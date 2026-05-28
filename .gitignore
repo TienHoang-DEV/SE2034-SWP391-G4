@@ -31,3 +31,29 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Environment files (secrets) ###
+# Ignore local .env files that may contain secrets. Keep a template like .env.example in source control.
+.env
+.env.*
+!.env.example
+
+### Logs and runtime generated files ###
+logs/
+*.log
+hs_err_pid*.log
+
+### Compiled classes / packaging ###
+*.class
+*.jar
+*.war
+*.ear
+
+### IDE / editor folders (additional) ###
+.idea/
+out/
+
+### Build reports / coverage ###
+jacoco.exec
+.coverage
+
