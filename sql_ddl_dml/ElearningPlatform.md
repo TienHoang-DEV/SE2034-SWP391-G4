@@ -497,4 +497,101 @@ CREATE INDEX IX_payments_order ON payments(order_id);
 CREATE INDEX IX_enrollments_lookup ON enrollments(user_id, course_id);
 GO
 
+-- Mẫu chèn khóa học
+-- =========================
+-- USER (INSTRUCTOR)
+-- =========================
+INSERT INTO users (
+    first_name,
+    last_name,
+    email,
+    phone,
+    password_hash,
+    role,
+    status
+)
+VALUES (
+    N'28',
+    N'Tech',
+    '28tech@gmail.com',
+    '0909999999',
+    '123456',
+    'instructor',
+    'active'
+);
 
+-- =========================
+-- CATEGORY
+-- =========================
+INSERT INTO categories (
+    name,
+    description,
+    parent_id,
+    status
+)
+VALUES (
+    N'Lập trình',
+    N'Các khóa học lập trình',
+    NULL,
+    'active'
+);
+
+-- =========================
+-- COURSE
+-- =========================
+INSERT INTO courses (
+    instructor_id,
+    category_id,
+    title,
+    description,
+    thumbnail_url,
+    price,
+    level,
+    status
+)
+VALUES (
+    1,
+    1,
+    N'Lập Trình C Cơ Bản - 28Tech',
+    N'Khóa học lập trình C cơ bản',
+    'course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg',
+    0,
+    'beginner',
+    'published'
+);
+
+-- =========================
+-- SECTION
+-- =========================
+INSERT INTO course_sections (
+    course_id,
+    title,
+    position
+)
+VALUES (
+    1,
+    N'Giới thiệu',
+    1
+);
+
+-- =========================
+-- LESSON
+-- =========================
+INSERT INTO lessons (
+    section_id,
+    title,
+    video_url,
+    duration_seconds,
+    position,
+    is_published,
+    moderation_status
+)
+VALUES (
+    1,
+    N'Bài 1 - Giới thiệu ngôn ngữ C',
+    'videos/Recording 2026-05-28 212131.mp4',
+    600,
+    1,
+    1,
+    'approved'
+);
