@@ -314,17 +314,38 @@ CREATE TABLE cart_items (
     id INT PRIMARY KEY IDENTITY(1,1),
     cart_id INT NOT NULL,
     course_id INT NOT NULL,
-    coupon_id INT NULL, -- Mới bổ sung để lưu mã giảm giá áp dụng theo từng giảng viên trong giỏ hàng
     added_at DATETIME DEFAULT GETDATE(),
 
     CONSTRAINT FK_cart_items_cart
         FOREIGN KEY (cart_id) REFERENCES carts(id),
+
     CONSTRAINT FK_cart_items_course
         FOREIGN KEY (course_id) REFERENCES courses(id),
-    CONSTRAINT FK_cart_items_coupon
-        FOREIGN KEY (coupon_id) REFERENCES coupons(id),
-    CONSTRAINT UQ_cart_course UNIQUE (cart_id, course_id) -- Chống trùng lặp khóa học trong giỏ hàng
+
+    CONSTRAINT UQ_cart_course UNIQUE(cart_id, course_id)
 );
+
+CREATE TABLE cart_instructor_coupons (
+    id INT PRIMARY KEY IDENTITY(1,1),
+
+    cart_id INT NOT NULL,
+    instructor_id INT NOT NULL,
+    coupon_id INT NOT NULL,
+
+    applied_at DATETIME DEFAULT GETDATE(),
+
+    CONSTRAINT FK_cart_coupon_cart
+        FOREIGN KEY (cart_id) REFERENCES carts(id),
+
+    CONSTRAINT FK_cart_coupon_instructor
+        FOREIGN KEY (instructor_id) REFERENCES users(id),
+
+    CONSTRAINT FK_cart_coupon_coupon
+        FOREIGN KEY (coupon_id) REFERENCES coupons(id),
+
+    CONSTRAINT UQ_cart_instructor UNIQUE(cart_id, instructor_id)
+);
+
 
 -- =========================
 -- ORDERS
