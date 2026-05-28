@@ -1,5 +1,7 @@
 package vn.edu.fpt;
 
+import io.github.cdimascio.dotenv.Dotenv;
+import io.github.cdimascio.dotenv.DotenvEntry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,7 +9,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Se2034Swp391G4Application {
 
     public static void main(String[] args) {
+        // Load .env early so values are available as system properties and env for Spring
+        Dotenv dotenv = Dotenv.configure().filename(".env").ignoreIfMissing().load();
+        for (DotenvEntry entry : dotenv.entries()) {
+            // set as system property so Spring's ${...} can resolve it
+            System.setProperty(entry.getKey(), entry.getValue());
+        }
+
         SpringApplication.run(Se2034Swp391G4Application.class, args);
+
+        System.out.println(System.getProperty("AZURE_STORAGE_CONNECTION_STRING"));
     }
 
 }
