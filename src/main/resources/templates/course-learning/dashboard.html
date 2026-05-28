@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Học Tập - ELearning</title>
+    <link rel="stylesheet" th:href="@{/css/learner/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/common/bootstrap.css}">
+</head>
+<body>
+    <div class="learner-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Dashboard</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#courses">Khóa học của tôi</a></li>
+                    <li><a href="#progress">Tiến độ học tập</a></li>
+                    <li><a href="#discussions">Thảo luận</a></li>
+                    <li><a href="#quiz-results">Kết quả bài test</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <header class="content-header">
+                <h1>Chào mừng, bạn!</h1>
+                <div class="user-info">
+                    <span th:text="${#request.userPrincipal?.name}">Guest</span>
+                </div>
+            </header>
+
+            <!-- Courses Section -->
+            <section id="courses" class="courses-section">
+                <h2>Khóa học của bạn</h2>
+                <div class="courses-grid">
+                    <!-- Placeholder: course cards will be dynamically rendered -->
+                    <div class="course-card">
+                        <div class="course-image">
+                            <img src="/images/learner/placeholder-course.jpg" alt="Course">
+                        </div>
+                        <div class="course-info">
+                            <h3>Tên Khóa Học</h3>
+                            <p class="instructor">Giảng viên: John Doe</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                            <p class="progress-text">65% hoàn thành</p>
+                            <a href="/course-learning/lesson-view" class="btn-primary">Tiếp tục học</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Progress Overview -->
+            <section id="progress" class="progress-section">
+                <h2>Tiến độ học tập</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Khóa học đang theo học</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">856</div>
+                        <div class="stat-label">Phút đã học</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Chứng chỉ đạt được</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script th:src="@{/js/learner/dashboard.js}"></script>
+</body>
+</html>
+

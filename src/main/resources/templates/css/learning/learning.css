@@ -1,0 +1,214 @@
+/* --- Custom Styles for Course Player (learning.html) --- */
+
+:root {
+    --player-gray: #f8fafc;
+}
+
+/* Page Split Screen Layout */
+.main-player-content {
+    background-color: #ffffff;
+}
+
+.sidebar-curriculum-container {
+    min-height: calc(100vh - 73px); /* 100vh minus navbar height */
+    position: sticky;
+    top: 73px;
+    z-index: 10;
+}
+
+/* Video Player */
+.video-player-container {
+    background-color: #000000;
+}
+
+/* Play button center overlay */
+.play-overlay {
+    background-color: var(--primary);
+    box-shadow: 0 4px 20px rgba(26, 86, 219, 0.4);
+    width: 60px;
+    height: 60px;
+    opacity: 0.95;
+    z-index: 20;
+}
+
+.play-overlay:hover {
+    transform: translate(-50%, -50%) scale(1.1) !important;
+    opacity: 1;
+}
+
+/* Video Controls overlay */
+.video-controls-bar {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
+    z-index: 15;
+}
+
+.video-progress-wrapper {
+    padding: 6px 0;
+}
+
+.video-progress-wrapper:hover .video-progress-bg {
+    height: 6px !important;
+}
+
+.video-progress-fill {
+    transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sidebar lists styling */
+.lesson-item {
+    transition: var(--transition);
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.lesson-item:hover:not(.active-lesson-item) {
+    background-color: #f8fafc !important;
+}
+
+/* Active playing lesson */
+.active-lesson-item {
+    background-color: var(--primary) !important;
+    color: #ffffff !important;
+    border-color: var(--primary) !important;
+}
+
+.active-play-icon-box {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.lesson-document-link {
+    transition: var(--transition);
+    opacity: 0.9;
+}
+
+.lesson-document-link:hover {
+    opacity: 1;
+    text-decoration: underline !important;
+}
+
+/* Sticky sidebar footer */
+.sticky-bottom-sidebar {
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.04);
+}
+
+/* Nav Tabs */
+.player-nav-tabs .nav-link {
+    border: none !important;
+    background: transparent !important;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 15px;
+    font-family: var(--font-heading);
+    position: relative;
+    transition: var(--transition);
+}
+
+.player-nav-tabs .nav-link:hover {
+    color: var(--primary);
+}
+
+.player-nav-tabs .nav-link.active {
+    color: var(--primary) !important;
+}
+
+.player-nav-tabs .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary);
+    border-radius: 99px;
+}
+
+/* Quiz questions */
+.quiz-question-box {
+    border-color: #e2e8f0 !important;
+}
+
+.quiz-option {
+    transition: var(--transition);
+    border-color: #e2e8f0 !important;
+}
+
+.quiz-option:hover {
+    background-color: #f8fafc;
+    border-color: #cbd5e1 !important;
+}
+
+.active-option {
+    border-color: var(--primary) !important;
+    background-color: #eff6ff !important;
+}
+
+/* Star selection inside Reviews */
+.star-selector-btn {
+    transition: var(--transition);
+}
+
+.star-selector-btn:hover {
+    transform: scale(1.15);
+}
+
+.star-selector-btn i {
+    transition: var(--transition);
+}
+
+.star-selector-btn.star-active {
+    color: #f59e0b !important;
+}
+
+.star-selector-btn.star-active i {
+    fill: #f59e0b !important;
+}
+
+/* Accordion details */
+.accordion-button::after {
+    display: none !important; /* Hide bootstrap default arrow */
+}
+
+/* Header navbar minimal modifications */
+.header-utilities button {
+    transition: var(--transition);
+}
+
+.header-utilities button:hover {
+    background-color: #f1f5f9;
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 991.98px) {
+    .sidebar-curriculum-container {
+        min-height: auto;
+        position: relative;
+        top: 0;
+        border-start: 0 !important;
+        border-top: 1px solid #cbd5e1;
+    }
+}
+
+/* Quiz Option correctness colors */
+.correct-option {
+    border-color: #22c55e !important;
+    background-color: #f0fdf4 !important;
+    color: #15803d !important;
+}
+
+.incorrect-option {
+    border-color: #ef4444 !important;
+    background-color: #fef2f2 !important;
+    color: #b91c1c !important;
+}
+
+.quiz-result-banner {
+    border-radius: 10px !important;
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

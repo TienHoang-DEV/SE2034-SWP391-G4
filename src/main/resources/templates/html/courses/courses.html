@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết Quả Tìm Kiếm "Guitar" - Learning Hub</title>
+    <meta name="description" content="Khám phá các khóa học guitar chất lượng cao phù hợp với trình độ của bạn tại Learning Hub.">
+    
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Central Stylesheet -->
+    <link rel="stylesheet" href="../../css/home/home.css">
+    <!-- Courses Search Page Custom Stylesheet -->
+    <link rel="stylesheet" href="../../css/courses/courses.css">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-light bg-opacity-25">
+
+    <!-- Header Navigation -->
+    <header class="navbar navbar-expand-lg bg-white border-bottom py-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            
+            <!-- Logo Section -->
+            <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="../home/home_logged_in.html">
+                <div class="logo-icon-box d-flex align-items-center justify-content-center bg-primary text-white" style="width: 36px; height: 36px; border-radius: 8px;">
+                    <i data-lucide="zap" style="width: 20px; height: 20px; fill: currentColor;"></i>
+                </div>
+                <span class="logo-text fw-bold text-primary font-heading text-uppercase" style="letter-spacing: 0.5px;">Learning Hub</span>
+            </a>
+
+            <!-- Search and Category -->
+            <div class="search-category-section d-none d-lg-flex align-items-center gap-2 flex-grow-1 mx-5" style="max-width: 600px;">
+                <!-- Category Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-light rounded-pill dropdown-toggle d-flex align-items-center gap-2 px-3 py-2 text-muted fw-medium fs-7" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Danh mục</span>
+                    </button>
+                    <ul class="dropdown-menu border-0 shadow-lg mt-2 p-2" aria-labelledby="categoryDropdown">
+                        <li><a class="dropdown-item d-flex align-items-center gap-2 rounded py-2" href="#"><i data-lucide="music" style="width:16px;"></i> Âm nhạc & Nghệ thuật</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2 rounded py-2" href="#"><i data-lucide="code-2" style="width:16px;"></i> Công nghệ thông tin</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2 rounded py-2" href="#"><i data-lucide="languages" style="width:16px;"></i> Ngoại ngữ</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2 rounded py-2" href="#"><i data-lucide="palette" style="width:16px;"></i> Thiết kế đồ họa</a></li>
+                    </ul>
+                </div>
+
+                <!-- Search Input -->
+                <div class="search-bar-wrapper position-relative flex-grow-1">
+                    <i data-lucide="search" class="search-icon position-absolute start-0 top-50 translate-middle-y ms-3 text-muted" style="width:18px; height:18px;"></i>
+                    <input type="text" placeholder="Tìm khóa học..." class="form-control rounded-pill border-0 bg-light px-4 py-2 ps-5" id="search-input" value="Guitar">
+                </div>
+            </div>
+
+            <!-- User Utilities -->
+            <div class="header-utilities d-flex align-items-center gap-3">
+                <!-- Cart Icon with badge number 2 -->
+                <a href="../cart/cart.html" class="btn btn-link nav-icon-btn text-muted p-2 rounded-circle position-relative" aria-label="Giỏ hàng">
+                    <i data-lucide="shopping-cart" style="width: 20px; height: 20px;"></i>
+                    <span class="position-absolute top-1 translate-middle badge rounded-circle bg-danger p-1 cart-count-badge" style="left: 75%; font-size: 10px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #fff;">
+                        2
+                    </span>
+                </a>
+
+                <!-- Notification Bell -->
+                <button class="btn btn-link nav-icon-btn text-muted p-2 rounded-circle" aria-label="Thông báo">
+                    <i data-lucide="bell" style="width: 20px; height: 20px;"></i>
+                </button>
+
+                <!-- User Profile Dropdown -->
+                <div class="dropdown">
+                    <button class="btn p-0 border-0 dropdown-toggle no-caret" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="../../image/avatar.png" alt="User Avatar" class="user-avatar rounded-circle border border-2 border-primary" style="width: 36px; height: 36px; object-fit: cover;">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2 p-2" aria-labelledby="profileDropdown" style="width: 220px; border-radius: var(--radius-lg);">
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../student_profile/student_profile.html"><i data-lucide="user" style="width:16px;"></i> Thông tin của tôi</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../my_learning/my_learning.html"><i data-lucide="graduation-cap" style="width:16px;"></i> Việc học của tôi</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../recommendations/recommendations.html"><i data-lucide="sparkles" style="width:16px;"></i> Khóa học đề xuất</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted active bg-primary text-white" href="../courses/courses.html"><i data-lucide="search" style="width:16px;"></i> Tìm kiếm khóa học</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="#"><i data-lucide="message-square" style="width:16px;"></i> Tin nhắn</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../purchase_history/purchase_history.html"><i data-lucide="history" style="width:16px;"></i> Lịch sử mua hàng</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="#"><i data-lucide="bar-chart-2" style="width:16px;"></i> Báo cáo</a></li>
+                        <li><hr class="dropdown-divider my-2"></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-danger fw-semibold" href="../../index.html"><i data-lucide="log-out" style="width:16px;"></i> Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="py-5">
+        <div class="container py-3">
+            
+            <div class="row g-4">
+                
+                <!-- Left Sidebar Filters -->
+                <aside class="col-lg-3 col-md-4 col-12">
+                    <div class="card border border-light-subtle rounded-3 p-4 bg-white shadow-sm mb-4 sidebar-filters">
+                        
+                        <!-- Filter Group 1: Tags -->
+                        <div class="filter-group mb-4">
+                            <h4 class="filter-title fw-bold fs-7 mb-3 d-flex align-items-center gap-2">
+                                <i data-lucide="tag" class="text-muted" style="width: 18px; height: 18px;"></i> Tag
+                            </h4>
+                            <ul class="list-unstyled d-flex flex-column gap-2 m-0 fs-7">
+                                <li><a href="#" class="filter-tag-link text-decoration-none d-block text-muted">Lý thuyết Guitar (5)</a></li>
+                                <li><a href="#" class="filter-tag-link text-decoration-none d-block active-tag">Guitar đệm hát (12)</a></li>
+                                <li><a href="#" class="filter-tag-link text-decoration-none d-block text-muted">Guitar solo (8)</a></li>
+                                <li><a href="#" class="filter-tag-link text-decoration-none d-block text-muted">Bolero (3)</a></li>
+                            </ul>
+                        </div>
+                        
+                        <hr class="my-3 text-muted opacity-25">
+                        
+                        <!-- Filter Group 2: Ratings -->
+                        <div class="filter-group mb-4">
+                            <h4 class="filter-title fw-bold fs-7 mb-3 d-flex align-items-center gap-2">
+                                <i data-lucide="star" class="text-muted" style="width: 18px; height: 18px;"></i> Đánh giá
+                            </h4>
+                            <div class="d-flex flex-column gap-2">
+                                <label class="d-flex align-items-center gap-2 fs-7 cursor-pointer text-muted-dark">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <span class="d-flex align-items-center gap-1">
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <span class="ms-1 text-muted fs-8">(2)</span>
+                                    </span>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 fs-7 cursor-pointer text-muted-dark">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <span class="d-flex align-items-center gap-1">
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <span class="ms-1 text-muted fs-8">(5)</span>
+                                    </span>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 fs-7 cursor-pointer text-muted-dark">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <span class="d-flex align-items-center gap-1">
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <span class="ms-1 text-muted fs-8">(1)</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-3 text-muted opacity-25">
+                        
+                        <!-- Filter Group 3: Duration -->
+                        <div class="filter-group mb-4">
+                            <h4 class="filter-title fw-bold fs-7 mb-3 d-flex align-items-center gap-2">
+                                <i data-lucide="clock" class="text-muted" style="width: 18px; height: 18px;"></i> Thời lượng
+                            </h4>
+                            <div class="d-flex flex-column gap-2 fs-7 text-muted-dark">
+                                <label class="d-flex align-items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <span>3 - 5 phút</span>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <span>5 - 7 phút</span>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <span>7 - 10 phút</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-3 text-muted opacity-25">
+                        
+                        <!-- Filter Group 4: Price -->
+                        <div class="filter-group">
+                            <h4 class="filter-title fw-bold fs-7 mb-3 d-flex align-items-center gap-2">
+                                <i data-lucide="coins" class="text-muted" style="width: 18px; height: 18px;"></i> Giá tiền
+                            </h4>
+                            <div class="d-flex flex-column gap-2 fs-7 text-muted-dark">
+                                <label class="d-flex align-items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <span>200.000 - 500.000 VNĐ</span>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <span>500.000 - 700.000 VNĐ</span>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <span>700.000 - 1.000.000 VNĐ</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </aside>
+
+                <!-- Right Side Course List -->
+                <section class="col-lg-9 col-md-8 col-12">
+                    
+                    <!-- Search Info & Sorting -->
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                        <div>
+                            <h2 class="search-result-title fw-extrabold font-heading fs-4 m-0 d-inline-block">Kết quả cho "Guitar"</h2>
+                            <span class="text-muted fs-7 ms-2">128 khóa học</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <select class="form-select border-light-subtle rounded-3 py-2 px-3 fs-7 text-muted fw-semibold" style="width: 140px; cursor: pointer;">
+                                <option value="newest" selected>Mới nhất</option>
+                                <option value="rating">Đánh giá tốt nhất</option>
+                                <option value="price-asc">Giá tăng dần</option>
+                                <option value="price-desc">Giá giảm dần</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Courses Horizontal List -->
+                    <div class="d-flex flex-column gap-4 mb-5">
+                        
+                        <!-- Course Row 1 -->
+                        <div class="course-list-item d-flex gap-4 p-4 border border-light-subtle rounded-3 bg-white shadow-sm flex-md-row flex-column align-items-start">
+                            <!-- Left: Thumbnail -->
+                            <div class="position-relative overflow-hidden rounded-3 flex-shrink-0 align-self-center align-self-md-start" style="width: 240px; height: 145px;">
+                                <img src="../../image/tech_course.png" alt="Guitar đệm hát 30 ngày cùng Hiển Râu" class="w-100 h-100 object-fit-cover">
+                                <span class="position-absolute top-0 start-0 badge-discount text-white fw-bold fs-8 px-2.5 py-1 m-3">GIẢM 30%</span>
+                                <span class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white fs-8 px-2.5 py-1 rounded-pill m-3 fw-medium">31 phút</span>
+                            </div>
+                            
+                            <!-- Right: Info -->
+                            <div class="flex-grow-1 w-100 d-flex flex-column justify-content-between h-100" style="min-height: 145px;">
+                                <div>
+                                    <h3 class="course-item-title fw-bold fs-6 mb-2 font-heading">
+                                        Tiêu đề khóa học: Guitar đệm hát 30 ngày cùng Hiển Râu
+                                    </h3>
+                                    
+                                    <div class="rating-stars mb-2 d-flex align-items-center gap-1">
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <span class="text-muted fs-8 ms-1">(2 đánh giá)</span>
+                                    </div>
+                                    
+                                    <a href="../student_profile/student_profile.html" class="instructor-name fw-bold fs-8 text-decoration-none d-block mb-3">NGUYỄN CÔNG THÁI SƠN</a>
+                                </div>
+                                
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-auto">
+                                    <!-- Meta Attributes -->
+                                    <div class="d-flex align-items-center gap-3 text-muted fs-8">
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="clock" style="width: 14px;"></i> 31 phút</span>
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="zap" style="width: 14px;"></i> Cơ bản</span>
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="eye" style="width: 14px;"></i> 7 lượt mua</span>
+                                    </div>
+                                    
+                                    <!-- Price & Cart -->
+                                    <div class="d-flex align-items-center gap-3 ms-auto align-self-end">
+                                        <div class="text-end">
+                                            <span class="price-current fw-extrabold fs-5 d-block">209,300 VNĐ</span>
+                                            <span class="price-old text-decoration-line-through text-muted fs-8">299,000 VNĐ</span>
+                                        </div>
+                                        <button class="btn btn-add-to-cart px-3 py-2 fw-bold fs-8 d-flex align-items-center gap-2 rounded-3">
+                                            <i data-lucide="shopping-cart" style="width:16px;"></i> Thêm vào giỏ hàng
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Course Row 2 -->
+                        <div class="course-list-item d-flex gap-4 p-4 border border-light-subtle rounded-3 bg-white shadow-sm flex-md-row flex-column align-items-start">
+                            <!-- Left: Thumbnail -->
+                            <div class="position-relative overflow-hidden rounded-3 flex-shrink-0 align-self-center align-self-md-start" style="width: 240px; height: 145px;">
+                                <img src="../../image/guitar_sunburst_acoustic.png" alt="Khóa học guitar Acoustic căn bản" class="w-100 h-100 object-fit-cover">
+                                <span class="position-absolute top-0 start-0 badge-discount text-white fw-bold fs-8 px-2.5 py-1 m-3">GIẢM 30%</span>
+                                <span class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white fs-8 px-2.5 py-1 rounded-pill m-3 fw-medium">4 phút</span>
+                            </div>
+                            
+                            <!-- Right: Info -->
+                            <div class="flex-grow-1 w-100 d-flex flex-column justify-content-between h-100" style="min-height: 145px;">
+                                <div>
+                                    <h3 class="course-item-title fw-bold fs-6 mb-2 font-heading">
+                                        Khóa học guitar Acoustic căn bản
+                                    </h3>
+                                    
+                                    <div class="rating-stars mb-2 d-flex align-items-center gap-1">
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <span class="text-muted fs-8 ms-1">(1 đánh giá)</span>
+                                    </div>
+                                    
+                                    <a href="../student_profile/student_profile.html" class="instructor-name fw-bold fs-8 text-decoration-none d-block mb-3">NGUYỄN CÔNG THÁI SƠN</a>
+                                </div>
+                                
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-auto">
+                                    <!-- Meta Attributes -->
+                                    <div class="d-flex align-items-center gap-3 text-muted fs-8">
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="clock" style="width: 14px;"></i> 4 phút</span>
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="zap" style="width: 14px;"></i> Cơ bản</span>
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="eye" style="width: 14px;"></i> 4 lượt mua</span>
+                                    </div>
+                                    
+                                    <!-- Price & Cart -->
+                                    <div class="d-flex align-items-center gap-3 ms-auto align-self-end">
+                                        <div class="text-end">
+                                            <span class="price-current fw-extrabold fs-5 d-block">209,300 VNĐ</span>
+                                            <span class="price-old text-decoration-line-through text-muted fs-8">299,000 VNĐ</span>
+                                        </div>
+                                        <button class="btn btn-add-to-cart px-3 py-2 fw-bold fs-8 d-flex align-items-center gap-2 rounded-3">
+                                            <i data-lucide="shopping-cart" style="width:16px;"></i> Thêm vào giỏ hàng
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Course Row 3 -->
+                        <div class="course-list-item d-flex gap-4 p-4 border border-light-subtle rounded-3 bg-white shadow-sm flex-md-row flex-column align-items-start">
+                            <!-- Left: Thumbnail -->
+                            <div class="position-relative overflow-hidden rounded-3 flex-shrink-0 align-self-center align-self-md-start" style="width: 240px; height: 145px;">
+                                <img src="../../image/guitar_bolero_classical.png" alt="Guitar Bolero nâng cao" class="w-100 h-100 object-fit-cover">
+                                <span class="position-absolute top-0 start-0 badge-discount text-white fw-bold fs-8 px-2.5 py-1 m-3" style="background-color: #eab308 !important;">Mới</span>
+                                <span class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white fs-8 px-2.5 py-1 rounded-pill m-3 fw-medium">45 phút</span>
+                            </div>
+                            
+                            <!-- Right: Info -->
+                            <div class="flex-grow-1 w-100 d-flex flex-column justify-content-between h-100" style="min-height: 145px;">
+                                <div>
+                                    <h3 class="course-item-title fw-bold fs-6 mb-2 font-heading">
+                                        Guitar Bolero nâng cao cho người lớn (mời demo cô)
+                                    </h3>
+                                    
+                                    <div class="rating-stars mb-2 d-flex align-items-center gap-1">
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <span class="text-muted fs-8 ms-1">(0 đánh giá)</span>
+                                    </div>
+                                    
+                                    <a href="../student_profile/student_profile.html" class="instructor-name fw-bold fs-8 text-decoration-none d-block mb-3">NGUYỄN CÔNG THÁI SƠN</a>
+                                </div>
+                                
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-auto">
+                                    <!-- Meta Attributes -->
+                                    <div class="d-flex align-items-center gap-3 text-muted fs-8">
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="clock" style="width: 14px;"></i> 45 phút</span>
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="zap" style="width: 14px;"></i> Nâng cao</span>
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="eye" style="width: 14px;"></i> 1 lượt mua</span>
+                                    </div>
+                                    
+                                    <!-- Price & Cart -->
+                                    <div class="d-flex align-items-center gap-3 ms-auto align-self-end">
+                                        <div class="text-end">
+                                            <span class="price-current fw-extrabold fs-5 d-block">750,000 VNĐ</span>
+                                        </div>
+                                        <button class="btn btn-add-to-cart px-3 py-2 fw-bold fs-8 d-flex align-items-center gap-2 rounded-3">
+                                            <i data-lucide="shopping-cart" style="width:16px;"></i> Thêm vào giỏ hàng
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Centered Pagination (Numbers only matching image) -->
+                    <div class="d-flex justify-content-center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination gap-2 border-0 m-0">
+                                <li class="page-item">
+                                    <a class="page-link rounded-circle d-flex align-items-center justify-content-center p-0 fw-semibold page-num-btn text-dark" href="#">1</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link rounded-circle d-flex align-items-center justify-content-center p-0 fw-bold page-num-btn text-white" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link rounded-circle d-flex align-items-center justify-content-center p-0 fw-semibold page-num-btn text-dark" href="#">3</a>
+                                </li>
+                                <li class="page-item disabled">
+                                    <span class="page-link rounded-circle d-flex align-items-center justify-content-center p-0 border-0 bg-transparent text-muted fw-semibold" style="width: 38px; height: 38px;">...</span>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link rounded-circle d-flex align-items-center justify-content-center p-0 fw-semibold page-num-btn text-dark" href="#">10</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                </section>
+                
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer bg-white pt-5 pb-4 border-top">
+        <div class="container">
+            <div class="row g-5 justify-content-between mb-5">
+                
+                <!-- Footer Branding -->
+                <div class="col-lg-5 col-12">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="logo-icon-box d-flex align-items-center justify-content-center bg-primary rounded text-white" style="width: 32px; height: 32px;">
+                            <i data-lucide="zap" style="width: 18px; height: 18px; fill: currentColor;"></i>
+                        </div>
+                        <span class="logo-text fw-bold text-primary font-heading fs-5">Learning Hub</span>
+                    </div>
+                    <p class="text-muted fs-7 mb-0 leading-relaxed" style="max-width: 380px;">
+                        Kiến thức là sức mạnh. Chúng tôi đồng hành cùng bạn trên con đường chinh phục đỉnh cao tri thức.
+                    </p>
+                </div>
+
+                <!-- Footer Menu 1 -->
+                <div class="col-lg-3 col-6">
+                    <h4 class="footer-title fw-bold text-primary fs-7 mb-4">HỌC TẬP</h4>
+                    <ul class="list-unstyled d-flex flex-column gap-2 footer-links fs-7">
+                        <li><a href="#" class="text-muted text-decoration-none">Tất cả khóa học</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Thiết kế</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Lập trình</a></li>
+                    </ul>
+                </div>
+
+                <!-- Footer Menu 2 -->
+                <div class="col-lg-3 col-6">
+                    <h4 class="footer-title fw-bold text-primary fs-7 mb-4">HỖ TRỢ</h4>
+                    <ul class="list-unstyled d-flex flex-column gap-2 footer-links fs-7">
+                        <li><a href="#" class="text-muted text-decoration-none">Trung tâm trợ giúp</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Điều khoản dịch vụ</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom border-top pt-4 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+                <p class="text-muted fs-7 m-0">© 2024 Learning Hub. All rights reserved.</p>
+                
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" aria-label="Ngôn ngữ">
+                        <i data-lucide="globe" style="width:18px; height:18px;" class="text-muted"></i>
+                    </button>
+                    <button class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" aria-label="Chia sẻ">
+                        <i data-lucide="share-2" style="width:18px; height:18px;" class="text-muted"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="../../javascript/courses/courses.js"></script>
+</body>
+</html>
