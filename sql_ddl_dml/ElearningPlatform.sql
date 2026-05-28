@@ -616,3 +616,303 @@ VALUES (
     1,
     'approved'
 );
+
+USE ElearningPlatform;
+GO
+
+-- =========================================================
+-- LESSON 2
+-- =========================================================
+INSERT INTO lessons (
+    section_id,
+    title,
+    video_url,
+    duration_seconds,
+    position,
+    is_published,
+    moderation_status
+)
+VALUES (
+    1,
+    N'Bài 2 - Kiểu dữ liệu và khai báo biến trong C',
+
+    'videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2002.%20Ki%E1%BB%83u%20d%E1%BB%AF%20li%E1%BB%87u%20v%C3%A0%20c%C3%A1ch%20khai%20b%C3%A1o%20bi%E1%BA%BFn%20trong%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C-C++.mp4',
+
+    900,
+    2,
+    1,
+    'approved'
+);
+
+DECLARE @Lesson2Id INT = SCOPE_IDENTITY();
+
+-- QUIZ LESSON 2
+INSERT INTO quizzes (
+    lesson_id,
+    title,
+    pass_score
+)
+VALUES (
+    @Lesson2Id,
+    N'Quiz - Kiểu dữ liệu và biến',
+    70
+);
+
+DECLARE @Quiz2Id INT = SCOPE_IDENTITY();
+
+-- QUESTION 1
+INSERT INTO quiz_questions (
+    quiz_id,
+    question_text,
+    question_type,
+    points,
+    position
+)
+VALUES (
+    @Quiz2Id,
+    N'Kiểu dữ liệu nào dùng để lưu số nguyên trong C?',
+    'single',
+    1,
+    1
+);
+
+DECLARE @Q1Id INT = SCOPE_IDENTITY();
+
+INSERT INTO quiz_answers (
+    question_id,
+    answer_text,
+    is_correct
+)
+VALUES
+(@Q1Id, N'int', 1),
+(@Q1Id, N'float', 0),
+(@Q1Id, N'double', 0),
+(@Q1Id, N'char', 0);
+
+-- QUESTION 2
+INSERT INTO quiz_questions (
+    quiz_id,
+    question_text,
+    question_type,
+    points,
+    position
+)
+VALUES (
+    @Quiz2Id,
+    N'Từ khóa nào dùng để khai báo biến số thực?',
+    'single',
+    1,
+    2
+);
+
+DECLARE @Q2Id INT = SCOPE_IDENTITY();
+
+INSERT INTO quiz_answers (
+    question_id,
+    answer_text,
+    is_correct
+)
+VALUES
+(@Q2Id, N'float', 1),
+(@Q2Id, N'int', 0),
+(@Q2Id, N'char', 0),
+(@Q2Id, N'void', 0);
+
+-- =========================================================
+-- LESSON 3
+-- =========================================================
+INSERT INTO lessons (
+    section_id,
+    title,
+    video_url,
+    duration_seconds,
+    position,
+    is_published,
+    moderation_status
+)
+VALUES (
+    1,
+    N'Bài 3 - Xuất dữ liệu với printf',
+
+    'videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2003.%20C%C3%A1ch%20xu%E1%BA%A5t%20d%E1%BB%AF%20li%E1%BB%87u%20ra%20m%C3%A0n%20h%C3%ACnh%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20H%C3%A0m%20printf%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C.mp4',
+
+    850,
+    3,
+    1,
+    'approved'
+);
+
+DECLARE @Lesson3Id INT = SCOPE_IDENTITY();
+
+-- QUIZ LESSON 3
+INSERT INTO quizzes (
+    lesson_id,
+    title,
+    pass_score
+)
+VALUES (
+    @Lesson3Id,
+    N'Quiz - Hàm printf',
+    70
+);
+
+DECLARE @Quiz3Id INT = SCOPE_IDENTITY();
+
+-- QUESTION 1
+INSERT INTO quiz_questions (
+    quiz_id,
+    question_text,
+    question_type,
+    points,
+    position
+)
+VALUES (
+    @Quiz3Id,
+    N'Hàm nào dùng để xuất dữ liệu ra màn hình?',
+    'single',
+    1,
+    1
+);
+
+DECLARE @Q3Id INT = SCOPE_IDENTITY();
+
+INSERT INTO quiz_answers (
+    question_id,
+    answer_text,
+    is_correct
+)
+VALUES
+(@Q3Id, N'printf', 1),
+(@Q3Id, N'scanf', 0),
+(@Q3Id, N'gets', 0),
+(@Q3Id, N'cin', 0);
+
+-- QUESTION 2
+INSERT INTO quiz_questions (
+    quiz_id,
+    question_text,
+    question_type,
+    points,
+    position
+)
+VALUES (
+    @Quiz3Id,
+    N'%d trong printf dùng để in kiểu dữ liệu nào?',
+    'single',
+    1,
+    2
+);
+
+DECLARE @Q4Id INT = SCOPE_IDENTITY();
+
+INSERT INTO quiz_answers (
+    question_id,
+    answer_text,
+    is_correct
+)
+VALUES
+(@Q4Id, N'Số nguyên', 1),
+(@Q4Id, N'Số thực', 0),
+(@Q4Id, N'Ký tự', 0),
+(@Q4Id, N'Chuỗi', 0);
+
+-- =========================================================
+-- LESSON 4
+-- =========================================================
+INSERT INTO lessons (
+    section_id,
+    title,
+    video_url,
+    duration_seconds,
+    position,
+    is_published,
+    moderation_status
+)
+VALUES (
+    1,
+    N'Bài 4 - Nhập dữ liệu với scanf',
+
+    'videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2004.%20C%C3%A1ch%20nh%E1%BA%ADp%20d%E1%BB%AF%20li%E1%BB%87u%20t%E1%BB%AB%20b%C3%A0n%20ph%C3%ADm%20trong%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C.mp4',
+
+    920,
+    4,
+    1,
+    'approved'
+);
+
+DECLARE @Lesson4Id INT = SCOPE_IDENTITY();
+
+-- QUIZ LESSON 4
+INSERT INTO quizzes (
+    lesson_id,
+    title,
+    pass_score
+)
+VALUES (
+    @Lesson4Id,
+    N'Quiz - Hàm scanf',
+    70
+);
+
+DECLARE @Quiz4Id INT = SCOPE_IDENTITY();
+
+-- QUESTION 1
+INSERT INTO quiz_questions (
+    quiz_id,
+    question_text,
+    question_type,
+    points,
+    position
+)
+VALUES (
+    @Quiz4Id,
+    N'Hàm nào dùng để nhập dữ liệu từ bàn phím?',
+    'single',
+    1,
+    1
+);
+
+DECLARE @Q5Id INT = SCOPE_IDENTITY();
+
+INSERT INTO quiz_answers (
+    question_id,
+    answer_text,
+    is_correct
+)
+VALUES
+(@Q5Id, N'scanf', 1),
+(@Q5Id, N'printf', 0),
+(@Q5Id, N'puts', 0),
+(@Q5Id, N'cout', 0);
+
+-- QUESTION 2
+INSERT INTO quiz_questions (
+    quiz_id,
+    question_text,
+    question_type,
+    points,
+    position
+)
+VALUES (
+    @Quiz4Id,
+    N'Dấu & trong scanf có tác dụng gì?',
+    'single',
+    1,
+    2
+);
+
+DECLARE @Q6Id INT = SCOPE_IDENTITY();
+
+INSERT INTO quiz_answers (
+    question_id,
+    answer_text,
+    is_correct
+)
+VALUES
+(@Q6Id, N'Lấy địa chỉ biến', 1),
+(@Q6Id, N'Kết thúc lệnh', 0),
+(@Q6Id, N'Nối chuỗi', 0),
+(@Q6Id, N'Xuất dữ liệu', 0);
+
+PRINT N'Đã thêm lesson 2, 3, 4 và quiz thành công!';
+GO
