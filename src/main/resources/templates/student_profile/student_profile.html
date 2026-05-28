@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nguyễn Công Thái Sơn - Hồ Sơ Học Viên | Learning Hub</title>
+    <meta name="description" content="Hồ sơ cá nhân học viên Nguyễn Công Thái Sơn tại Learning Hub. Theo dõi tiến độ học tập, chứng chỉ đạt được và quản lý cài đặt tài khoản.">
+    
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Student Profile Custom Stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/student_profile.css}">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-page">
+
+    <!-- Header Navigation (Consistent with other logged-in UIs) -->
+    <header class="navbar navbar-expand-lg bg-white border-bottom sticky-top py-2">
+        <div class="container px-3 d-flex justify-content-between align-items-center">
+            
+            <!-- Logo Section -->
+            <a class="navbar-brand d-flex align-items-center gap-2 m-0" th:href="@{/}">
+                <div class="logo-icon-box d-flex align-items-center justify-content-center bg-primary rounded text-white" style="width: 32px; height: 32px;">
+                    <i data-lucide="zap" style="width: 18px; height: 18px; fill: currentColor;"></i>
+                </div>
+                <span class="logo-text fw-bold text-primary font-heading fs-5">Learning Hub</span>
+            </a>
+
+            <!-- Search bar (Desktop) -->
+            <div class="search-category-section d-none d-lg-flex align-items-center flex-grow-1 mx-5" style="max-width: 500px;">
+                <div class="search-bar-wrapper position-relative flex-grow-1">
+                    <i data-lucide="search" class="search-icon position-absolute start-0 top-50 translate-middle-y ms-3 text-muted" style="width:18px; height:18px;"></i>
+                    <input type="text" placeholder="Tìm kiếm khóa học, giảng viên..." class="form-control rounded-pill border bg-light bg-opacity-75 px-4 py-2 ps-5 fs-7" id="search-input">
+                </div>
+            </div>
+
+            <!-- User Utilities -->
+            <div class="header-utilities d-flex align-items-center gap-3">
+                <!-- Cart Icon -->
+                <a href="../cart/cart.html" class="btn btn-link nav-icon-btn text-muted p-2 rounded-circle position-relative" aria-label="Giỏ hàng">
+                    <i data-lucide="shopping-cart" style="width: 20px; height: 20px;"></i>
+                    <span class="position-absolute top-1 translate-middle badge rounded-circle bg-danger p-1 cart-count-badge" style="left: 75%; font-size: 10px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #fff;">
+                        2
+                    </span>
+                </a>
+
+                <!-- Notification Bell -->
+                <button class="btn btn-link nav-icon-btn text-muted p-2 rounded-circle" aria-label="Thông báo">
+                    <i data-lucide="bell" style="width: 20px; height: 20px;"></i>
+                </button>
+
+                <!-- User Profile Dropdown -->
+                <div class="dropdown">
+                    <button class="btn p-0 border-0 dropdown-toggle no-caret" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img th:src="@{/images/student2.png}" alt="User Avatar" class="user-avatar rounded-circle border" style="width: 36px; height: 36px; object-fit: cover;">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2 p-2" aria-labelledby="profileDropdown" style="width: 220px; border-radius: var(--radius-lg);">
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted active" href="../student_profile/student_profile.html"><i data-lucide="user" style="width:16px;"></i> Thông tin của tôi</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../my_learning/my_learning.html"><i data-lucide="graduation-cap" style="width:16px;"></i> Việc học của tôi</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../recommendations/recommendations.html"><i data-lucide="sparkles" style="width:16px;"></i> Khóa học đề xuất</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="#"><i data-lucide="message-square" style="width:16px;"></i> Tin nhắn</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../purchase_history/purchase_history.html"><i data-lucide="history" style="width:16px;"></i> Lịch sử mua hàng</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="#"><i data-lucide="bar-chart-2" style="width:16px;"></i> Báo cáo</a></li>
+                        <li><hr class="dropdown-divider my-2"></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-danger fw-semibold" th:href="@{/}"><i data-lucide="log-out" style="width:16px;"></i> Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="main-content py-5">
+        <div class="container" style="max-width: 860px;">
+            
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumb-nav mb-4" aria-label="breadcrumb">
+                <ol class="breadcrumb m-0 align-items-center">
+                    <li class="breadcrumb-item"><a th:href="@{/}" class="text-muted text-decoration-none fs-7 fw-medium">Trang Chủ</a></li>
+                    <li class="breadcrumb-item active text-primary fs-7 fw-semibold" aria-current="page">Hồ Sơ Cá Nhân</li>
+                </ol>
+            </nav>
+
+            <!-- Profile Overview Block Card -->
+            <div class="card border rounded-3 p-4 bg-white shadow-sm text-center mb-4">
+                
+                <!-- Avatar with edit pencil badge -->
+                <div class="student-avatar-wrapper position-relative mx-auto mb-3" style="width: 120px; height: 120px;">
+                    <img th:src="@{/images/student2.png}" alt="Nguyễn Công Thái Sơn" class="rounded-circle border border-4 border-light w-100 h-100 object-fit-cover shadow-sm">
+                    <button class="avatar-edit-btn position-absolute bottom-0 end-0 bg-primary text-white rounded-circle border border-3 border-white d-flex align-items-center justify-content-center" style="width:34px; height:34px;" aria-label="Thay đổi ảnh đại diện" id="btn-change-avatar">
+                        <i data-lucide="pencil" style="width:14px; height:14px;"></i>
+                    </button>
+                </div>
+
+                <!-- Personal Info -->
+                <h1 class="student-name fw-bold text-dark font-heading fs-4 m-0">Nguyễn Công Thái Sơn</h1>
+                <p class="student-email text-muted fs-7 mt-1 mb-3">thaison@example.com</p>
+
+                <!-- Verified Account Badge -->
+                <div class="d-flex justify-content-center">
+                    <span class="badge verified-account-badge text-primary px-3 py-2 rounded-pill fs-8 fw-semibold d-inline-flex align-items-center gap-2">
+                        <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+                        Tài khoản đã xác minh
+                    </span>
+                </div>
+            </div>
+
+            <!-- Statistics cards row -->
+            <div class="row g-3 mb-4">
+                <!-- Stat Card 1 -->
+                <div class="col-md-4 col-12">
+                    <div class="card border rounded-3 p-3 bg-white shadow-sm h-100 d-flex flex-row align-items-center justify-content-between">
+                        <div class="stat-content">
+                            <span class="text-muted fs-8 fw-medium d-block">Khóa học đã học</span>
+                            <span class="fs-4 fw-bold text-primary font-heading mt-1 d-block">12</span>
+                        </div>
+                        <div class="stat-icon-wrapper rounded-circle d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary" style="width: 44px; height: 44px;">
+                            <i data-lucide="graduation-cap" style="width:22px; height:22px;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stat Card 2 -->
+                <div class="col-md-4 col-12">
+                    <div class="card border rounded-3 p-3 bg-white shadow-sm h-100 d-flex flex-row align-items-center justify-content-between">
+                        <div class="stat-content">
+                            <span class="text-muted fs-8 fw-medium d-block">Chứng chỉ</span>
+                            <span class="fs-4 fw-bold text-orange font-heading mt-1 d-block" style="color: #c2410c;">5</span>
+                        </div>
+                        <div class="stat-icon-wrapper rounded-circle d-flex align-items-center justify-content-center bg-warning bg-opacity-10 text-warning" style="width: 44px; height: 44px;">
+                            <i data-lucide="award" style="width:22px; height:22px; color: #ea580c;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stat Card 3 -->
+                <div class="col-md-4 col-12">
+                    <div class="card border rounded-3 p-3 bg-white shadow-sm h-100 d-flex flex-row align-items-center justify-content-between">
+                        <div class="stat-content">
+                            <span class="text-muted fs-8 fw-medium d-block">Giờ học</span>
+                            <span class="fs-4 fw-bold text-dark font-heading mt-1 d-block">24h</span>
+                        </div>
+                        <div class="stat-icon-wrapper rounded-circle d-flex align-items-center justify-content-center bg-light text-muted" style="width: 44px; height: 44px;">
+                            <i data-lucide="clock" style="width:22px; height:22px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List Menu Settings Options Group -->
+            <div class="card border rounded-3 overflow-hidden bg-white shadow-sm mb-5">
+                <div class="list-group list-group-flush option-menu-list">
+                    
+                    <!-- Option 1 -->
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border-light-subtle option-item" id="opt-info">
+                        <div class="d-flex align-items-center gap-3">
+                            <i data-lucide="user" class="text-muted" style="width: 18px; height: 18px;"></i>
+                            <span class="fs-7 fw-medium text-dark">Thông tin cá nhân</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-light" style="width: 16px; height: 16px;"></i>
+                    </a>
+
+                    <!-- Option 2 -->
+                    <a href="../purchase_history/purchase_history.html" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border-light-subtle option-item" id="opt-history">
+                        <div class="d-flex align-items-center gap-3">
+                            <i data-lucide="history" class="text-muted" style="width: 18px; height: 18px;"></i>
+                            <span class="fs-7 fw-medium text-dark">Lịch sử mua hàng</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-light" style="width: 16px; height: 16px;"></i>
+                    </a>
+
+                    <!-- Option 3 -->
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border-light-subtle option-item" id="opt-certificates">
+                        <div class="d-flex align-items-center gap-3">
+                            <i data-lucide="file-badge" class="text-muted" style="width: 18px; height: 18px;"></i>
+                            <span class="fs-7 fw-medium text-dark">Chứng chỉ của tôi</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-light" style="width: 16px; height: 16px;"></i>
+                    </a>
+
+                    <!-- Option 4 -->
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border-light-subtle option-item" id="opt-settings">
+                        <div class="d-flex align-items-center gap-3">
+                            <i data-lucide="settings" class="text-muted" style="width: 18px; height: 18px;"></i>
+                            <span class="fs-7 fw-medium text-dark">Cài đặt</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-light" style="width: 16px; height: 16px;"></i>
+                    </a>
+
+                    <!-- Option 5 -->
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between p-3 border-light-subtle option-item" id="opt-help">
+                        <div class="d-flex align-items-center gap-3">
+                            <i data-lucide="help-circle" class="text-muted" style="width: 18px; height: 18px;"></i>
+                            <span class="fs-7 fw-medium text-dark">Trợ giúp</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-light" style="width: 16px; height: 16px;"></i>
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer Section (Consistent branding) -->
+    <footer class="footer bg-white pt-5 pb-4 border-top">
+        <div class="container">
+            <div class="row g-5 justify-content-between mb-5">
+                
+                <!-- Footer Branding -->
+                <div class="col-lg-5 col-12">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="logo-icon-box d-flex align-items-center justify-content-center bg-primary rounded text-white" style="width: 32px; height: 32px;">
+                            <i data-lucide="zap" style="width: 18px; height: 18px; fill: currentColor;"></i>
+                        </div>
+                        <span class="logo-text fw-bold text-primary font-heading fs-5">Learning Hub</span>
+                    </div>
+                    <p class="text-muted fs-7 mb-0 leading-relaxed" style="max-width: 380px;">
+                        Kiến thức là sức mạnh. Chúng tôi đồng hành cùng bạn trên con đường chinh phục đỉnh cao tri thức.
+                    </p>
+                </div>
+
+                <!-- Footer Menu 1 -->
+                <div class="col-lg-3 col-6">
+                    <h4 class="footer-title fw-bold text-primary fs-7 mb-4">HỌC TẬP</h4>
+                    <ul class="list-unstyled d-flex flex-column gap-2 footer-links fs-7">
+                        <li><a th:href="@{/}" class="text-muted text-decoration-none">Tất cả khóa học</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Thiết kế</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Lập trình</a></li>
+                    </ul>
+                </div>
+
+                <!-- Footer Menu 2 -->
+                <div class="col-lg-3 col-6">
+                    <h4 class="footer-title fw-bold text-primary fs-7 mb-4">HỖ TRỢ</h4>
+                    <ul class="list-unstyled d-flex flex-column gap-2 footer-links fs-7">
+                        <li><a href="#" class="text-muted text-decoration-none">Trung tâm trợ giúp</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Điều khoản dịch vụ</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom border-top pt-4 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+                <p class="text-muted fs-7 m-0">© 2024 Learning Hub. All rights reserved.</p>
+                
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" aria-label="Ngôn ngữ">
+                        <i data-lucide="globe" style="width:18px; height:18px;" class="text-muted"></i>
+                    </button>
+                    <button class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" aria-label="Chia sẻ">
+                        <i data-lucide="share-2" style="width:18px; height:18px;" class="text-muted"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- Custom JavaScript -->
+    <script th:src="@{/js/student_profile.js}"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

@@ -27,7 +27,7 @@
         <div class="container d-flex justify-content-between align-items-center">
 
             <!-- Logo Section -->
-            <a class="header-logo d-flex align-items-center gap-2" href="index.html">
+            <a class="header-logo d-flex align-items-center gap-2" th:href="@{/}">
                 <div class="logo-icon-box d-flex align-items-center justify-content-center bg-primary rounded text-white">
                     <i data-lucide="zap" style="width: 20px; height: 20px; fill: currentColor;"></i>
                 </div>
@@ -55,11 +55,6 @@
 
             <!-- Header Auth -->
             <div class="header-auth d-flex align-items-center gap-2">
-                <!-- Cart Icon with badge (matching home log in styles) -->
-                <a href="html/cart/cart.html" class="btn btn-link position-relative text-muted p-2 rounded-circle" id="cart-utility-btn" aria-label="Giỏ hàng" style="margin-right: 8px;">
-                    <i data-lucide="shopping-cart" style="width: 20px; height: 20px; color: var(--text-muted);"></i>
-                    <span class="badge rounded-circle bg-danger border border-white cart-count-badge" id="cart-badge-count" style="font-size: 9px; padding: 3px 6px;">2</span>
-                </a>
                 <button class="btn btn-ghost-primary rounded-pill px-4 py-2 fw-semibold fs-7 d-none d-sm-block">Đăng nhập</button>
                 <button class="btn btn-primary-solid rounded-pill px-4 py-2 fw-semibold fs-7" id="btn-login-header">Đăng ký</button>
             </div>
@@ -108,7 +103,7 @@
 
                         <!-- CTA Buttons -->
                         <div class="hero-ctas d-flex flex-wrap gap-3 animate-fadeInUp" style="animation-delay: 0.5s;">
-                            <a href="html/courses/courses.html" class="btn-cta-primary d-inline-flex align-items-center gap-2" id="btn-find-courses">
+                            <a href="../courses/courses.html" class="btn-cta-primary d-inline-flex align-items-center gap-2" id="btn-find-courses">
                                 <span>Tìm Khóa Học</span>
                                 <i data-lucide="arrow-right" class="btn-arrow-icon" style="width:18px; height:18px;"></i>
                             </a>
@@ -127,9 +122,9 @@
                         <!-- Students Stats -->
                         <div class="hero-students-row d-flex align-items-center gap-3 animate-fadeInUp" style="animation-delay: 0.65s;">
                             <div class="student-avatar-pile d-flex">
-                                <img src="image/student1.png" alt="Học viên" class="avatar-img" loading="lazy">
-                                <img src="image/student2.png" alt="Học viên" class="avatar-img" loading="lazy">
-                                <img src="image/avatar.png" alt="Học viên" class="avatar-img" loading="lazy">
+                                <img th:src="@{/images/student1.png}" alt="Học viên" class="avatar-img" loading="lazy">
+                                <img th:src="@{/images/student2.png}" alt="Học viên" class="avatar-img" loading="lazy">
+                                <img th:src="@{/images/avatar.png}" alt="Học viên" class="avatar-img" loading="lazy">
                                 <div class="avatar-more">+2k</div>
                             </div>
                             <p class="students-text m-0">Tham gia cùng hàng nghìn <br><strong>học viên mỗi ngày</strong></p>
@@ -159,16 +154,16 @@
 
                             <!-- Main hero photo -->
                             <div class="hero-photo-frame">
-                                <img src="image/instructor_hero.png" alt="Nữ giảng viên Learning Hub tươi cười" class="hero-photo" loading="eager">
+                                <img th:src="@{/images/instructor_hero.png}" alt="Nữ giảng viên Learning Hub tươi cười" class="hero-photo" loading="eager">
                             </div>
 
                             <!-- Glassmorphic Instructor card -->
                             <div class="instructor-card glass-card">
                                 <p class="instructor-card-label">Giảng Viên</p>
                                 <div class="instructor-avatars-row">
-                                    <img src="image/avatar.png" alt="Instructor" class="inst-avatar">
-                                    <img src="image/student1.png" alt="Instructor" class="inst-avatar">
-                                    <img src="image/student2.png" alt="Instructor" class="inst-avatar">
+                                    <img th:src="@{/images/avatar.png}" alt="Instructor" class="inst-avatar">
+                                    <img th:src="@{/images/student1.png}" alt="Instructor" class="inst-avatar">
+                                    <img th:src="@{/images/student2.png}" alt="Instructor" class="inst-avatar">
                                     <div class="inst-avatar inst-avatar-plus">
                                         <i data-lucide="plus" style="width:12px; height:12px;"></i>
                                     </div>
@@ -228,8 +223,7 @@
                 </div>
                 <div class="row g-4">
                     <div class="col-lg-3 col-md-6 col-12">
-                        <!-- Direct Link to Detailed Course Page inside category card -->
-                        <div class="category-card" id="cat-music" onclick="location.href='html/course_detail/course_detail.html'">
+                        <div class="category-card" id="cat-music">
                             <div class="category-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
                                 <i data-lucide="music" style="width:28px; height:28px; color:white;"></i>
                             </div>
@@ -327,6 +321,6 @@
     <script>lucide.createIcons();</script>
 
     <!-- Custom JavaScript -->
-    <script src="javascript/home/home.js"></script>
+    <script th:src="@{/js/home.js}"></script>
 </body>
 </html>
