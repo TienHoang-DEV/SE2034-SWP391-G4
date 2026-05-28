@@ -1,4 +1,4 @@
-package vn.edu.fpt.common;
+package vn.edu.fpt.entity;
 
 public class Helloworld {
     public static void main(String[] args) {
