@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -47,5 +50,18 @@ public class User extends BaseEntity{
             message = "Status must be either 'ACTIVE', 'INACTIVE', or 'DELETED'"
     )
     private String status;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<PasswordResetToken> passwordResetTokens = new HashSet<>();
+
+    public void addPasswordResetToken(PasswordResetToken passwordResetToken) {
+        passwordResetTokens.add(passwordResetToken);
+        passwordResetToken.setUser(this);
+    }
+
+    public void removePasswordResetToken(PasswordResetToken passwordResetToken) {
+        passwordResetTokens.remove(passwordResetToken);
+        passwordResetToken.setUser(null);
+    }
 
 }
