@@ -17,7 +17,6 @@ public class QuizQuestion extends BaseEntity {
     @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
-    @Lob
     @Column(name = "question_text", columnDefinition = "NVARCHAR(MAX)", nullable = false)
     private String questionText;
 

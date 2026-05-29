@@ -26,7 +26,6 @@ public class SystemLog extends BaseEntity {
     @Column(name = "target_id", length = 100)
     private String targetId;
 
-    @Lob
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String meta;
 }

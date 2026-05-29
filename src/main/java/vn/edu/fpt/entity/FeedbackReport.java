@@ -21,7 +21,7 @@ public class FeedbackReport extends BaseEntity {
     @JoinColumn(name = "reporter_id", nullable = false)
     private User reporter;
 
-    @Lob
+    
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String reason;
 

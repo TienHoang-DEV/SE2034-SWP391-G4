@@ -27,7 +27,7 @@ public class Course extends BaseEntity {
     @Column(columnDefinition = "NVARCHAR(255)", nullable = false)
     private String title;
 
-    @Lob
+    
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String description;
 

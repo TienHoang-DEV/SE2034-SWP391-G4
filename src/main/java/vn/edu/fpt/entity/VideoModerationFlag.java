@@ -28,7 +28,6 @@ public class VideoModerationFlag extends BaseEntity {
     @Column(name = "confidence_score", nullable = false, precision = 5, scale = 2)
     private BigDecimal confidenceScore;
 
-    @Lob
     @Column(columnDefinition = "NVARCHAR(500)")
     private String description;
 }

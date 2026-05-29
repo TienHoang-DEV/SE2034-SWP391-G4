@@ -23,7 +23,7 @@ public class InstructorRequest extends BaseEntity {
     @Column(name = "certificate_url", length = 500)
     private String certificateUrl;
 
-    @Lob
+    
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String description;
 

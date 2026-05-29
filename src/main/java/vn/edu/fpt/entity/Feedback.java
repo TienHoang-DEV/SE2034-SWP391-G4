@@ -24,7 +24,7 @@ public class Feedback extends BaseEntity {
     @Column
     private Integer rating;
 
-    @Lob
+    
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String comment;
 
