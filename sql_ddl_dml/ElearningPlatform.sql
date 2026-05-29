@@ -19,19 +19,42 @@ GO
 -- =========================
 CREATE TABLE users (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh duy nhất, tự động tăng
+
     first_name NVARCHAR(255) NOT NULL,
-    last_name Nvarchar(255) NOT NULL,
+    -- Họ của người dùng
+
+    last_name NVARCHAR(255) NOT NULL,
+    -- Tên của người dùng
+
     email VARCHAR(255) UNIQUE NOT NULL,
-    phone Varchar(20) Unique Not Null,
+    -- Email duy nhất dùng cho đăng nhập local, phải unique
+
+    phone VARCHAR(20) UNIQUE NULL,
+    -- Số điện thoại (tuỳ chọn), duy nhất nếu có giá trị
+
     password_hash VARCHAR(255) NULL,
+    -- Hash mật khẩu (BCrypt/Argon2). NULL nếu user chỉ login via Google
+
     avatar_url VARCHAR(500) NULL,
+    -- URL ảnh đại diện (lưu link từ Azure Blob Storage)
+
     google_id VARCHAR(255) NULL,
+    -- Google ID nếu user authenticate via OAuth Google
+
     role VARCHAR(20) NOT NULL
         CHECK (role IN ('admin', 'learner', 'instructor', 'manager')),
+    -- Vai trò: admin (quản trị), learner (học viên), instructor (giáo viên), manager (nhân viên)
+
     status VARCHAR(20) NOT NULL
         CHECK (status IN ('active', 'banned', 'pending')),
+    -- Trạng thái: active (hoạt động), banned (cấm), pending (chờ xác thực)
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo tài khoản (mặc định là thời chạy lệnh CREATE)
+
     updated_at DATETIME NULL
+    -- Thời gian cập nhật gần nhất
 
 );
 
@@ -40,11 +63,22 @@ CREATE TABLE users (
 -- =========================
 CREATE TABLE password_reset_tokens (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh token reset
+
     user_id INT NOT NULL,
+    -- Tham chiếu đến bảng users, người dùng yêu cầu reset password
+
     token VARCHAR(255) NOT NULL,
+    -- Token ngẫu nhiên được gửi qua email (dùng cho link reset)
+
     expired_at DATETIME NOT NULL,
+    -- Thời gian token hết hiệu lực (thường 1 giờ sau khi tạo)
+
     is_used BIT DEFAULT 0,
+    -- Cờ đánh dấu token đã được sử dụng (reset password thành công) hay chưa
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian token được tạo
 
     CONSTRAINT FK_reset_tokens_user
         FOREIGN KEY (user_id) REFERENCES users(id)
@@ -55,12 +89,25 @@ CREATE TABLE password_reset_tokens (
 -- =========================
 CREATE TABLE system_logs (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh log
+
     user_id INT NOT NULL,
+    -- Tham chiếu đến bảng users, người dùng thực hiện hành động
+
     action VARCHAR(255),
+    -- Hành động thực hiện (ví dụ: 'create_course', 'upload_video', 'edit_course', 'delete_lesson')
+
     target_type VARCHAR(100),
+    -- Loại đối tượng bị tác động (ví dụ: 'course', 'lesson', 'quiz', 'user')
+
     target_id VARCHAR(100),
+    -- ID của đối tượng bị tác động (để trace được)
+
     meta NVARCHAR(MAX) NULL,
+    -- Dữ liệu bổ sung dạng JSON (ví dụ chi tiết thay đổi, thông tin cũ/mới)
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian ghi log
 
     CONSTRAINT FK_system_logs_user
         FOREIGN KEY (user_id) REFERENCES users(id)
@@ -71,15 +118,32 @@ CREATE TABLE system_logs (
 -- =========================
 CREATE TABLE instructor_requests (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh yêu cầu
+
     user_id INT NOT NULL,
+    -- Tham chiếu đến bảng users, người dùng yêu cầu trở thành giáo viên
+
     cv_url VARCHAR(500) NULL,
+    -- URL file CV (lưu link từ Azure Blob Storage)
+
     certificate_url VARCHAR(500) NULL,
+    -- URL file chứng chỉ/bằng cấp (lưu link từ Azure Blob Storage)
+
     description NVARCHAR(MAX) NULL,
+    -- Mô tả kinh nghiệm, lý do muốn trở thành giáo viên
+
     status VARCHAR(20) NOT NULL
         CHECK (status IN ('pending', 'approved', 'rejected', 'blocked')),
+    -- Trạng thái: pending (chờ duyệt), approved (phê duyệt), rejected (từ chối), blocked (chặn vĩnh viễn)
+
     reviewed_by INT NULL,
+    -- Tham chiếu đến manager/admin đã review yêu cầu này
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo yêu cầu
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất (khi được review)
 
     CONSTRAINT FK_instructor_requests_user
         FOREIGN KEY (user_id) REFERENCES users(id),
@@ -92,13 +156,26 @@ CREATE TABLE instructor_requests (
 -- =========================
 CREATE TABLE categories (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh danh mục
+
     name NVARCHAR(255) NOT NULL,
+    -- Tên danh mục (ví dụ: 'Lập trình', 'Thiết kế', 'Kinh doanh')
+
     description NVARCHAR(MAX) NULL,
+    -- Mô tả chi tiết về danh mục
+
     parent_id INT NULL,
+    -- ID danh mục cha (cho phép phân cấp danh mục: Lập trình -> Web Development -> Frontend)
+
     status VARCHAR(20)
         CHECK (status IN ('active', 'inactive')),
+    -- Trạng thái: active (hiển thị), inactive (ẩn)
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo danh mục
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_categories_parent
         FOREIGN KEY (parent_id) REFERENCES categories(id)
@@ -109,20 +186,45 @@ CREATE TABLE categories (
 -- =========================
 CREATE TABLE courses (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh khóa học
+
     instructor_id INT NOT NULL,
+    -- Tham chiếu đến bảng users (role='instructor'), giáo viên tạo khóa học
+
     category_id INT NOT NULL,
+    -- Tham chiếu đến bảng categories, danh mục khóa học
+
     title NVARCHAR(255) NOT NULL,
+    -- Tên khóa học (ví dụ: 'Lập trình C Cơ bản')
+
     description NVARCHAR(MAX) NULL,
+    -- Mô tả chi tiết nội dung, mục tiêu khóa học
+
     thumbnail_url VARCHAR(500) NULL,
+    -- URL ảnh bìa khóa học (lưu link từ Azure Blob Storage)
+
     price DECIMAL(10,2) NOT NULL CHECK (price >= 0),
+    -- Giá khóa học (0 = miễn phí)
+
     level VARCHAR(20)
         CHECK (level IN ('beginner', 'intermediate', 'advanced')),
+    -- Mức độ: beginner (cơ bản), intermediate (trung cấp), advanced (nâng cao)
+
     status VARCHAR(20)
         CHECK (status IN ('draft', 'pending', 'published', 'rejected', 'hidden')),
+    -- Trạng thái: draft (nháp), pending (chờ duyệt), published (đã xuất bản), rejected (từ chối), hidden (ẩn)
+
     approved_by INT NULL,
+    -- Tham chiếu đến manager/admin đã phê duyệt khóa học
+
     approved_at DATETIME NULL,
+    -- Thời gian phê duyệt
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo khóa học
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_courses_instructor
         FOREIGN KEY (instructor_id) REFERENCES users(id),
@@ -137,11 +239,22 @@ CREATE TABLE courses (
 -- =========================
 CREATE TABLE course_sections (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh section (chương)
+
     course_id INT NOT NULL,
+    -- Tham chiếu đến bảng courses, khóa học mà section này thuộc về
+
     title NVARCHAR(255) NOT NULL,
+    -- Tên section (ví dụ: 'Chương 1: Nhập môn', 'Chương 2: Cú pháp cơ bản')
+
     position INT NOT NULL,
+    -- Thứ tự hiển thị section trong khóa học (1, 2, 3, ...)
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo section
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_sections_course
         FOREIGN KEY (course_id) REFERENCES courses(id)
@@ -152,32 +265,68 @@ CREATE TABLE course_sections (
 -- =========================
 CREATE TABLE lessons (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh bài học
+
     section_id INT NOT NULL,
+    -- Tham chiếu đến bảng course_sections, bài học này thuộc section nào
+
     title NVARCHAR(255) NOT NULL,
+    -- Tên bài học (ví dụ: 'Bài 1: Giới thiệu ngôn ngữ C')
+
     video_url VARCHAR(500) NULL,
+    -- URL video bài học (lưu link từ Azure Blob Storage)
+
     duration_seconds INT NULL CHECK (duration_seconds > 0),
+    -- Thời lượng video (giây), kiểm tra phải > 0 nếu có giá trị
+
     position INT NULL,
+    -- Thứ tự hiển thị bài trong section (1, 2, 3, ...)
+
     is_published BIT DEFAULT 0,
+    -- Cờ đánh dấu bài học đã xuất bản cho học viên hay chưa
+
     moderation_status VARCHAR(20) DEFAULT 'pending'
-        CHECK (moderation_status IN ('pending', 'auto_flagged', 'clean', 'approved', 'rejected')), -- Trạng thái kiểm duyệt Azure & Manager
+        CHECK (moderation_status IN ('pending', 'auto_flagged', 'clean', 'approved', 'rejected')),
+    -- Trạng thái kiểm duyệt video bởi Azure AI:
+    -- pending (chờ), auto_flagged (AI phát hiện vấn đề), clean (không vấn đề),
+    -- approved (manager phê duyệt), rejected (manager từ chối)
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo bài học
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_lessons_section
         FOREIGN KEY (section_id) REFERENCES course_sections(id)
 );
 
 -- =========================
--- VIDEO MODERATION FLAGS (MỚI - LƯU VẾT VI PHẠM AZURE AI PHÁT HIỆN THEO PHÚT/GIÂY)
+-- VIDEO MODERATION FLAGS
 -- =========================
+-- Bảng lưu các dấu hiệu vi phạm được phát hiện bởi Azure AI cho từng video
+-- Giups manager dễ dàng review những vị trí nhạy cảm trong video
 CREATE TABLE video_moderation_flags (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh cờ (flag)
+
     lesson_id INT NOT NULL,
-    flagged_at_second INT NOT NULL CHECK (flagged_at_second >= 0), -- Giây thứ bao nhiêu trong video bị phát hiện nhạy cảm
-    category VARCHAR(100) NOT NULL, -- Thể loại nhạy cảm (bạo lực, khỏa thân, từ ngữ kích động...)
-    confidence_score DECIMAL(5,2) NOT NULL CHECK (confidence_score BETWEEN 0.00 AND 100.00), -- Độ tin cậy (%) từ Azure AI
-    description NVARCHAR(500) NULL, -- Mô tả chi tiết lỗi phát hiện
+    -- Tham chiếu đến bảng lessons, video bị phát hiện vấn đề
+
+    flagged_at_second INT NOT NULL CHECK (flagged_at_second >= 0),
+    -- Vị trí giây thứ bao nhiêu trong video bị phát hiện (dùng cho skip trực tiếp)
+
+    category VARCHAR(100) NOT NULL,
+    -- Thể loại vấn đề: 'violence' (bạo lực), 'nudity' (khỏa thân), 'offensive_language' (từ ngữ kích động), ...
+
+    confidence_score DECIMAL(5,2) NOT NULL CHECK (confidence_score BETWEEN 0.00 AND 100.00),
+    -- Độ tin cậy của phát hiện Azure AI (0.00-100.00%)
+
+    description NVARCHAR(500) NULL,
+    -- Mô tả chi tiết về lỗi phát hiện bởi AI
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian phát hiện
 
     CONSTRAINT FK_moderation_flags_lesson
         FOREIGN KEY (lesson_id) REFERENCES lessons(id)
@@ -188,15 +337,34 @@ CREATE TABLE video_moderation_flags (
 -- =========================
 CREATE TABLE lesson_materials (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh tài liệu
+
     instructor_id INT NOT NULL,
+    -- Tham chiếu đến bảng users (role='instructor'), giáo viên upload tài liệu
+
     course_id INT NULL,
+    -- Tham chiếu đến bảng courses (tài liệu cho cả khóa học nếu có)
+
     lesson_id INT NULL,
+    -- Tham chiếu đến bảng lessons (tài liệu cho bài học cụ thể)
+
     file_name NVARCHAR(255) NULL,
+    -- Tên file gốc
+
     file_url VARCHAR(500) NULL,
+    -- URL file (lưu link từ Azure Blob Storage)
+
     file_type VARCHAR(50) NULL,
+    -- Loại file: 'pdf', 'docx', 'pptx', 'zip', 'txt', ...
+
     file_size BIGINT NULL,
+    -- Kích thước file (bytes)
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian upload tài liệu
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_materials_instructor
         FOREIGN KEY (instructor_id) REFERENCES users(id),
@@ -211,11 +379,22 @@ CREATE TABLE lesson_materials (
 -- =========================
 CREATE TABLE quizzes (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh bài quiz
+
     lesson_id INT NOT NULL,
+    -- Tham chiếu đến bảng lessons, quiz nằm trong bài học nào
+
     title NVARCHAR(255) NOT NULL,
+    -- Tên bài quiz (ví dụ: 'Quiz: Kiểu dữ liệu và biến')
+
     pass_score INT NOT NULL CHECK (pass_score >= 0),
+    -- Điểm tối thiểu để pass quiz (ví dụ: 70)
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo quiz
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_quizzes_lesson
         FOREIGN KEY (lesson_id) REFERENCES lessons(id)
@@ -226,14 +405,29 @@ CREATE TABLE quizzes (
 -- =========================
 CREATE TABLE quiz_questions (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh câu hỏi
+
     quiz_id INT NOT NULL,
+    -- Tham chiếu đến bảng quizzes, câu hỏi này thuộc quiz nào
+
     question_text NVARCHAR(MAX) NOT NULL,
+    -- Nội dung câu hỏi
+
     question_type VARCHAR(20)
         CHECK (question_type IN ('single', 'multiple')),
+    -- Loại câu hỏi: single (1 đáp án đúng), multiple (nhiều đáp án đúng)
+
     points INT DEFAULT 1,
+    -- Điểm thưởng nếu trả lời đúng (mặc định 1)
+
     position INT NULL,
+    -- Thứ tự câu hỏi trong quiz
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo câu hỏi
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_questions_quiz
         FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
@@ -244,11 +438,22 @@ CREATE TABLE quiz_questions (
 -- =========================
 CREATE TABLE quiz_answers (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh đáp án
+
     question_id INT NOT NULL,
+    -- Tham chiếu đến bảng quiz_questions, đáp án thuộc câu hỏi nào
+
     answer_text NVARCHAR(MAX) NOT NULL,
+    -- Nội dung đáp án
+
     is_correct BIT DEFAULT 0,
+    -- Cờ đánh dấu đáp án đúng hay sai (1 = đúng, 0 = sai)
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo đáp án
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_answers_question
         FOREIGN KEY (question_id) REFERENCES quiz_questions(id)
@@ -259,12 +464,25 @@ CREATE TABLE quiz_answers (
 -- =========================
 CREATE TABLE quiz_attempts (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh lần làm quiz
+
     user_id INT NOT NULL,
+    -- Tham chiếu đến bảng users, học viên làm quiz
+
     quiz_id INT NOT NULL,
+    -- Tham chiếu đến bảng quizzes, quiz nào được làm
+
     score DECIMAL(5,2) NULL,
+    -- Điểm đạt được (NULL nếu còn đang làm)
+
     is_passed BIT NULL,
+    -- Cờ đánh dấu pass hay fail (NULL nếu chưa submit, 1 = pass, 0 = fail)
+
     started_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian bắt đầu làm quiz
+
     submitted_at DATETIME NULL,
+    -- Thời gian submit quiz (NULL nếu chưa submit)
 
     CONSTRAINT FK_attempts_user
         FOREIGN KEY (user_id) REFERENCES users(id),
@@ -277,18 +495,39 @@ CREATE TABLE quiz_attempts (
 -- =========================
 CREATE TABLE coupons (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh mã giảm giá
+
     instructor_id INT NOT NULL,
+    -- Tham chiếu đến bảng users (role='instructor'), giáo viên tạo coupon cho khóa học của họ
+
     code VARCHAR(100) UNIQUE NOT NULL,
+    -- Mã code coupon (ví dụ: 'SUMMER50', 'NEWYEAR2024'), phải unique
+
     discount_type VARCHAR(20)
         CHECK (discount_type IN ('percent', 'fixed')),
+    -- Loại giảm giá: percent (giảm theo %), fixed (giảm số tiền cố định)
+
     discount_value DECIMAL(10,2) NOT NULL CHECK (discount_value > 0),
+    -- Giá trị giảm (ví dụ: 50 cho percent, 100000 cho fixed)
+
     usage_limit INT NULL CHECK (usage_limit >= 1),
+    -- Giới hạn số lần sử dụng coupon (NULL = không giới hạn)
+
     used_count INT DEFAULT 0 CHECK (used_count >= 0),
+    -- Số lần coupon đã được sử dụng
+
     expired_at DATETIME NULL,
+    -- Thời gian hết hiệu lực coupon (NULL = không có hạn)
+
     status VARCHAR(20)
         CHECK (status IN ('active', 'inactive')),
+    -- Trạng thái: active (đang hoạt động), inactive (không hoạt động)
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo coupon
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_coupons_instructor
         FOREIGN KEY (instructor_id) REFERENCES users(id)
@@ -299,9 +538,16 @@ CREATE TABLE coupons (
 -- =========================
 CREATE TABLE carts (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh giỏ hàng
+
     user_id INT UNIQUE NOT NULL,
+    -- Tham chiếu đến bảng users, mỗi user có 1 giỏ hàng duy nhất
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo giỏ hàng
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_carts_user
         FOREIGN KEY (user_id) REFERENCES users(id)
@@ -312,9 +558,16 @@ CREATE TABLE carts (
 -- =========================
 CREATE TABLE cart_items (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh item trong giỏ
+
     cart_id INT NOT NULL,
+    -- Tham chiếu đến bảng carts, item này thuộc giỏ nào
+
     course_id INT NOT NULL,
+    -- Tham chiếu đến bảng courses, khóa học nào được thêm vào giỏ
+
     added_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian thêm vào giỏ
 
     CONSTRAINT FK_cart_items_cart
         FOREIGN KEY (cart_id) REFERENCES carts(id),
@@ -322,17 +575,28 @@ CREATE TABLE cart_items (
     CONSTRAINT FK_cart_items_course
         FOREIGN KEY (course_id) REFERENCES courses(id),
 
+    -- Constraint unique để tránh thêm cùng khóa học 2 lần vào giỏ
     CONSTRAINT UQ_cart_course UNIQUE(cart_id, course_id)
 );
 
+-- =========================
+-- CART INSTRUCTOR COUPONS
+-- =========================
 CREATE TABLE cart_instructor_coupons (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh mối quan hệ
 
     cart_id INT NOT NULL,
+    -- Tham chiếu đến bảng carts, giỏ nào áp dụng coupon
+
     instructor_id INT NOT NULL,
+    -- Tham chiếu đến bảng users, coupon của giáo viên nào
+
     coupon_id INT NOT NULL,
+    -- Tham chiếu đến bảng coupons, coupon nào được áp dụng
 
     applied_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian áp dụng coupon
 
     CONSTRAINT FK_cart_coupon_cart
         FOREIGN KEY (cart_id) REFERENCES carts(id),
@@ -343,6 +607,7 @@ CREATE TABLE cart_instructor_coupons (
     CONSTRAINT FK_cart_coupon_coupon
         FOREIGN KEY (coupon_id) REFERENCES coupons(id),
 
+    -- Constraint unique để tránh áp dụng coupon cùng giáo viên 2 lần
     CONSTRAINT UQ_cart_instructor UNIQUE(cart_id, instructor_id)
 );
 
@@ -352,14 +617,31 @@ CREATE TABLE cart_instructor_coupons (
 -- =========================
 CREATE TABLE orders (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh đơn hàng
+
     user_id INT NOT NULL,
+    -- Tham chiếu đến bảng users, học viên tạo đơn hàng
+
     total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
+    -- Tổng tiền trước khi giảm giá
+
     discount_amount DECIMAL(10,2) DEFAULT 0 CHECK (discount_amount >= 0),
+    -- Tổng tiền giảm từ tất cả coupons
+
     status VARCHAR(20)
-        CHECK (status IN ('pending', 'paid', 'completed', 'cancelled', 'expired')), -- Thêm completed và expired
+        CHECK (status IN ('pending', 'paid', 'completed', 'cancelled', 'expired')),
+    -- Trạng thái đơn hàng:
+    -- pending (chờ thanh toán), paid (đã thanh toán), completed (hoàn tất),
+    -- cancelled (hủy), expired (hết hạn thanh toán)
+
     payment_method VARCHAR(50) NULL,
+    -- Phương thức thanh toán (ví dụ: 'MOMO', 'VNPAY', 'CARD')
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo đơn hàng
+
     updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_orders_user
         FOREIGN KEY (user_id) REFERENCES users(id)
@@ -370,13 +652,28 @@ CREATE TABLE orders (
 -- =========================
 CREATE TABLE order_items (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh item trong đơn hàng
+
     order_id INT NOT NULL,
+    -- Tham chiếu đến bảng orders, item này thuộc đơn hàng nào
+
     course_id INT NOT NULL,
+    -- Tham chiếu đến bảng courses, khóa học nào được thanh toán
+
     coupon_id INT NULL,
+    -- Tham chiếu đến bảng coupons, coupon được áp dụng cho item này (nếu có)
+
     price_snapshot DECIMAL(10,2) NOT NULL CHECK (price_snapshot >= 0),
+    -- Giá gốc khóa học tại thời điểm tạo đơn (snapshot)
+
     discount_amount DECIMAL(10,2) DEFAULT 0 CHECK (discount_amount >= 0),
+    -- Tiền giảm từ coupon (nếu có)
+
     final_price DECIMAL(10,2) NOT NULL CHECK (final_price >= 0),
+    -- Giá cuối cùng = price_snapshot - discount_amount
+
     course_title_snapshot NVARCHAR(255) NULL,
+    -- Tên khóa học tại thời điểm tạo đơn (snapshot, dùng cho lịch sử)
 
     CONSTRAINT FK_order_items_order
         FOREIGN KEY (order_id) REFERENCES orders(id),
@@ -391,16 +688,35 @@ CREATE TABLE order_items (
 -- =========================
 CREATE TABLE payments (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh ghi nhận thanh toán
+
     order_id INT NOT NULL,
+    -- Tham chiếu đến bảng orders, thanh toán cho đơn hàng nào
+
     transaction_code VARCHAR(255) NULL,
-    gateway VARCHAR(50) NULL, -- 'MOMO', 'VNPAY', etc.
-    gateway_tx_id VARCHAR(255) NULL, -- transId từ MoMo
+    -- Mã giao dịch nội bộ
+
+    gateway VARCHAR(50) NULL,
+    -- Cổng thanh toán: 'MOMO', 'VNPAY', 'CARD', ...
+
+    gateway_tx_id VARCHAR(255) NULL,
+    -- Transaction ID từ gateway MOMO, VNPAY, ... (để trace)
+
     amount DECIMAL(10,2) NOT NULL CHECK (amount >= 0),
-    qr_code_url VARCHAR(500) NULL, -- Mới bổ sung để lưu mã QR thanh toán động MoMo
+    -- Số tiền thanh toán
+
+    qr_code_url VARCHAR(500) NULL,
+    -- URL mã QR động từ MOMO (để check QR trên điện thoại)
+
     status VARCHAR(20)
         CHECK (status IN ('success', 'failed', 'pending')),
+    -- Trạng thái thanh toán: success (thành công), failed (thất bại), pending (chờ xác nhận)
+
     paid_at DATETIME NULL,
+    -- Thời gian thanh toán thành công
+
     created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo bản ghi thanh toán
 
     CONSTRAINT FK_payments_order
         FOREIGN KEY (order_id) REFERENCES orders(id)
@@ -411,8 +727,14 @@ CREATE TABLE payments (
 -- =========================
 CREATE TABLE coupon_usages (
     id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh lần sử dụng coupon
+
     coupon_id INT NOT NULL,
+    -- Tham chiếu đến bảng coupons, coupon nào được sử dụng
+
     user_id INT NOT NULL,
+    -- Tham chiếu đến bảng users, người dùng nào sử dụng
+
     order_id INT NOT NULL,
     discount_amount DECIMAL(10,2) NOT NULL,
     used_at DATETIME DEFAULT GETDATE(),
@@ -620,9 +942,10 @@ VALUES (
 USE ElearningPlatform;
 GO
 
--- =========================================================
--- LESSON 2
--- =========================================================
+-- =========================
+-- SAMPLE LESSON 2
+-- =========================
+-- Bài học 2: Kiểu dữ liệu và khai báo biến
 INSERT INTO lessons (
     section_id,
     title,
@@ -646,7 +969,10 @@ VALUES (
 
 DECLARE @Lesson2Id INT = SCOPE_IDENTITY();
 
--- QUIZ LESSON 2
+-- ==========
+-- QUIZ 2
+-- ==========
+-- Quiz cho bài học 2: Kiểu dữ liệu và biến
 INSERT INTO quizzes (
     lesson_id,
     title,
@@ -660,7 +986,10 @@ VALUES (
 
 DECLARE @Quiz2Id INT = SCOPE_IDENTITY();
 
--- QUESTION 1
+-- ==========
+-- QUIZ 2 - QUESTION 1
+-- ==========
+-- Câu hỏi 1: Kiểu dữ liệu cho số nguyên
 INSERT INTO quiz_questions (
     quiz_id,
     question_text,
@@ -678,6 +1007,7 @@ VALUES (
 
 DECLARE @Q1Id INT = SCOPE_IDENTITY();
 
+-- Đáp án cho Q1
 INSERT INTO quiz_answers (
     question_id,
     answer_text,
@@ -689,7 +1019,10 @@ VALUES
 (@Q1Id, N'double', 0),
 (@Q1Id, N'char', 0);
 
--- QUESTION 2
+-- ==========
+-- QUIZ 2 - QUESTION 2
+-- ==========
+-- Câu hỏi 2: Từ khóa cho số thực
 INSERT INTO quiz_questions (
     quiz_id,
     question_text,
@@ -707,6 +1040,7 @@ VALUES (
 
 DECLARE @Q2Id INT = SCOPE_IDENTITY();
 
+-- Đáp án cho Q2
 INSERT INTO quiz_answers (
     question_id,
     answer_text,
@@ -718,9 +1052,10 @@ VALUES
 (@Q2Id, N'char', 0),
 (@Q2Id, N'void', 0);
 
--- =========================================================
--- LESSON 3
--- =========================================================
+-- =========================
+-- SAMPLE LESSON 3
+-- =========================
+-- Bài học 3: Xuất dữ liệu với printf
 INSERT INTO lessons (
     section_id,
     title,
@@ -744,7 +1079,10 @@ VALUES (
 
 DECLARE @Lesson3Id INT = SCOPE_IDENTITY();
 
--- QUIZ LESSON 3
+-- ==========
+-- QUIZ 3
+-- ==========
+-- Quiz cho bài học 3: Hàm printf
 INSERT INTO quizzes (
     lesson_id,
     title,
@@ -758,7 +1096,10 @@ VALUES (
 
 DECLARE @Quiz3Id INT = SCOPE_IDENTITY();
 
--- QUESTION 1
+-- ==========
+-- QUIZ 3 - QUESTION 1
+-- ==========
+-- Câu hỏi 1: Hàm xuất dữ liệu
 INSERT INTO quiz_questions (
     quiz_id,
     question_text,
@@ -787,7 +1128,10 @@ VALUES
 (@Q3Id, N'gets', 0),
 (@Q3Id, N'cin', 0);
 
--- QUESTION 2
+-- ==========
+-- QUIZ 3 - QUESTION 2
+-- ==========
+-- Câu hỏi 2: %d trong printf
 INSERT INTO quiz_questions (
     quiz_id,
     question_text,
@@ -816,9 +1160,10 @@ VALUES
 (@Q4Id, N'Ký tự', 0),
 (@Q4Id, N'Chuỗi', 0);
 
--- =========================================================
--- LESSON 4
--- =========================================================
+-- =========================
+-- SAMPLE LESSON 4
+-- =========================
+-- Bài học 4: Nhập dữ liệu với scanf
 INSERT INTO lessons (
     section_id,
     title,
@@ -842,7 +1187,10 @@ VALUES (
 
 DECLARE @Lesson4Id INT = SCOPE_IDENTITY();
 
--- QUIZ LESSON 4
+-- ==========
+-- QUIZ 4
+-- ==========
+-- Quiz cho bài học 4: Hàm scanf
 INSERT INTO quizzes (
     lesson_id,
     title,
@@ -856,7 +1204,10 @@ VALUES (
 
 DECLARE @Quiz4Id INT = SCOPE_IDENTITY();
 
--- QUESTION 1
+-- ==========
+-- QUIZ 4 - QUESTION 1
+-- ==========
+-- Câu hỏi 1: Hàm nhập dữ liệu
 INSERT INTO quiz_questions (
     quiz_id,
     question_text,
@@ -885,7 +1236,10 @@ VALUES
 (@Q5Id, N'puts', 0),
 (@Q5Id, N'cout', 0);
 
--- QUESTION 2
+-- ==========
+-- QUIZ 4 - QUESTION 2
+-- ==========
+-- Câu hỏi 2: Dấu & trong scanf
 INSERT INTO quiz_questions (
     quiz_id,
     question_text,
@@ -914,5 +1268,7 @@ VALUES
 (@Q6Id, N'Nối chuỗi', 0),
 (@Q6Id, N'Xuất dữ liệu', 0);
 
-PRINT N'Đã thêm lesson 2, 3, 4 và quiz thành công!';
+-- =========================
+-- SAMPLE DATA COMPLETE
+-- =========================
 GO
