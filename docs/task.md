@@ -14,6 +14,7 @@ Tài liệu này ghi nhanh nhiệm vụ chính tương ứng với từng nhánh
 | `feature/auth-backend-register` | Xây dựng luồng đăng ký phía backend: validate, tạo user, gán role, lưu dữ liệu, trả phản hồi phù hợp. | Backend cho UC-01 Register account. |
 | `feature/instructor-ui` | Xây dựng giao diện cho instructor: dashboard, quản lý course/material/quiz/coupon. | Liên quan nhóm UC-24 → UC-36. |
 | `feature/course-management` | Phát triển chức năng quản lý khóa học: danh sách, chi tiết, tạo/sửa/duyệt/xuất bản theo quyền. | Liên quan UC-18, UC-24, UC-37, UC-38. |
+| `feature/entity-initialization` | Khởi tạo các entity/domain model cơ bản và mapping JPA: User, Role, Course, Category, Order, OrderDetail, Material, Feedback, Coupon, ... | Nền tảng cho toàn bộ nghiệp vụ và migration database. |
 | `feature/avatar-upload` | Thêm chức năng tải lên/cập nhật avatar người dùng. | Liên quan hồ sơ cá nhân và media storage. |
 | `feature/security-secret-management` | Chuẩn hoá quản lý secret và cấu hình nhạy cảm: env vars, key, token, connection string. | Tăng an toàn vận hành. |
 | `feature/docker-and-ci` | Thêm Docker/Docker Compose và pipeline CI để build, test, package tự động. | Phục vụ triển khai và kiểm tra liên tục. |
