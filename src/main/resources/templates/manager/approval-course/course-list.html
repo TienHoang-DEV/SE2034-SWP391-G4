@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Manager - Quản lý Khóa học</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../../../static/css/manager/course.css" th:href="@{/css/manager/course.css}">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Hệ thống Quản lý</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="../dashboard/dashboard.html"><i class="ph ph-squares-four"></i><span>Tổng quan</span></a>
+                    </li>
+                    <li>
+                        <a href="../approval-instructor/instructor-list.html"><i class="ph ph-users"></i><span>Phê duyệt giảng viên</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="course-list.html"><i class="ph ph-book-open"></i><span>Phê duyệt khóa học</span></a>
+                    </li>
+                    <li>
+                        <a href="../revenue/revenue-list.html"><i class="ph ph-currency-circle-dollar"></i><span>Doanh thu</span></a>
+                    </li>
+                    <li>
+                        <a href="../feedback-report/feedback-report-list.html"><i class="ph ph-chat-circle-dots"></i><span>Phản hồi</span></a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer" style="padding: 20px; border-top: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; margin-top: auto;">
+                <div class="avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-blue); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; flex-shrink: 0;">M</div>
+                <div class="profile-info" style="overflow: hidden;">
+                    <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-main); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Quản trị viên</div>
+                    <div style="font-size: 0.8rem; color: var(--text-gray); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">admin@system.com</div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-wrapper">
+
+            <main class="content">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <h1>Phê duyệt Khóa học</h1>
+                        <p>Xem xét, phê duyệt và quản lý các khóa học trên nền tảng.</p>
+                    </div>
+                    <div class="header-actions">
+                        <input type="text" placeholder="Tìm kiếm khóa học..." class="search-input">
+                        <select class="search-input" style="cursor: pointer; color: var(--text-main); font-family: inherit;">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="PENDING">Đang chờ duyệt</option>
+                            <option value="APPROVED">Đã duyệt</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="course-grid">
+                    <div class="course-card">
+                        <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=400&auto=format&fit=crop" class="course-image" alt="Course">
+                        <div class="course-body">
+                            <div class="course-meta">
+                                <span class="badge badge-success">APPROVED</span>
+                                <span class="course-price">$49.99</span>
+                            </div>
+                            <div class="course-title">Các Mẫu React Nâng Cao</div>
+                            <div class="course-instructor">Michael Chang</div>
+                        </div>
+                        <div class="course-footer">
+                            <div class="course-rating">★ 4.8</div>
+                            <div class="actions"><i class="ph ph-eye"></i><a href="#" class="action-link">Xem Chi Tiết</a></div>
+                        </div>
+                    </div>
+                    <div class="course-card">
+                        <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=400&auto=format&fit=crop" class="course-image" alt="Course">
+                        <div class="course-body">
+                            <div class="course-meta">
+                                <span class="badge badge-warning">PENDING</span>
+                                <span class="course-price">$89.99</span>
+                            </div>
+                            <div class="course-title">Nhập môn Học Máy</div>
+                            <div class="course-instructor">Tiến sĩ Eleanor Vance</div>
+                        </div>
+                        <div class="course-footer">
+                            <div class="course-rating" style="color:var(--text-gray);">Chưa có đánh giá</div>
+                            <div class="actions"><i class="ph ph-eye"></i><a href="#" class="action-link">Xem Chi Tiết</a></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
+
