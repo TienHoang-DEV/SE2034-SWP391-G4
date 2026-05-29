@@ -13,12 +13,29 @@ GO
 
 USE ElearningPlatform;
 GO
+-- =========================
+-- ROLES
+-- =========================
+CREATE TABLE roles (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    name VARCHAR(50) UNIQUE NOT NULL,
+    description NVARCHAR(255) NULL,
+    created_at DATETIME DEFAULT GETDATE()
+);
 
+-- Seed roles
+INSERT INTO roles (name, description)
+VALUES
+('admin', N'Quản trị hệ thống'),
+('manager', N'Quản lý nội dung'),
+('instructor', N'Giảng viên'),
+('learner', N'Học viên');
 -- =========================
 -- USERS
 -- =========================
 CREATE TABLE users (
     id INT PRIMARY KEY IDENTITY(1,1),
+	role_id INT NOT NULL,
     first_name NVARCHAR(255) NOT NULL,
     last_name Nvarchar(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -26,12 +43,12 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NULL,
     avatar_url VARCHAR(500) NULL,
     google_id VARCHAR(255) NULL,
-    role VARCHAR(20) NOT NULL
-        CHECK (role IN ('admin', 'learner', 'instructor', 'manager')),
     status VARCHAR(20) NOT NULL
         CHECK (status IN ('active', 'banned', 'pending')),
     created_at DATETIME DEFAULT GETDATE(),
     updated_at DATETIME NULL
+	    CONSTRAINT FK_users_role
+        FOREIGN KEY (role_id) REFERENCES roles(id)
 
 );
 
@@ -69,6 +86,9 @@ CREATE TABLE system_logs (
 -- =========================
 -- INSTRUCTOR REQUESTS
 -- =========================
+-- =========================
+-- INSTRUCTOR REQUESTS
+-- =========================
 CREATE TABLE instructor_requests (
     id INT PRIMARY KEY IDENTITY(1,1),
     user_id INT NOT NULL,
@@ -77,12 +97,14 @@ CREATE TABLE instructor_requests (
     description NVARCHAR(MAX) NULL,
     status VARCHAR(20) NOT NULL
         CHECK (status IN ('pending', 'approved', 'rejected', 'blocked')),
+    reject_reason NVARCHAR(1000) NULL,
     reviewed_by INT NULL,
+    reviewed_at DATETIME NULL,
     created_at DATETIME DEFAULT GETDATE(),
     updated_at DATETIME NULL,
-
     CONSTRAINT FK_instructor_requests_user
         FOREIGN KEY (user_id) REFERENCES users(id),
+
     CONSTRAINT FK_instructor_requests_reviewed_by
         FOREIGN KEY (reviewed_by) REFERENCES users(id)
 );
@@ -523,21 +545,21 @@ GO
 -- USER (INSTRUCTOR)
 -- =========================
 INSERT INTO users (
+    role_id,
     first_name,
     last_name,
     email,
     phone,
     password_hash,
-    role,
     status
 )
 VALUES (
+    3, -- instructor
     N'28',
     N'Tech',
     '28tech@gmail.com',
     '0909999999',
     '123456',
-    'instructor',
     'active'
 );
 
