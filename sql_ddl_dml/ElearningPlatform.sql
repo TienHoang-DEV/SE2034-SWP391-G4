@@ -29,8 +29,10 @@ CREATE TABLE roles (
     description NVARCHAR(255) NULL,
     -- Mô tả chi tiết vai trò
 
-    created_at DATETIME DEFAULT GETDATE()
+    created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo vai trò
+    updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 );
 
 -- Seed dữ liệu vai trò mặc định
@@ -109,6 +111,8 @@ CREATE TABLE password_reset_tokens (
 
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian token được tạo
+    updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_reset_tokens_user
         FOREIGN KEY (user_id) REFERENCES users(id)
@@ -138,6 +142,8 @@ CREATE TABLE system_logs (
 
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian ghi log
+    updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_system_logs_user
         FOREIGN KEY (user_id) REFERENCES users(id)
@@ -357,6 +363,8 @@ CREATE TABLE video_moderation_flags (
 
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian phát hiện
+    updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_moderation_flags_lesson
         FOREIGN KEY (lesson_id) REFERENCES lessons(id)
@@ -481,7 +489,6 @@ CREATE TABLE quiz_answers (
 
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo đáp án
-
     updated_at DATETIME NULL,
     -- Thời gian cập nhật gần nhất
 
@@ -510,9 +517,12 @@ CREATE TABLE quiz_attempts (
 
     started_at DATETIME DEFAULT GETDATE(),
     -- Thời gian bắt đầu làm quiz
-
     submitted_at DATETIME NULL,
     -- Thời gian submit quiz (NULL nếu chưa submit)
+    created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo bản ghi
+    updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_attempts_user
         FOREIGN KEY (user_id) REFERENCES users(id),
@@ -598,6 +608,10 @@ CREATE TABLE cart_items (
 
     added_at DATETIME DEFAULT GETDATE(),
     -- Thời gian thêm vào giỏ
+    created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo bản ghi
+    updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_cart_items_cart
         FOREIGN KEY (cart_id) REFERENCES carts(id),
@@ -627,6 +641,10 @@ CREATE TABLE cart_instructor_coupons (
 
     applied_at DATETIME DEFAULT GETDATE(),
     -- Thời gian áp dụng coupon
+    created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo bản ghi
+    updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_cart_coupon_cart
         FOREIGN KEY (cart_id) REFERENCES carts(id),
@@ -768,6 +786,10 @@ CREATE TABLE coupon_usages (
     order_id INT NOT NULL,
     discount_amount DECIMAL(10,2) NOT NULL,
     used_at DATETIME DEFAULT GETDATE(),
+    created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo bản ghi
+    updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT FK_coupon_usages_coupon
         FOREIGN KEY (coupon_id) REFERENCES coupons(id),
@@ -787,6 +809,10 @@ CREATE TABLE enrollments (
     progress_percent DECIMAL(5,2) DEFAULT 0,
     enrolled_at DATETIME DEFAULT GETDATE(),
     completed_at DATETIME NULL,
+    created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo bản ghi
+    updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT UQ_enrollment UNIQUE (user_id, course_id),
     CONSTRAINT FK_enrollments_user
@@ -804,6 +830,10 @@ CREATE TABLE lesson_progress (
     lesson_id INT NOT NULL,
     is_completed BIT DEFAULT 0,
     last_accessed DATETIME NULL,
+    created_at DATETIME DEFAULT GETDATE(),
+    -- Thời gian tạo bản ghi
+    updated_at DATETIME NULL,
+    -- Thời gian cập nhật gần nhất
 
     CONSTRAINT UQ_lesson_progress UNIQUE (enrollment_id, lesson_id),
     CONSTRAINT FK_lesson_progress_enrollment
