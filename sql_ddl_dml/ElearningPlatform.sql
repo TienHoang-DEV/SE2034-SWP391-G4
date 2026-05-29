@@ -15,11 +15,42 @@ USE ElearningPlatform;
 GO
 
 -- =========================
+-- ROLES
+-- =========================
+-- Bảng lưu các vai trò hệ thống (tách riêng để dễ mở rộng)
+CREATE TABLE roles (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    -- Mã định danh vai trò
+
+    name VARCHAR(50) UNIQUE NOT NULL,
+    -- Tên vai trò: 'admin', 'manager', 'instructor', 'learner'
+
+    description NVARCHAR(255) NULL,
+    -- Mô tả chi tiết vai trò
+
+    created_at DATETIME DEFAULT GETDATE()
+    -- Thời gian tạo vai trò
+);
+
+-- Seed dữ liệu vai trò mặc định
+INSERT INTO roles (name, description)
+VALUES
+('admin', N'Quản trị hệ thống'),
+('manager', N'Quản lý nội dung'),
+('instructor', N'Giảng viên'),
+('learner', N'Học viên');
+
+GO
+
+-- =========================
 -- USERS
 -- =========================
 CREATE TABLE users (
     id INT PRIMARY KEY IDENTITY(1,1),
     -- Mã định danh duy nhất, tự động tăng
+
+    role_id INT NOT NULL,
+    -- Tham chiếu đến bảng roles, vai trò của user
 
     first_name NVARCHAR(255) NOT NULL,
     -- Họ của người dùng
@@ -42,10 +73,6 @@ CREATE TABLE users (
     google_id VARCHAR(255) NULL,
     -- Google ID nếu user authenticate via OAuth Google
 
-    role VARCHAR(20) NOT NULL
-        CHECK (role IN ('admin', 'learner', 'instructor', 'manager')),
-    -- Vai trò: admin (quản trị), learner (học viên), instructor (giáo viên), manager (nhân viên)
-
     status VARCHAR(20) NOT NULL
         CHECK (status IN ('active', 'banned', 'pending')),
     -- Trạng thái: active (hoạt động), banned (cấm), pending (chờ xác thực)
@@ -53,9 +80,11 @@ CREATE TABLE users (
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo tài khoản (mặc định là thời chạy lệnh CREATE)
 
-    updated_at DATETIME NULL
+    updated_at DATETIME NULL,
     -- Thời gian cập nhật gần nhất
 
+    CONSTRAINT FK_users_role
+        FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
 -- =========================
@@ -840,26 +869,26 @@ CREATE INDEX IX_payments_order ON payments(order_id);
 CREATE INDEX IX_enrollments_lookup ON enrollments(user_id, course_id);
 GO
 
--- Mẫu chèn khóa học
 -- =========================
--- USER (INSTRUCTOR)
+-- INSTRUCTOR USER (SAMPLE)
 -- =========================
+-- Tạo một giáo viên mẫu (role_id = 3 : instructor)
 INSERT INTO users (
+    role_id,
     first_name,
     last_name,
     email,
     phone,
     password_hash,
-    role,
     status
 )
 VALUES (
+    3,
     N'28',
     N'Tech',
     '28tech@gmail.com',
     '0909999999',
     '123456',
-    'instructor',
     'active'
 );
 
