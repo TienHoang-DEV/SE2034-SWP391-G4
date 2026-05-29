@@ -45,10 +45,6 @@ public class User extends BaseEntity{
     private String googleId;
 
     @Column(length = 20, nullable = false)
-    @Pattern(
-            regexp = "ACTIVE|INACTIVE|DELETED|active|inactive|deleted",
-            message = "Status must be either 'ACTIVE', 'INACTIVE', or 'DELETED'"
-    )
     private String status;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
