@@ -27,33 +27,34 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String @NonNull... args) {
-        if (userRepository.findByEmail("28tech@gmail.com").isPresent()) {
-            return;
+        Role instructorRole = roleRepository.findByName("instructor").orElse(null);
+        if (instructorRole == null) {
+            instructorRole = roleRepository.save(Role.builder()
+                    .name("instructor")
+                    .description("Giảng viên")
+                    .build());
         }
-        persistRole("admin", "Quản trị hệ thống");
-        persistRole("manager", "Quản lý nội dung");
-        Role instructorRole = persistRole("instructor", "Giảng viên");
-        persistRole("learner", "Học viên");
 
-        User instructor = User.builder()
-                .role(instructorRole)
-                .firstName("28")
-                .lastName("Tech")
-                .email("28tech@gmail.com")
-                .phone("0909999999")
-                .passwordHash("123456")
-                .status("active")
-                .build();
-        instructor = userRepository.save(instructor);
+        User instructor = userRepository.findByEmail("28tech@gmail.com").orElse(null);
+        if (instructor == null) {
+            instructor = userRepository.save(User.builder()
+                    .role(instructorRole)
+                    .firstName("28")
+                    .lastName("Tech")
+                    .email("28tech@gmail.com")
+                    .phone("0909999999")
+                    .passwordHash("123456")
+                    .status("active")
+                    .build());
+        }
 
-        Category category = Category.builder()
+        Category category = categoryRepository.save(Category.builder()
                 .name("Lập trình")
                 .description("Các khóa học lập trình")
                 .status("active")
-                .build();
-        category = categoryRepository.save(category);
+                .build());
 
-        Course course = Course.builder()
+        Course course = courseRepository.save(Course.builder()
                 .instructor(instructor)
                 .category(category)
                 .title("Lập Trình C Cơ Bản - 28Tech")
@@ -62,17 +63,15 @@ public class DataInitializer implements CommandLineRunner {
                 .price(BigDecimal.ZERO)
                 .level("beginner")
                 .status("published")
-                .build();
-        course = courseRepository.save(course);
+                .build());
 
-        CourseSection section = CourseSection.builder()
+        CourseSection section = courseSectionRepository.save(CourseSection.builder()
                 .course(course)
                 .title("Giới thiệu")
                 .position(1)
-                .build();
-        section = courseSectionRepository.save(section);
+                .build());
 
-        Lesson lesson1 = Lesson.builder()
+        lessonRepository.save(Lesson.builder()
                 .courseSection(section)
                 .title("Bài 1 - Giới thiệu ngôn ngữ C")
                 .videoUrl("videos/Recording 2026-05-28 212131.mp4")
@@ -80,10 +79,9 @@ public class DataInitializer implements CommandLineRunner {
                 .position(1)
                 .published(true)
                 .moderationStatus("approved")
-                .build();
-        lessonRepository.save(lesson1);
+                .build());
 
-        Lesson lesson2 = Lesson.builder()
+        Lesson lesson2 = lessonRepository.save(Lesson.builder()
                 .courseSection(section)
                 .title("Bài 2 - Kiểu dữ liệu và khai báo biến trong C")
                 .videoUrl("videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2002.%20Ki%E1%BB%83u%20d%E1%BB%AF%20li%E1%BB%87u%20v%C3%A0%20c%C3%A1ch%20khai%20b%C3%A1o%20bi%E1%BA%BFn%20trong%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C-C++.mp4")
@@ -91,10 +89,9 @@ public class DataInitializer implements CommandLineRunner {
                 .position(2)
                 .published(true)
                 .moderationStatus("approved")
-                .build();
-        lesson2 = lessonRepository.save(lesson2);
+                .build());
 
-        Lesson lesson3 = Lesson.builder()
+        Lesson lesson3 = lessonRepository.save(Lesson.builder()
                 .courseSection(section)
                 .title("Bài 3 - Xuất dữ liệu với printf")
                 .videoUrl("videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2003.%20C%C3%A1ch%20xu%E1%BA%A5t%20d%E1%BB%AF%20li%E1%BB%87u%20ra%20m%C3%A0n%20h%C3%ACnh%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20H%C3%A0m%20printf%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C.mp4")
@@ -102,10 +99,9 @@ public class DataInitializer implements CommandLineRunner {
                 .position(3)
                 .published(true)
                 .moderationStatus("approved")
-                .build();
-        lesson3 = lessonRepository.save(lesson3);
+                .build());
 
-        Lesson lesson4 = Lesson.builder()
+        Lesson lesson4 = lessonRepository.save(Lesson.builder()
                 .courseSection(section)
                 .title("Bài 4 - Nhập dữ liệu với scanf")
                 .videoUrl("videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2004.%20C%C3%A1ch%20nh%E1%BA%ADp%20d%E1%BB%AF%20li%E1%BB%87u%20t%E1%BB%AB%20b%C3%A0n%20ph%C3%ADm%20trong%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C.mp4")
@@ -113,8 +109,7 @@ public class DataInitializer implements CommandLineRunner {
                 .position(4)
                 .published(true)
                 .moderationStatus("approved")
-                .build();
-        lesson4 = lessonRepository.save(lesson4);
+                .build());
 
         seedQuizForLesson2(lesson2);
         seedQuizForLesson3(lesson3);
@@ -122,13 +117,6 @@ public class DataInitializer implements CommandLineRunner {
 
     }
 
-    private Role persistRole(String name, String description) {
-        Role role = Role.builder()
-                .name(name)
-                .description(description)
-                .build();
-        return roleRepository.save(role);
-    }
 
     private void seedQuizForLesson2(Lesson lesson2) {
         Quiz quiz = Quiz.builder()

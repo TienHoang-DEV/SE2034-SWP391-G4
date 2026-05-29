@@ -40,7 +40,7 @@ public class User extends BaseEntity{
     private String passwordHash;
 
     @Column(length = 500, nullable = true)
-    private String avartarUrl;
+    private String avatarUrl;
 
     private String googleId;
 
