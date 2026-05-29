@@ -1,3 +1,4 @@
+USE master
 IF DB_ID('ElearningPlatform') IS NOT NULL
 BEGIN
     ALTER DATABASE ElearningPlatform
