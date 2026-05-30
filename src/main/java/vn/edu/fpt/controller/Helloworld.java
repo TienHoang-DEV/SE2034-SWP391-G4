@@ -21,4 +21,9 @@ public class Helloworld {
         return "index";
     }
 
+    @GetMapping("/learning")
+    public String learningPage() {
+        return "learning/learning";
+    }
+
 }

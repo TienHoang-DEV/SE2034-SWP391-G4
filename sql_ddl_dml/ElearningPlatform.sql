@@ -606,8 +606,6 @@ CREATE TABLE cart_items (
     course_id INT NOT NULL,
     -- Tham chiếu đến bảng courses, khóa học nào được thêm vào giỏ
 
-    added_at DATETIME DEFAULT GETDATE(),
-    -- Thời gian thêm vào giỏ
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo bản ghi
     updated_at DATETIME NULL,
@@ -639,8 +637,6 @@ CREATE TABLE cart_instructor_coupons (
     coupon_id INT NOT NULL,
     -- Tham chiếu đến bảng coupons, coupon nào được áp dụng
 
-    applied_at DATETIME DEFAULT GETDATE(),
-    -- Thời gian áp dụng coupon
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo bản ghi
     updated_at DATETIME NULL,
@@ -723,6 +719,11 @@ CREATE TABLE order_items (
     course_title_snapshot NVARCHAR(255) NULL,
     -- Tên khóa học tại thời điểm tạo đơn (snapshot, dùng cho lịch sử)
 
+    created_at DATETIME DEFAULT GETDATE(),
+     
+
+    updated_at DATETIME NULL, 
+
     CONSTRAINT FK_order_items_order
         FOREIGN KEY (order_id) REFERENCES orders(id),
     CONSTRAINT FK_order_items_course
@@ -766,6 +767,8 @@ CREATE TABLE payments (
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo bản ghi thanh toán
 
+    updated_at DATETIME NULL, 
+
     CONSTRAINT FK_payments_order
         FOREIGN KEY (order_id) REFERENCES orders(id)
 );
@@ -785,7 +788,7 @@ CREATE TABLE coupon_usages (
 
     order_id INT NOT NULL,
     discount_amount DECIMAL(10,2) NOT NULL,
-    used_at DATETIME DEFAULT GETDATE(),
+  
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo bản ghi
     updated_at DATETIME NULL,

@@ -143,6 +143,27 @@ body {
     border-bottom-color: var(--primary) !important;
 }
 
+/* Course review form */
+.course-review-star {
+    transition: var(--transition);
+}
+
+.course-review-star:hover {
+    transform: scale(1.12);
+}
+
+.course-review-star i {
+    transition: var(--transition);
+}
+
+.course-review-star.is-selected {
+    color: var(--accent-yellow) !important;
+}
+
+.course-review-star.is-selected i {
+    fill: var(--accent-yellow) !important;
+}
+
 /* Syllabus Accordion Premium styling */
 .accordion-item {
     transition: var(--transition);

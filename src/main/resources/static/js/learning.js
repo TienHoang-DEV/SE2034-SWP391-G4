@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initializeTabs();
     initializeVideoPlayer();
-    initializeReviewsSelector();
     initializeQuizOptions();
     initializeSidebarToggle();
 });
@@ -16,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeTabs() {
     const tabs = {
         'tab-overview-btn': 'panel-overview',
-        'tab-reviews-btn': 'panel-reviews',
         'tab-quiz-btn': 'panel-quiz'
     };
 
@@ -39,129 +37,53 @@ function initializeTabs() {
     });
 }
 
-// 2. Mock Video Player Controls
+// 2. Load real lesson video from temporary backend endpoint
 function initializeVideoPlayer() {
-    const playCenterBtn = document.getElementById("video-play-center-btn");
-    const playBarBtn = document.getElementById("video-play-btn");
-    const progressFill = document.querySelector(".video-progress-fill");
-    const timeDisplay = document.querySelector(".video-time-display");
+    const videoEl = document.getElementById("lesson-video");
+    const statusEl = document.getElementById("lesson-video-status");
 
-    if (!playCenterBtn || !playBarBtn) return;
-
-    let isPlaying = false;
-    let playInterval = null;
-    let currentSeconds = 442; // 07:22 in seconds
-    const totalSeconds = 1314; // 21:54 in seconds
-
-    function formatTime(secs) {
-        const m = Math.floor(secs / 60).toString().padStart(2, '0');
-        const s = (secs % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
+    if (!videoEl) {
+        return;
     }
 
-    function togglePlay() {
-        isPlaying = !isPlaying;
-
-        if (isPlaying) {
-            // Update icons to Pause
-            playCenterBtn.style.opacity = "0"; // hide center play button
-            playBarBtn.innerHTML = `<i data-lucide="pause" style="width: 18px; height: 18px;" class="fill-white"></i>`;
-            
-            // Start simulation timer
-            playInterval = setInterval(() => {
-                if (currentSeconds < totalSeconds) {
-                    currentSeconds++;
-                    // Update progress bar width
-                    const percentage = (currentSeconds / totalSeconds) * 100;
-                    if (progressFill) progressFill.style.width = `${percentage}%`;
-                    
-                    // Update time display
-                    if (timeDisplay) {
-                        timeDisplay.textContent = `${formatTime(currentSeconds)} / ${formatTime(totalSeconds)}`;
-                    }
-                } else {
-                    clearInterval(playInterval);
-                    togglePlay(); // Stop when ended
-                }
-            }, 1000);
-        } else {
-            // Update icons to Play
-            playCenterBtn.style.opacity = "1"; // show center play button
-            playBarBtn.innerHTML = `<i data-lucide="play" style="width: 18px; height: 18px;" class="fill-white"></i>`;
-            
-            // Stop timer
-            clearInterval(playInterval);
-        }
-
-        // Re-render icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons({
-                attrs: { class: 'lucide-icon' },
-                node: playBarBtn
-            });
-        }
+    if (statusEl) {
+        statusEl.textContent = "Dang tai video...";
     }
 
-    playCenterBtn.addEventListener("click", togglePlay);
-    playBarBtn.addEventListener("click", togglePlay);
-}
-
-// 3. Satisfying Reviews Stars selector
-function initializeReviewsSelector() {
-    const stars = document.querySelectorAll(".star-selector-btn");
-    const btnSubmit = document.getElementById("btn-submit-review");
-    const textarea = document.getElementById("feedback-textarea");
-    let currentRating = 0;
-
-    stars.forEach(star => {
-        star.addEventListener("click", () => {
-            const val = parseInt(star.getAttribute("data-value"));
-            currentRating = val;
-            
-            // Color stars up to val
-            stars.forEach((s, idx) => {
-                if (idx < val) {
-                    s.classList.add("star-active", "text-warning");
-                    s.classList.remove("text-muted-light");
-                } else {
-                    s.classList.remove("star-active", "text-warning");
-                    s.classList.add("text-muted-light");
-                }
-            });
-        });
-    });
-
-    if (btnSubmit) {
-        btnSubmit.addEventListener("click", () => {
-            if (currentRating === 0) {
-                alert("Vui lòng chọn mức độ hài lòng của bạn bằng cách click vào các ngôi sao!");
-                return;
+    fetch("/temp/video/first-course-first-lesson/url")
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Khong the lay URL video");
             }
-            
-            const comment = textarea.value.trim();
-            if (!comment) {
-                alert("Vui lòng viết phản hồi/nhận xét trước khi gửi!");
-                return;
+            return response.text();
+        })
+        .then((videoUrl) => {
+            if (!videoUrl) {
+                throw new Error("Khong nhan duoc video URL");
             }
 
-            // Show simulated success toast
-            alert(`Cảm ơn phản hồi của bạn! Đã ghi nhận đánh giá ${currentRating} sao thành công.`);
-            
-            // Reset form
-            currentRating = 0;
-            stars.forEach(s => {
-                s.classList.remove("star-active", "text-warning");
-                s.classList.add("text-muted-light");
-            });
-            textarea.value = "";
+            videoEl.src = videoUrl;
+            videoEl.load();
+
+            if (statusEl) {
+                statusEl.textContent = "Da nap video";
+                setTimeout(() => {
+                    statusEl.textContent = "";
+                }, 2000);
+            }
+        })
+        .catch((error) => {
+            if (statusEl) {
+                statusEl.textContent = "Khong tai duoc video";
+            }
+            console.error(error);
         });
-    }
 }
 
-// 4. Quiz selections toggle styles
+// 3. Quiz selections toggle styles
 function initializeQuizOptions() {
     const options = document.querySelectorAll(".quiz-option");
-    
+
     options.forEach(opt => {
         const radio = opt.querySelector("input[type='radio']");
         if (!radio) return;
@@ -217,7 +139,7 @@ function initializeQuizOptions() {
             for (const [qName, correctVal] of Object.entries(correctAnswers)) {
                 const selectedOption = document.querySelector(`input[name='${qName}']:checked`);
                 const correctOptionInput = document.querySelector(`input[name='${qName}'][value='${correctVal}']`);
-                
+
                 // Color correct option in green
                 if (correctOptionInput) {
                     const correctLabel = correctOptionInput.closest(".quiz-option");
@@ -236,7 +158,7 @@ function initializeQuizOptions() {
             // Display score banner above Question 1
             const quizPanel = document.getElementById("panel-quiz");
             const firstQuestionBox = quizPanel.querySelector(".quiz-question-box");
-            
+
             let banner = document.querySelector(".quiz-result-banner");
             if (banner) {
                 banner.remove();
@@ -264,7 +186,7 @@ function initializeQuizOptions() {
     }
 }
 
-// 5. Sidebar toggling
+// 4. Sidebar toggling
 function initializeSidebarToggle() {
     const toggleBtn = document.getElementById("btn-sidebar-toggle");
     const sidebar = document.querySelector(".sidebar-curriculum-container");
@@ -273,7 +195,7 @@ function initializeSidebarToggle() {
     if (toggleBtn && sidebar && mainContent) {
         toggleBtn.addEventListener("click", () => {
             sidebar.classList.toggle("d-none");
-            
+
             // Adjust left side width class
             if (sidebar.classList.contains("d-none")) {
                 mainContent.className = "col-12 main-player-content";

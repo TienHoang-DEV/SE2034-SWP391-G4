@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Manager Dashboard</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../static/css/manager/dashboard.css" th:href="@{/css/manager/dashboard.css}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Hệ thống Quản lý</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="dashboard.html">
+                            <i class="ph ph-squares-four"></i>
+                            <span>Tổng quan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="instructor.html">
+                            <i class="ph ph-users"></i>
+                            <span>Phê duyệt giảng viên</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="course.html">
+                            <i class="ph ph-book-open"></i>
+                            <span>Phê duyệt khóa học</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="revenue.html">
+                            <i class="ph ph-currency-circle-dollar"></i>
+                            <span>Doanh thu</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="feedback.html">
+                            <i class="ph ph-chat-circle-dots"></i>
+                            <span>Phản hồi</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer" style="padding: 20px; border-top: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; margin-top: auto;">
+                <div class="avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-blue); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; flex-shrink: 0;">M</div>
+                <div class="profile-info" style="overflow: hidden;">
+                    <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-main); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Quản trị viên</div>
+                    <div style="font-size: 0.8rem; color: var(--text-gray); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">admin@system.com</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="main-wrapper">
+            <!-- Topbar -->
+
+            <!-- Dashboard Content -->
+            <main class="content">
+                <div class="page-header">
+                    <h1>Tổng quan</h1>
+                    <p>Chào mừng trở lại. Dưới đây là hoạt động hôm nay.</p>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <!-- Card 1 -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Tổng Doanh Thu</h3>
+                            <div class="icon-wrapper bg-blue-light">
+                                <i class="ph ph-currency-dollar text-blue"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">$45,231</div>
+                        <div class="stat-change text-gray">+20.1% so với tháng trước</div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Tổng Giảng Viên</h3>
+                            <div class="icon-wrapper bg-blue-light">
+                                <i class="ph ph-users text-blue"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">124</div>
+                        <div class="stat-change text-gray">+4 trong tuần này</div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Khóa Học Hoạt Động</h3>
+                            <div class="icon-wrapper bg-blue-light">
+                                <i class="ph ph-book-open text-blue"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">842</div>
+                        <div class="stat-change text-gray">+12 trong tháng này</div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Tổng số học viên</h3>
+                            <div class="icon-wrapper bg-blue-light">
+                                <i class="ph ph-graduation-cap text-blue"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">2,450</div>
+                        <div class="stat-change text-gray">+150 trong tháng này</div>
+                    </div>
+                </div>
+
+                <!-- Chart Section -->
+                <div class="chart-section">
+                    <h2>Tổng Quan Doanh Thu</h2>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Custom JS -->
+    <script src="../../static/js/manager/dashboard.js" th:src="@{/js/manager/dashboard.js}"></script>
+</body>
+</html>
+

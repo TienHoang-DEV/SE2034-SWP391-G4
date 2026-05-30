@@ -144,27 +144,6 @@
     background-color: #eff6ff !important;
 }
 
-/* Star selection inside Reviews */
-.star-selector-btn {
-    transition: var(--transition);
-}
-
-.star-selector-btn:hover {
-    transform: scale(1.15);
-}
-
-.star-selector-btn i {
-    transition: var(--transition);
-}
-
-.star-selector-btn.star-active {
-    color: #f59e0b !important;
-}
-
-.star-selector-btn.star-active i {
-    fill: #f59e0b !important;
-}
-
 /* Accordion details */
 .accordion-button::after {
     display: none !important; /* Hide bootstrap default arrow */
