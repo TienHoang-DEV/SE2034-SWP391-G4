@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initializeTabs();
     initializeVideoPlayer();
+    initializeMaterial();
+    initializeLessonDocumentLinks();
     initializeQuizOptions();
     initializeSidebarToggle();
 });
@@ -15,7 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeTabs() {
     const tabs = {
         'tab-overview-btn': 'panel-overview',
-        'tab-quiz-btn': 'panel-quiz'
+        'tab-quiz-btn': 'panel-quiz',
+        'tab-document-btn': 'panel-document'
     };
 
     const tabBtns = document.querySelectorAll(".player-nav-tabs .nav-link");
@@ -35,6 +38,19 @@ function initializeTabs() {
             document.getElementById(targetPanelId).classList.remove("d-none");
         });
     });
+}
+
+function initializeMaterial() {
+    const frame = document.getElementById("lesson-document-frame");
+    const openLink = document.getElementById("btn-open-lesson-document");
+    const downloadLink = document.getElementById("btn-download-lesson-document");
+
+    fetch("/temp/material/first-course-first-lesson/url").then(response => {
+        if (!response.ok) throw new Error("Khong the lay du lieu");
+        return response.text();
+    }).then(sasUrl => {
+       frame.src = sasUrl;
+    }).catch(err => console.error("Loi tai tai lieu:", err));
 }
 
 // 2. Load real lesson video from temporary backend endpoint
@@ -80,7 +96,28 @@ function initializeVideoPlayer() {
         });
 }
 
-// 3. Quiz selections toggle styles
+
+
+// 4. Open document tab from lesson list links
+function initializeLessonDocumentLinks() {
+    const documentLinks = document.querySelectorAll(".lesson-document-link");
+    const documentTab = document.getElementById("tab-document-btn");
+
+    if (!documentTab) return;
+
+    documentLinks.forEach(link => {
+        link.addEventListener("click", (event) => {
+            event.preventDefault();
+            documentTab.click();
+            document.getElementById("player-tab-content")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        });
+    });
+}
+
+// 5. Quiz selections toggle styles
 function initializeQuizOptions() {
     const options = document.querySelectorAll(".quiz-option");
 
@@ -186,7 +223,7 @@ function initializeQuizOptions() {
     }
 }
 
-// 4. Sidebar toggling
+// 6. Sidebar toggling
 function initializeSidebarToggle() {
     const toggleBtn = document.getElementById("btn-sidebar-toggle");
     const sidebar = document.querySelector(".sidebar-curriculum-container");

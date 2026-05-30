@@ -28,9 +28,10 @@ public class AzureBlobService {
     // Tạo URL SAS có quyền đọc cho một file trong container xác định.
     public String generateSasUrl(String containerName, String blobName) {
         // Lấy blob client theo tên container và tên file.
+        String decodedBlobName = java.net.URLDecoder.decode(blobName, java.nio.charset.StandardCharsets.UTF_8);
         BlobClient blobClient = blobServiceClient
                 .getBlobContainerClient(containerName)
-                .getBlobClient(blobName);
+                .getBlobClient(decodedBlobName);
 
         // Cấu hình thời gian hết hạn và quyền truy cập của SAS.
         BlobServiceSasSignatureValues sasValues = new BlobServiceSasSignatureValues(

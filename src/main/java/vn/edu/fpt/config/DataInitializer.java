@@ -24,6 +24,7 @@ public class DataInitializer implements CommandLineRunner {
     private final QuizRepository quizRepository;
     private final QuizQuestionRepository quizQuestionRepository;
     private final QuizAnswerRepository quizAnswerRepository;
+    private final LessonMaterialRepository lessonMaterialRepository;
 
     @Override
     public void run(String @NonNull... args) {
@@ -114,6 +115,8 @@ public class DataInitializer implements CommandLineRunner {
         seedQuizForLesson2(lesson2);
         seedQuizForLesson3(lesson3);
         seedQuizForLesson4(lesson4);
+
+        seedLessonMaterials(instructor, course, lesson4);
 
     }
 
@@ -230,5 +233,17 @@ public class DataInitializer implements CommandLineRunner {
                 .correct(correct)
                 .build();
         quizAnswerRepository.save(answer);
+    }
+
+    private void seedLessonMaterials(User instructor, Course course, Lesson lesson) {
+        LessonMaterial material = LessonMaterial.builder()
+                .instructor(instructor)
+                .course(course)
+                .lesson(lesson)
+                .fileName("[28Tech] BUOI 1.pdf")
+                .fileUrl("%5B28Tech%5D.%20BUOI%201.pdf")
+                .fileType("pdf")
+                .build();
+        lessonMaterialRepository.save(material);
     }
 }

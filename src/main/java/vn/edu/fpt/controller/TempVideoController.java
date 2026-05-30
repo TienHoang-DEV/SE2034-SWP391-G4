@@ -11,47 +11,84 @@ import org.springframework.web.server.ResponseStatusException;
 import vn.edu.fpt.entity.Course;
 import vn.edu.fpt.entity.CourseSection;
 import vn.edu.fpt.entity.Lesson;
+import vn.edu.fpt.entity.LessonMaterial;
 import vn.edu.fpt.repository.CourseRepository;
 import vn.edu.fpt.repository.CourseSectionRepository;
 import vn.edu.fpt.repository.LessonRepository;
 import vn.edu.fpt.service.AzureBlobService;
+import vn.edu.fpt.service.LessonMaterialService;
+import vn.edu.fpt.service.LessonService;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/temp/video")
+@RequestMapping("/temp")
 public class TempVideoController {
 
     private final CourseRepository courseRepository;
     private final CourseSectionRepository courseSectionRepository;
     private final LessonRepository lessonRepository;
     private final AzureBlobService azureBlobService;
+    private final LessonMaterialService lessonMaterialService;
+    private final LessonService lessonService;
 
     public TempVideoController(CourseRepository courseRepository,
                                CourseSectionRepository courseSectionRepository,
                                LessonRepository lessonRepository,
-                               AzureBlobService azureBlobService) {
+                               AzureBlobService azureBlobService, LessonMaterialService lessonMaterialService, LessonService lessonService) {
         this.courseRepository = courseRepository;
         this.courseSectionRepository = courseSectionRepository;
         this.lessonRepository = lessonRepository;
         this.azureBlobService = azureBlobService;
+        this.lessonMaterialService = lessonMaterialService;
+        this.lessonService = lessonService;
     }
 
-    @GetMapping("/first-course-first-lesson/url")
+    @GetMapping("/video/first-course-first-lesson/url")
     @ResponseBody
     public String getFirstCourseFirstLessonVideoUrl() {
         return resolveFirstCourseFirstLessonVideoUrl();
     }
 
-    @GetMapping("/first-course-first-lesson/play")
-    public RedirectView playFirstCourseFirstLesson() {
+    @GetMapping("/material/first-course-first-lesson/url")
+    @ResponseBody
+    public String getFirstCourseFirstLessonMaterialUrl() {
+        return returnFirstMaterial();
+    }
+
+    @GetMapping("/video/first-course-first-lesson/play")
+    public String playFirstCourseFirstLesson() {
         try {
             String videoUrl = resolveFirstCourseFirstLessonVideoUrl();
-            return new RedirectView(videoUrl);
+            return videoUrl;
         } catch (IllegalStateException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
+    }
+
+    private String resolveFirstCourseFirstLessonMaterialUrl() {
+        Course firstCourse = courseRepository.findFirstByOrderByIdAsc()
+                .orElseThrow(() -> new IllegalStateException("Khong tim thay khoa hoc nao."));
+
+        CourseSection firstSection = courseSectionRepository
+                .findFirstByCourse_IdOrderByPositionAscIdAsc(firstCourse.getId())
+                .orElseThrow(() -> new IllegalStateException("Khong tim thay section cho khoa hoc dau tien."));
+
+        Lesson firstLesson = lessonRepository
+                .findFirstByCourseSection_IdOrderByPositionAscIdAsc(firstSection.getId())
+                .orElseThrow(() -> new IllegalStateException("Khong tim thay lesson dau tien."));
+
+        LessonMaterial material = lessonMaterialService.findByLessonId(firstLesson.getId())
+                .orElseThrow(() -> new IllegalStateException("Khong tim thay tai lieu cho lesson nay."));
+
+        String fileUrl = material.getFileUrl();
+        if (fileUrl == null || fileUrl.isBlank()) {
+            throw new IllegalStateException("File URL khong ton tai.");
+        }
+
+        String containerName = System.getProperty("AZURE_STORAGE_CONTAINER_MATERIALS", "materials");
+        return azureBlobService.generateSasUrl(containerName, fileUrl);
     }
 
     private String resolveFirstCourseFirstLessonVideoUrl() {
@@ -87,6 +124,11 @@ public class TempVideoController {
         }
 
         return azureBlobService.generateSasUrl(containerName, blobName);
+    }
+
+    public String returnFirstMaterial() {
+        String urlFIle =  lessonMaterialService.findById(1).get().getFileUrl();
+        return azureBlobService.generateSasUrl("materials", urlFIle);
     }
 }
 
