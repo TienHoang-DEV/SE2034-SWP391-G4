@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import vn.edu.fpt.entity.Course;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Integer> {
@@ -13,4 +14,6 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 
     // Tìm các khóa học có tên chứa từ khóa tìm kiếm (không phân biệt hoa thường)
     List<Course> findByTitleContainingIgnoreCase(String title);
+
+    Optional<Course> findFirstByOrderByIdAsc();
 }

@@ -56,19 +56,38 @@
 
                 <!-- CSRF token is present only when Spring Security CSRF is enabled -->
                 <th:block th:if="${_csrf != null}">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
                 </th:block>
 
-                <!-- Fullname input -->
-                <div class="input-wrapper position-relative mb-3">
-                    <i data-lucide="user" class="input-prefix-icon text-muted position-absolute start-0 top-50 translate-middle-y ms-3" style="width:16px; height:16px;"></i>
-                    <input type="text"
-                           name="fullName"
-                           placeholder="Họ và tên"
-                           class="form-control rounded-3 border-0 bg-light py-2 ps-5 fs-7"
-                           required
-                           id="reg-fullname"
-                           autocomplete="name">
+                <!-- Default role (hidden) - learner by default (seeded id = 4) -->
+                <input type="hidden" name="role_id" value="4" />
+
+                <!-- First name / Last name inputs (split to match DB schema) -->
+                <div class="row gx-2 mb-3">
+                    <div class="col-6">
+                        <div class="input-wrapper position-relative">
+                            <i data-lucide="user" class="input-prefix-icon text-muted position-absolute start-0 top-50 translate-middle-y ms-3" style="width:16px; height:16px;"></i>
+                            <input type="text"
+                                   name="first_name"
+                                   placeholder="Họ"
+                                   class="form-control rounded-3 border-0 bg-light py-2 ps-5 fs-7"
+                                   required
+                                   id="reg-firstname"
+                                   autocomplete="family-name">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="input-wrapper position-relative">
+                            <i data-lucide="user" class="input-prefix-icon text-muted position-absolute start-0 top-50 translate-middle-y ms-3" style="width:16px; height:16px;"></i>
+                            <input type="text"
+                                   name="last_name"
+                                   placeholder="Tên"
+                                   class="form-control rounded-3 border-0 bg-light py-2 ps-5 fs-7"
+                                   required
+                                   id="reg-lastname"
+                                   autocomplete="given-name">
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Email input -->

@@ -4,8 +4,10 @@ import io.github.cdimascio.dotenv.Dotenv;
 import io.github.cdimascio.dotenv.DotenvEntry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class Se2034Swp391G4Application {
 
     public static void main(String[] args) {
@@ -19,6 +21,8 @@ public class Se2034Swp391G4Application {
         SpringApplication.run(Se2034Swp391G4Application.class, args);
 
         System.out.println(System.getProperty("AZURE_STORAGE_CONNECTION_STRING"));
+        System.out.println(System.getProperty("AZURE_STORAGE_CONNECTION_STRING"));
+        System.out.println(System.getProperty("AZURE_STORAGE_BASE_URL"));
     }
 
 }

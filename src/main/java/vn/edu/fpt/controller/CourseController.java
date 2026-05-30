@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.fpt.repository.CourseRepository;
 import vn.edu.fpt.entity.Course;
 import java.util.List;
@@ -16,7 +17,7 @@ public class CourseController {
 
     @GetMapping("/courses")
     public String showCourseList(
-            @org.springframework.web.bind.annotation.RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "search", required = false) String search,
             Model model) {
         
         List<Course> courses;
@@ -36,5 +37,10 @@ public class CourseController {
         
         // Trả về template course/list.html
         return "course/list";
+    }
+
+    @GetMapping("/coursemanager")
+    public String getall(){
+        return "instructor_course/course_manager";
     }
 }
