@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,5 +25,19 @@ public class CourseSection extends BaseEntity {
 
     @Column(nullable = false)
     private Integer position;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "courseSection", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Lesson> lessons = new HashSet<>();
+
+    public void addLesson(Lesson lesson) {
+        lessons.add(lesson);
+        lesson.setCourseSection(this);
+    }
+
+    public void removeLesson(Lesson lesson) {
+        lessons.remove(lesson);
+        lesson.setCourseSection(null);
+    }
 }
 

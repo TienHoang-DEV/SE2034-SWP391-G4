@@ -30,6 +30,20 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     private Set<Category> children = new HashSet<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private Set<Course> courses = new HashSet<>();
+
     @Column(length = 20)
     private String status;
+
+    public void addCourse(Course course) {
+        courses.add(course);
+        course.setCategory(this);
+    }
+
+    public void removeCourse(Course course) {
+        courses.remove(course);
+        course.setCategory(null);
+    }
 }

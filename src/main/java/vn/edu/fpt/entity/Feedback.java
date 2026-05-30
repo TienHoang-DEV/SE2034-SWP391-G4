@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,5 +33,19 @@ public class Feedback extends BaseEntity {
 
     @Column(length = 20)
     private String status;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "feedback", fetch = FetchType.LAZY)
+    private Set<FeedbackReport> reports = new HashSet<>();
+
+    public void addReport(FeedbackReport report) {
+        reports.add(report);
+        report.setFeedback(this);
+    }
+
+    public void removeReport(FeedbackReport report) {
+        reports.remove(report);
+        report.setFeedback(null);
+    }
 }
 

@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,5 +31,19 @@ public class QuizQuestion extends BaseEntity {
 
     @Column
     private Integer position;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<QuizAnswer> answers = new HashSet<>();
+
+    public void addAnswer(QuizAnswer answer) {
+        answers.add(answer);
+        answer.setQuestion(this);
+    }
+
+    public void removeAnswer(QuizAnswer answer) {
+        answers.remove(answer);
+        answer.setQuestion(null);
+    }
 }
 
