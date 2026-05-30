@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Manager - Quản lý Doanh thu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../../../static/css/manager/revenue.css" th:href="@{/css/manager/revenue.css}">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Hệ thống Quản lý</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="../dashboard/dashboard.html"><i class="ph ph-squares-four"></i><span>Tổng quan</span></a>
+                    </li>
+                    <li>
+                        <a href="../approval-instructor/instructor-list.html"><i class="ph ph-users"></i><span>Phê duyệt giảng viên</span></a>
+                    </li>
+                    <li>
+                        <a href="../approval-course/course-list.html"><i class="ph ph-book-open"></i><span>Phê duyệt khóa học</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="revenue-list.html"><i class="ph ph-currency-circle-dollar"></i><span>Doanh thu</span></a>
+                    </li>
+                    <li>
+                        <a href="../feedback-report/feedback-report-list.html"><i class="ph ph-chat-circle-dots"></i><span>Phản hồi</span></a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer" style="padding: 20px; border-top: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; margin-top: auto;">
+                <div class="avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-blue); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; flex-shrink: 0;">M</div>
+                <div class="profile-info" style="overflow: hidden;">
+                    <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-main); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Quản trị viên</div>
+                    <div style="font-size: 0.8rem; color: var(--text-gray); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">admin@system.com</div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-wrapper">
+
+            <main class="content">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <h1>Báo cáo Doanh thu</h1>
+                        <p>Tổng quan về tài chính và doanh thu của hệ thống.</p>
+                    </div>
+                    <button class="btn btn-outline">Xem tất cả giao dịch <i class="ph ph-arrow-right"></i></button>
+                </div>
+                <div class="rev-grid">
+                    <div class="rev-card primary">
+                        <h3>Tổng doanh thu (Tháng)</h3>
+                        <div class="rev-val">$12,450.00</div>
+                        <div class="rev-sub">↗ +15.3% so với tháng trước</div>
+                    </div>
+                    <div class="rev-card">
+                        <h3>Thanh toán cho Giảng viên</h3>
+                        <div class="rev-val">$8,715.00</div>
+                    </div>
+                    <div class="rev-card">
+                        <h3>Phí nền tảng (Thực nhận)</h3>
+                        <div class="rev-val">$3,735.00</div>
+                    </div>
+                </div>
+                <div class="chart-section" style="margin-top: 30px;">
+                    <h2>Xu hướng Doanh thu hàng tháng</h2>
+                    <div class="chart-container">
+                        <canvas id="revLineChart"></canvas>
+                    </div>
+                </div>
+            </main>
+            <!-- Chart.js setup for revenue -->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const ctx = document.getElementById('revLineChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
+                            datasets: [{
+                                label: 'Doanh thu',
+                                data: [700, 1400, 2100, 2800],
+                                borderColor: '#0056b3',
+                                backgroundColor: 'rgba(0, 86, 179, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true, maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                y: { beginAtZero: true, max: 2800, ticks: { stepSize: 700, callback: v => '$' + v } },
+                                x: { grid: { display: false } }
+                            }
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</body>
+</html>
+

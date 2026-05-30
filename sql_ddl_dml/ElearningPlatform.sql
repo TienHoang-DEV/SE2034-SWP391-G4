@@ -1335,3 +1335,52 @@ VALUES
 -- SAMPLE DATA COMPLETE
 -- =========================
 GO
+
+-- =========================
+-- ADMIN USER
+-- =========================
+INSERT INTO users (
+    role_id,
+    first_name,
+    last_name,
+    email,
+    phone,
+    password_hash,
+    avatar_url,
+    status
+)
+VALUES (
+    1,
+    N'Đặng',
+    N'Minh Quân',
+    'admin@elearning.com',
+    '0901234567',
+    'admin123',
+    NULL,
+    'active'
+);
+
+-- =========================
+-- MANAGER USER
+-- =========================
+INSERT INTO users (
+    role_id,
+    first_name,
+    last_name,
+    email,
+    phone,
+    password_hash,
+    avatar_url,
+    status
+)
+VALUES (
+    2,
+    N'Lê',
+    N'Thị Mai',
+    'manager@elearning.com',
+    '0912345678',
+    'manager123',
+    NULL,
+    'active'
+);
+
