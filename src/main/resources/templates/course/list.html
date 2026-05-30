@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -52,10 +52,10 @@
                 </div>
 
                 <!-- Search Input -->
-                <div class="search-bar-wrapper position-relative flex-grow-1">
+                <form action="/courses" method="get" class="search-bar-wrapper position-relative flex-grow-1">
                     <i data-lucide="search" class="search-icon position-absolute start-0 top-50 translate-middle-y ms-3 text-muted" style="width:18px; height:18px;"></i>
-                    <input type="text" placeholder="Tìm khóa học..." class="form-control rounded-pill border-0 bg-light px-4 py-2 ps-5" id="search-input" value="Guitar">
-                </div>
+                    <input type="text" name="search" th:value="${search}" placeholder="Tìm khóa học..." class="form-control rounded-pill border-0 bg-light px-4 py-2 ps-5" id="search-input">
+                </form>
             </div>
 
             <!-- User Utilities -->
@@ -216,8 +216,11 @@
                     <!-- Search Info & Sorting -->
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
                         <div>
-                            <h2 class="search-result-title fw-extrabold font-heading fs-4 m-0 d-inline-block">Kết quả cho "Guitar"</h2>
-                            <span class="text-muted fs-7 ms-2">128 khóa học</span>
+                            <h2 class="search-result-title fw-extrabold font-heading fs-4 m-0 d-inline-block"
+                                th:text="${search != null && !search.isEmpty()} ? 'Kết quả cho &quot;' + ${search} + '&quot;' : 'Tất cả khóa học'">
+                                Kết quả cho "Guitar"
+                            </h2>
+                            <span class="text-muted fs-7 ms-2" th:text="${courses.size()} + ' khóa học'">128 khóa học</span>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <select class="form-select border-light-subtle rounded-3 py-2 px-3 fs-7 text-muted fw-semibold" style="width: 140px; cursor: pointer;">
@@ -232,11 +235,11 @@
                     <!-- Courses Horizontal List -->
                     <div class="d-flex flex-column gap-4 mb-5">
                         
-                        <!-- Course Row 1 -->
-                        <div class="course-list-item d-flex gap-4 p-4 border border-light-subtle rounded-3 bg-white shadow-sm flex-md-row flex-column align-items-start">
+                        <!-- Course Row Loop -->
+                        <div class="course-list-item d-flex gap-4 p-4 border border-light-subtle rounded-3 bg-white shadow-sm flex-md-row flex-column align-items-start" th:each="course : ${courses}">
                             <!-- Left: Thumbnail -->
                             <div class="position-relative overflow-hidden rounded-3 flex-shrink-0 align-self-center align-self-md-start" style="width: 240px; height: 145px;">
-                                <img th:src="@{/images/tech_course.png}" alt="Guitar đệm hát 30 ngày cùng Hiển Râu" class="w-100 h-100 object-fit-cover">
+                                <img th:src="${course.thumbnailUrl != null ? course.thumbnailUrl : '/images/tech_course.png'}" th:alt="${course.title}" class="w-100 h-100 object-fit-cover">
                                 <span class="position-absolute top-0 start-0 badge-discount text-white fw-bold fs-8 px-2.5 py-1 m-3">GIẢM 30%</span>
                                 <span class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white fs-8 px-2.5 py-1 rounded-pill m-3 fw-medium">31 phút</span>
                             </div>
@@ -244,8 +247,8 @@
                             <!-- Right: Info -->
                             <div class="flex-grow-1 w-100 d-flex flex-column justify-content-between h-100" style="min-height: 145px;">
                                 <div>
-                                    <h3 class="course-item-title fw-bold fs-6 mb-2 font-heading">
-                                        Tiêu đề khóa học: Guitar đệm hát 30 ngày cùng Hiển Râu
+                                    <h3 class="course-item-title fw-bold fs-6 mb-2 font-heading" th:text="${course.title}">
+                                        Guitar đệm hát 30 ngày cùng Hiển Râu
                                     </h3>
                                     
                                     <div class="rating-stars mb-2 d-flex align-items-center gap-1">
@@ -264,114 +267,14 @@
                                     <!-- Meta Attributes -->
                                     <div class="d-flex align-items-center gap-3 text-muted fs-8">
                                         <span class="d-flex align-items-center gap-1"><i data-lucide="clock" style="width: 14px;"></i> 31 phút</span>
-                                        <span class="d-flex align-items-center gap-1"><i data-lucide="zap" style="width: 14px;"></i> Cơ bản</span>
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="zap" style="width: 14px;"></i> <span th:text="${course.level}">Cơ bản</span></span>
                                         <span class="d-flex align-items-center gap-1"><i data-lucide="eye" style="width: 14px;"></i> 7 lượt mua</span>
                                     </div>
                                     
                                     <!-- Price & Cart -->
                                     <div class="d-flex align-items-center gap-3 ms-auto align-self-end">
                                         <div class="text-end">
-                                            <span class="price-current fw-extrabold fs-5 d-block">209,300 VNĐ</span>
-                                            <span class="price-old text-decoration-line-through text-muted fs-8">299,000 VNĐ</span>
-                                        </div>
-                                        <button class="btn btn-add-to-cart px-3 py-2 fw-bold fs-8 d-flex align-items-center gap-2 rounded-3">
-                                            <i data-lucide="shopping-cart" style="width:16px;"></i> Thêm vào giỏ hàng
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Course Row 2 -->
-                        <div class="course-list-item d-flex gap-4 p-4 border border-light-subtle rounded-3 bg-white shadow-sm flex-md-row flex-column align-items-start">
-                            <!-- Left: Thumbnail -->
-                            <div class="position-relative overflow-hidden rounded-3 flex-shrink-0 align-self-center align-self-md-start" style="width: 240px; height: 145px;">
-                                <img th:src="@{/images/guitar_sunburst_acoustic.png}" alt="Khóa học guitar Acoustic căn bản" class="w-100 h-100 object-fit-cover">
-                                <span class="position-absolute top-0 start-0 badge-discount text-white fw-bold fs-8 px-2.5 py-1 m-3">GIẢM 30%</span>
-                                <span class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white fs-8 px-2.5 py-1 rounded-pill m-3 fw-medium">4 phút</span>
-                            </div>
-                            
-                            <!-- Right: Info -->
-                            <div class="flex-grow-1 w-100 d-flex flex-column justify-content-between h-100" style="min-height: 145px;">
-                                <div>
-                                    <h3 class="course-item-title fw-bold fs-6 mb-2 font-heading">
-                                        Khóa học guitar Acoustic căn bản
-                                    </h3>
-                                    
-                                    <div class="rating-stars mb-2 d-flex align-items-center gap-1">
-                                        <i data-lucide="star" class="star-icon star-filled"></i>
-                                        <i data-lucide="star" class="star-icon star-filled"></i>
-                                        <i data-lucide="star" class="star-icon star-filled"></i>
-                                        <i data-lucide="star" class="star-icon star-filled"></i>
-                                        <i data-lucide="star" class="star-icon star-filled"></i>
-                                        <span class="text-muted fs-8 ms-1">(1 đánh giá)</span>
-                                    </div>
-                                    
-                                    <a href="../student_profile/student_profile.html" class="instructor-name fw-bold fs-8 text-decoration-none d-block mb-3">NGUYỄN CÔNG THÁI SƠN</a>
-                                </div>
-                                
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-auto">
-                                    <!-- Meta Attributes -->
-                                    <div class="d-flex align-items-center gap-3 text-muted fs-8">
-                                        <span class="d-flex align-items-center gap-1"><i data-lucide="clock" style="width: 14px;"></i> 4 phút</span>
-                                        <span class="d-flex align-items-center gap-1"><i data-lucide="zap" style="width: 14px;"></i> Cơ bản</span>
-                                        <span class="d-flex align-items-center gap-1"><i data-lucide="eye" style="width: 14px;"></i> 4 lượt mua</span>
-                                    </div>
-                                    
-                                    <!-- Price & Cart -->
-                                    <div class="d-flex align-items-center gap-3 ms-auto align-self-end">
-                                        <div class="text-end">
-                                            <span class="price-current fw-extrabold fs-5 d-block">209,300 VNĐ</span>
-                                            <span class="price-old text-decoration-line-through text-muted fs-8">299,000 VNĐ</span>
-                                        </div>
-                                        <button class="btn btn-add-to-cart px-3 py-2 fw-bold fs-8 d-flex align-items-center gap-2 rounded-3">
-                                            <i data-lucide="shopping-cart" style="width:16px;"></i> Thêm vào giỏ hàng
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Course Row 3 -->
-                        <div class="course-list-item d-flex gap-4 p-4 border border-light-subtle rounded-3 bg-white shadow-sm flex-md-row flex-column align-items-start">
-                            <!-- Left: Thumbnail -->
-                            <div class="position-relative overflow-hidden rounded-3 flex-shrink-0 align-self-center align-self-md-start" style="width: 240px; height: 145px;">
-                                <img th:src="@{/images/guitar_bolero_classical.png}" alt="Guitar Bolero nâng cao" class="w-100 h-100 object-fit-cover">
-                                <span class="position-absolute top-0 start-0 badge-discount text-white fw-bold fs-8 px-2.5 py-1 m-3" style="background-color: #eab308 !important;">Mới</span>
-                                <span class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white fs-8 px-2.5 py-1 rounded-pill m-3 fw-medium">45 phút</span>
-                            </div>
-                            
-                            <!-- Right: Info -->
-                            <div class="flex-grow-1 w-100 d-flex flex-column justify-content-between h-100" style="min-height: 145px;">
-                                <div>
-                                    <h3 class="course-item-title fw-bold fs-6 mb-2 font-heading">
-                                        Guitar Bolero nâng cao cho người lớn (mời demo cô)
-                                    </h3>
-                                    
-                                    <div class="rating-stars mb-2 d-flex align-items-center gap-1">
-                                        <i data-lucide="star" class="star-icon star-empty"></i>
-                                        <i data-lucide="star" class="star-icon star-empty"></i>
-                                        <i data-lucide="star" class="star-icon star-empty"></i>
-                                        <i data-lucide="star" class="star-icon star-empty"></i>
-                                        <i data-lucide="star" class="star-icon star-empty"></i>
-                                        <span class="text-muted fs-8 ms-1">(0 đánh giá)</span>
-                                    </div>
-                                    
-                                    <a href="../student_profile/student_profile.html" class="instructor-name fw-bold fs-8 text-decoration-none d-block mb-3">NGUYỄN CÔNG THÁI SƠN</a>
-                                </div>
-                                
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-auto">
-                                    <!-- Meta Attributes -->
-                                    <div class="d-flex align-items-center gap-3 text-muted fs-8">
-                                        <span class="d-flex align-items-center gap-1"><i data-lucide="clock" style="width: 14px;"></i> 45 phút</span>
-                                        <span class="d-flex align-items-center gap-1"><i data-lucide="zap" style="width: 14px;"></i> Nâng cao</span>
-                                        <span class="d-flex align-items-center gap-1"><i data-lucide="eye" style="width: 14px;"></i> 1 lượt mua</span>
-                                    </div>
-                                    
-                                    <!-- Price & Cart -->
-                                    <div class="d-flex align-items-center gap-3 ms-auto align-self-end">
-                                        <div class="text-end">
-                                            <span class="price-current fw-extrabold fs-5 d-block">750,000 VNĐ</span>
+                                            <span class="price-current fw-extrabold fs-5 d-block" th:text="${#numbers.formatDecimal(course.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">209,300 VNĐ</span>
                                         </div>
                                         <button class="btn btn-add-to-cart px-3 py-2 fw-bold fs-8 d-flex align-items-center gap-2 rounded-3">
                                             <i data-lucide="shopping-cart" style="width:16px;"></i> Thêm vào giỏ hàng
