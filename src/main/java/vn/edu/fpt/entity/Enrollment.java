@@ -30,9 +30,6 @@ public class Enrollment extends BaseEntity {
     @Column(name = "progress_percent", precision = 5, scale = 2)
     private BigDecimal progressPercent;
 
-    @Column(name = "enrolled_at")
-    private LocalDateTime enrolledAt;
-
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
 

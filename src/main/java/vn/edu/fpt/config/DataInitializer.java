@@ -9,6 +9,7 @@ import vn.edu.fpt.entity.*;
 import vn.edu.fpt.repository.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor // tự động sinh constructor với tất cả các field final nên không cần gán @Autowired cho từng repository
@@ -25,14 +26,40 @@ public class DataInitializer implements CommandLineRunner {
     private final QuizQuestionRepository quizQuestionRepository;
     private final QuizAnswerRepository quizAnswerRepository;
     private final LessonMaterialRepository lessonMaterialRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     @Override
     public void run(String @NonNull... args) {
+        // Ensure default roles exist
+        Role adminRole = roleRepository.findByName("admin").orElse(null);
+        if (adminRole == null) {
+            adminRole = roleRepository.save(Role.builder()
+                    .name("admin")
+                    .description("Quản trị hệ thống")
+                    .build());
+        }
+
+        Role managerRole = roleRepository.findByName("manager").orElse(null);
+        if (managerRole == null) {
+            managerRole = roleRepository.save(Role.builder()
+                    .name("manager")
+                    .description("Quản lý nội dung")
+                    .build());
+        }
+
         Role instructorRole = roleRepository.findByName("instructor").orElse(null);
         if (instructorRole == null) {
             instructorRole = roleRepository.save(Role.builder()
                     .name("instructor")
                     .description("Giảng viên")
+                    .build());
+        }
+
+        Role learnerRole = roleRepository.findByName("learner").orElse(null);
+        if (learnerRole == null) {
+            learnerRole = roleRepository.save(Role.builder()
+                    .name("learner")
+                    .description("Học viên")
                     .build());
         }
 
@@ -117,6 +144,34 @@ public class DataInitializer implements CommandLineRunner {
         seedQuizForLesson4(lesson4);
 
         seedLessonMaterials(instructor, course, lesson4);
+
+        // Seed test learner user 'Do Thanh' and enroll to course id=1
+        User learner = userRepository.findByEmail("dothanh2572005@gmail.com").orElse(null);
+        if (learner == null) {
+            learner = userRepository.save(User.builder()
+                    .role(learnerRole)
+                    .firstName("Do")
+                    .lastName("Thanh")
+                    .email("dothanh2572005@gmail.com")
+                    .phone(null)
+                    .passwordHash("123")
+                    .status("active")
+                    .build());
+        }
+
+        // Enroll into course id=1 if exists and not already enrolled
+        final User finalLearner = learner;
+        courseRepository.findById(1).ifPresent(c -> {
+            boolean already = enrollmentRepository.findAll().stream()
+                    .anyMatch(en -> en.getUser().getId().equals(finalLearner.getId()) && en.getCourse().getId().equals(c.getId()));
+            if (!already) {
+                enrollmentRepository.save(Enrollment.builder()
+                        .user(finalLearner)
+                        .course(c)
+                        .progressPercent(BigDecimal.ZERO)
+                        .build());
+            }
+        });
 
     }
 

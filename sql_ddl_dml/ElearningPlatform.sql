@@ -36,14 +36,17 @@ CREATE TABLE roles (
 );
 
 -- Seed dữ liệu vai trò mặc định
-INSERT INTO roles (name, description)
-VALUES
-('admin', N'Quản trị hệ thống'),
-('manager', N'Quản lý nội dung'),
-('instructor', N'Giảng viên'),
-('learner', N'Học viên');
+IF NOT EXISTS (SELECT 1 FROM roles WHERE name = 'admin')
+    INSERT INTO roles (name, description) VALUES ('admin', N'Quản trị hệ thống');
 
-GO
+IF NOT EXISTS (SELECT 1 FROM roles WHERE name = 'manager')
+    INSERT INTO roles (name, description) VALUES ('manager', N'Quản lý nội dung');
+
+IF NOT EXISTS (SELECT 1 FROM roles WHERE name = 'instructor')
+    INSERT INTO roles (name, description) VALUES ('instructor', N'Giảng viên');
+
+IF NOT EXISTS (SELECT 1 FROM roles WHERE name = 'learner')
+    INSERT INTO roles (name, description) VALUES ('learner', N'Học viên');
 
 -- =========================
 -- USERS
@@ -810,7 +813,6 @@ CREATE TABLE enrollments (
     user_id INT NOT NULL,
     course_id INT NOT NULL,
     progress_percent DECIMAL(5,2) DEFAULT 0,
-    enrolled_at DATETIME DEFAULT GETDATE(),
     completed_at DATETIME NULL,
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo bản ghi
@@ -1395,4 +1397,33 @@ VALUES (
     NULL,
     'active'
 );
+
+
+-- Seed test learner user Do Thanh and enroll into course id=1
+IF NOT EXISTS (SELECT 1 FROM users WHERE email = 'dothanh2572005@gmail.com')
+    BEGIN
+        DECLARE @learnerRoleId INT;
+        SELECT @learnerRoleId = id FROM roles WHERE name = 'learner';
+        IF @learnerRoleId IS NULL
+            BEGIN
+                INSERT INTO roles (name, description) VALUES ('learner', N'Học viên');
+                SET @learnerRoleId = SCOPE_IDENTITY();
+            END
+
+        INSERT INTO users (role_id, first_name, last_name, email, phone, password_hash, avatar_url, google_id, status)
+        VALUES (@learnerRoleId, N'Do', N'Thanh', 'dothanh2572005@gmail.com', NULL, '123', NULL, NULL, 'active');
+    END
+
+-- Enroll user into course id = 1 if course exists and enrollment not present
+DECLARE @userId INT;
+SELECT @userId = id FROM users WHERE email = 'dothanh2572005@gmail.com';
+IF EXISTS (SELECT 1 FROM courses WHERE id = 1)
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM enrollments WHERE user_id = @userId AND course_id = 1)
+            BEGIN
+                INSERT INTO enrollments (user_id, course_id, progress_percent)
+                VALUES (@userId, 1, 0);
+            END
+    END
+GO
 

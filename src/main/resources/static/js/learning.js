@@ -45,11 +45,55 @@ function initializeMaterial() {
     const openLink = document.getElementById("btn-open-lesson-document");
     const downloadLink = document.getElementById("btn-download-lesson-document");
 
+    // Get temporary SAS URL from backend
     fetch("/temp/material/first-course-first-lesson/url").then(response => {
         if (!response.ok) throw new Error("Khong the lay du lieu");
         return response.text();
     }).then(sasUrl => {
        frame.src = sasUrl;
+       openLink.href = sasUrl;
+       if (downloadLink) downloadLink.href = sasUrl;
+
+       // When user clicks download, fetch the file as a blob and trigger native download
+       if (downloadLink) {
+           downloadLink.addEventListener('click', async (e) => {
+               e.preventDefault();
+               try {
+                   const res = await fetch(sasUrl);
+                   if (!res.ok) throw new Error('Không tải được file');
+                   const blob = await res.blob();
+
+                   // Try to get filename from Content-Disposition header
+                   let filename = 'tài-liệu';
+                   const cd = res.headers.get('content-disposition');
+                   if (cd) {
+                       const m = cd.match(/filename\*?=(?:UTF-8'')?\"?([^;\"']+)\"?/i);
+                       if (m && m[1]) filename = decodeURIComponent(m[1]);
+                   } else {
+                       // Fallback: extract name from URL
+                       try {
+                           const urlParts = new URL(sasUrl);
+                           const pathSeg = urlParts.pathname.split('/').pop();
+                           if (pathSeg) filename = pathSeg.split('?')[0] || filename;
+                       } catch (e) { /* ignore */ }
+                   }
+
+                   const objectUrl = URL.createObjectURL(blob);
+                   const a = document.createElement('a');
+                   a.href = objectUrl;
+                   a.download = filename;
+                   document.body.appendChild(a);
+                   a.click();
+                   a.remove();
+                   // Revoke after a short timeout to ensure download started
+                   setTimeout(() => URL.revokeObjectURL(objectUrl), 10000);
+               } catch (err) {
+                   console.error('Loi khi tai file:', err);
+                   // Fallback: open the SAS URL in a new tab (user can save from browser)
+                   window.open(sasUrl, '_blank');
+               }
+           });
+       }
     }).catch(err => console.error("Loi tai tai lieu:", err));
 }
 
