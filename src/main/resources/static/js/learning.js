@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initializeTabs();
     initializeVideoPlayer();
-    initializeReviewsSelector();
     initializeQuizOptions();
     initializeSidebarToggle();
 });
@@ -16,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeTabs() {
     const tabs = {
         'tab-overview-btn': 'panel-overview',
-        'tab-reviews-btn': 'panel-reviews',
         'tab-quiz-btn': 'panel-quiz'
     };
 
@@ -82,62 +80,10 @@ function initializeVideoPlayer() {
         });
 }
 
-// 3. Satisfying Reviews Stars selector
-function initializeReviewsSelector() {
-    const stars = document.querySelectorAll(".star-selector-btn");
-    const btnSubmit = document.getElementById("btn-submit-review");
-    const textarea = document.getElementById("feedback-textarea");
-    let currentRating = 0;
-
-    stars.forEach(star => {
-        star.addEventListener("click", () => {
-            const val = parseInt(star.getAttribute("data-value"));
-            currentRating = val;
-            
-            // Color stars up to val
-            stars.forEach((s, idx) => {
-                if (idx < val) {
-                    s.classList.add("star-active", "text-warning");
-                    s.classList.remove("text-muted-light");
-                } else {
-                    s.classList.remove("star-active", "text-warning");
-                    s.classList.add("text-muted-light");
-                }
-            });
-        });
-    });
-
-    if (btnSubmit) {
-        btnSubmit.addEventListener("click", () => {
-            if (currentRating === 0) {
-                alert("Vui lòng chọn mức độ hài lòng của bạn bằng cách click vào các ngôi sao!");
-                return;
-            }
-            
-            const comment = textarea.value.trim();
-            if (!comment) {
-                alert("Vui lòng viết phản hồi/nhận xét trước khi gửi!");
-                return;
-            }
-
-            // Show simulated success toast
-            alert(`Cảm ơn phản hồi của bạn! Đã ghi nhận đánh giá ${currentRating} sao thành công.`);
-            
-            // Reset form
-            currentRating = 0;
-            stars.forEach(s => {
-                s.classList.remove("star-active", "text-warning");
-                s.classList.add("text-muted-light");
-            });
-            textarea.value = "";
-        });
-    }
-}
-
-// 4. Quiz selections toggle styles
+// 3. Quiz selections toggle styles
 function initializeQuizOptions() {
     const options = document.querySelectorAll(".quiz-option");
-    
+
     options.forEach(opt => {
         const radio = opt.querySelector("input[type='radio']");
         if (!radio) return;
@@ -193,7 +139,7 @@ function initializeQuizOptions() {
             for (const [qName, correctVal] of Object.entries(correctAnswers)) {
                 const selectedOption = document.querySelector(`input[name='${qName}']:checked`);
                 const correctOptionInput = document.querySelector(`input[name='${qName}'][value='${correctVal}']`);
-                
+
                 // Color correct option in green
                 if (correctOptionInput) {
                     const correctLabel = correctOptionInput.closest(".quiz-option");
@@ -212,7 +158,7 @@ function initializeQuizOptions() {
             // Display score banner above Question 1
             const quizPanel = document.getElementById("panel-quiz");
             const firstQuestionBox = quizPanel.querySelector(".quiz-question-box");
-            
+
             let banner = document.querySelector(".quiz-result-banner");
             if (banner) {
                 banner.remove();
@@ -240,7 +186,7 @@ function initializeQuizOptions() {
     }
 }
 
-// 5. Sidebar toggling
+// 4. Sidebar toggling
 function initializeSidebarToggle() {
     const toggleBtn = document.getElementById("btn-sidebar-toggle");
     const sidebar = document.querySelector(".sidebar-curriculum-container");
@@ -249,7 +195,7 @@ function initializeSidebarToggle() {
     if (toggleBtn && sidebar && mainContent) {
         toggleBtn.addEventListener("click", () => {
             sidebar.classList.toggle("d-none");
-            
+
             // Adjust left side width class
             if (sidebar.classList.contains("d-none")) {
                 mainContent.className = "col-12 main-player-content";

@@ -128,9 +128,6 @@
                             <button class="nav-link px-0 py-3 active" id="tab-overview-btn" role="tab">Tổng Quan</button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link px-0 py-3" id="tab-reviews-btn" role="tab">Đánh giá</button>
-                        </li>
-                        <li class="nav-item">
                             <button class="nav-link px-0 py-3" id="tab-quiz-btn" role="tab">Câu Hỏi Ôn Tập</button>
                         </li>
                     </ul>
@@ -151,40 +148,7 @@
                         </div>
                     </div>
 
-                    <!-- Tab Panel 2: Reviews (Hidden by default) -->
-                    <div class="tab-panel-item d-none" id="panel-reviews">
-                        <h3 class="tab-panel-subtitle fw-bold fs-6 mb-3 font-heading d-flex align-items-center gap-2 text-dark">
-                            <i data-lucide="message-square-plus" class="text-primary" style="width: 20px; height: 20px;"></i> Đánh giá của bạn
-                        </h3>
-                        
-                        <div class="card border border-light-subtle rounded-3 p-4 bg-white shadow-sm mb-3">
-                            <!-- Satisfying Stars -->
-                            <div class="mb-3">
-                                <span class="d-block text-muted-dark fs-7 fw-semibold mb-2">Mức độ hài lòng</span>
-                                <div class="rating-selector d-flex align-items-center gap-1">
-                                    <button class="btn btn-link p-0 star-selector-btn text-muted-light" data-value="1" aria-label="1 star"><i data-lucide="star" style="width:24px; height:24px;"></i></button>
-                                    <button class="btn btn-link p-0 star-selector-btn text-muted-light" data-value="2" aria-label="2 stars"><i data-lucide="star" style="width:24px; height:24px;"></i></button>
-                                    <button class="btn btn-link p-0 star-selector-btn text-muted-light" data-value="3" aria-label="3 stars"><i data-lucide="star" style="width:24px; height:24px;"></i></button>
-                                    <button class="btn btn-link p-0 star-selector-btn text-muted-light" data-value="4" aria-label="4 stars"><i data-lucide="star" style="width:24px; height:24px;"></i></button>
-                                    <button class="btn btn-link p-0 star-selector-btn text-muted-light" data-value="5" aria-label="5 stars"><i data-lucide="star" style="width:24px; height:24px;"></i></button>
-                                </div>
-                            </div>
-                            
-                            <!-- Comment Textarea -->
-                            <div class="mb-4">
-                                <span class="d-block text-muted-dark fs-7 fw-semibold mb-2">Nhận xét</span>
-                                <textarea class="form-control rounded-3 p-3 fs-7" rows="4" placeholder="Viết feedback của bạn..." id="feedback-textarea" style="border-color: #cbd5e1;"></textarea>
-                            </div>
-                            
-                            <!-- Send Button -->
-                            <button class="btn btn-primary rounded-3 px-4 py-2.5 fw-bold fs-7 d-inline-flex align-items-center gap-2 shadow-primary" id="btn-submit-review">
-                                <span>Gửi đánh giá</span>
-                                <i data-lucide="send" style="width: 16px; height: 16px;"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Tab Panel 3: Quiz (Hidden by default) -->
+                    <!-- Tab Panel 2: Quiz (Hidden by default) -->
                     <div class="tab-panel-item d-none" id="panel-quiz">
                         <h3 class="tab-panel-subtitle fw-bold fs-6 mb-4 font-heading d-flex align-items-center gap-2 text-dark">
                             <i data-lucide="help-circle" class="text-primary" style="width: 20px; height: 20px;"></i> Câu Hỏi Ôn Tập
