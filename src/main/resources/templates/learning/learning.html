@@ -76,53 +76,17 @@
                 
                 <!-- Video Player Screen -->
                 <div class="video-player-container position-relative overflow-hidden bg-dark">
-                    <!-- Background Poster Image (Guitar lesson) -->
-                    <img th:src="@{/images/guitar_stratocaster_sunburst.png}" alt="Guitar Lesson Video Frame" class="video-poster w-100 object-fit-cover" style="height: 480px; filter: brightness(0.95);">
-                    
-                    <!-- Play Overlay -->
-                    <div class="play-overlay position-absolute top-50 start-50 translate-middle rounded-circle d-flex align-items-center justify-content-center cursor-pointer transition-all" id="video-play-center-btn">
-                        <i data-lucide="play" class="text-white fill-white" style="width: 24px; height: 24px; margin-left: 2px;"></i>
-                    </div>
-
-                    <!-- Custom Video Controls bar -->
-                    <div class="video-controls-bar position-absolute bottom-0 start-0 w-100 px-4 py-3 d-flex flex-column gap-2 text-white">
-                        <!-- Progress bar -->
-                        <div class="video-progress-wrapper cursor-pointer">
-                            <div class="video-progress-bg" style="height: 4px; background-color: rgba(255,255,255,0.3); border-radius: 2px;">
-                                <div class="video-progress-fill" style="width: 34%; height: 100%; background-color: var(--primary); border-radius: 2px; transition: width 0.1s linear;"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- Control buttons row -->
-                        <div class="d-flex align-items-center justify-content-between flex-wrap">
-                            <!-- Left Controls -->
-                            <div class="d-flex align-items-center gap-3">
-                                <button class="btn btn-link text-white p-0" id="video-play-btn" aria-label="Play/Pause">
-                                    <i data-lucide="play" style="width: 18px; height: 18px;" class="fill-white"></i>
-                                </button>
-                                <button class="btn btn-link text-white p-0" id="video-next-btn" aria-label="Next lesson">
-                                    <i data-lucide="skip-forward" style="width: 18px; height: 18px;" class="fill-white"></i>
-                                </button>
-                                <button class="btn btn-link text-white p-0" id="video-volume-btn" aria-label="Volume">
-                                    <i data-lucide="volume-2" style="width: 18px; height: 18px;"></i>
-                                </button>
-                                <span class="video-time-display fs-8 font-heading fw-medium ms-2">07:22 / 21:54</span>
-                            </div>
-                            
-                            <!-- Right Controls -->
-                            <div class="d-flex align-items-center gap-3">
-                                <button class="btn btn-link text-white p-0" aria-label="Subtitles">
-                                    <i data-lucide="subtitles" style="width: 18px; height: 18px;"></i>
-                                </button>
-                                <button class="btn btn-link text-white p-0" aria-label="Settings">
-                                    <i data-lucide="settings" style="width: 18px; height: 18px;"></i>
-                                </button>
-                                <button class="btn btn-link text-white p-0" id="video-fullscreen-btn" aria-label="Fullscreen">
-                                    <i data-lucide="maximize" style="width: 18px; height: 18px;"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <video
+                        id="lesson-video"
+                        class="w-100"
+                        style="height: 480px; object-fit: cover;"
+                        controls
+                        preload="metadata"
+                        playsinline
+                        th:poster="@{/images/guitar_stratocaster_sunburst.png}">
+                        Trinh duyet cua ban khong ho tro the video.
+                    </video>
+                    <div id="lesson-video-status" class="position-absolute top-0 start-0 m-3 badge bg-dark-subtle text-dark"></div>
                 </div>
 
                 <!-- Course Title & Actions -->

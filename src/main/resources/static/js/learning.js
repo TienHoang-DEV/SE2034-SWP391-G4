@@ -39,71 +39,47 @@ function initializeTabs() {
     });
 }
 
-// 2. Mock Video Player Controls
+// 2. Load real lesson video from temporary backend endpoint
 function initializeVideoPlayer() {
-    const playCenterBtn = document.getElementById("video-play-center-btn");
-    const playBarBtn = document.getElementById("video-play-btn");
-    const progressFill = document.querySelector(".video-progress-fill");
-    const timeDisplay = document.querySelector(".video-time-display");
+    const videoEl = document.getElementById("lesson-video");
+    const statusEl = document.getElementById("lesson-video-status");
 
-    if (!playCenterBtn || !playBarBtn) return;
-
-    let isPlaying = false;
-    let playInterval = null;
-    let currentSeconds = 442; // 07:22 in seconds
-    const totalSeconds = 1314; // 21:54 in seconds
-
-    function formatTime(secs) {
-        const m = Math.floor(secs / 60).toString().padStart(2, '0');
-        const s = (secs % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
+    if (!videoEl) {
+        return;
     }
 
-    function togglePlay() {
-        isPlaying = !isPlaying;
-
-        if (isPlaying) {
-            // Update icons to Pause
-            playCenterBtn.style.opacity = "0"; // hide center play button
-            playBarBtn.innerHTML = `<i data-lucide="pause" style="width: 18px; height: 18px;" class="fill-white"></i>`;
-            
-            // Start simulation timer
-            playInterval = setInterval(() => {
-                if (currentSeconds < totalSeconds) {
-                    currentSeconds++;
-                    // Update progress bar width
-                    const percentage = (currentSeconds / totalSeconds) * 100;
-                    if (progressFill) progressFill.style.width = `${percentage}%`;
-                    
-                    // Update time display
-                    if (timeDisplay) {
-                        timeDisplay.textContent = `${formatTime(currentSeconds)} / ${formatTime(totalSeconds)}`;
-                    }
-                } else {
-                    clearInterval(playInterval);
-                    togglePlay(); // Stop when ended
-                }
-            }, 1000);
-        } else {
-            // Update icons to Play
-            playCenterBtn.style.opacity = "1"; // show center play button
-            playBarBtn.innerHTML = `<i data-lucide="play" style="width: 18px; height: 18px;" class="fill-white"></i>`;
-            
-            // Stop timer
-            clearInterval(playInterval);
-        }
-
-        // Re-render icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons({
-                attrs: { class: 'lucide-icon' },
-                node: playBarBtn
-            });
-        }
+    if (statusEl) {
+        statusEl.textContent = "Dang tai video...";
     }
 
-    playCenterBtn.addEventListener("click", togglePlay);
-    playBarBtn.addEventListener("click", togglePlay);
+    fetch("/temp/video/first-course-first-lesson/url")
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Khong the lay URL video");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (!data.videoUrl) {
+                throw new Error("Phan hoi khong co videoUrl");
+            }
+
+            videoEl.src = data.videoUrl;
+            videoEl.load();
+
+            if (statusEl) {
+                statusEl.textContent = "Da nap video";
+                setTimeout(() => {
+                    statusEl.textContent = "";
+                }, 2000);
+            }
+        })
+        .catch((error) => {
+            if (statusEl) {
+                statusEl.textContent = "Khong tai duoc video";
+            }
+            console.error(error);
+        });
 }
 
 // 3. Satisfying Reviews Stars selector
