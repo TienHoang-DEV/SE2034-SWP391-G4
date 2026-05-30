@@ -4,7 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.server.ResponseStatusException;
 import vn.edu.fpt.entity.Course;
@@ -18,7 +19,7 @@ import vn.edu.fpt.service.AzureBlobService;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/temp/video")
 public class TempVideoController {
 
@@ -38,17 +39,9 @@ public class TempVideoController {
     }
 
     @GetMapping("/first-course-first-lesson/url")
-    public ResponseEntity<Map<String, Object>> getFirstCourseFirstLessonVideoUrl() {
-        try {
-            String videoUrl = resolveFirstCourseFirstLessonVideoUrl();
-            Map<String, Object> body = new HashMap<>();
-            body.put("videoUrl", videoUrl);
-            return ResponseEntity.ok(body);
-        } catch (IllegalStateException ex) {
-            Map<String, Object> body = new HashMap<>();
-            body.put("message", ex.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
-        }
+    @ResponseBody
+    public String getFirstCourseFirstLessonVideoUrl() {
+        return resolveFirstCourseFirstLessonVideoUrl();
     }
 
     @GetMapping("/first-course-first-lesson/play")

@@ -55,14 +55,14 @@ function initializeVideoPlayer() {
             if (!response.ok) {
                 throw new Error("Khong the lay URL video");
             }
-            return response.json();
+            return response.text();
         })
-        .then((data) => {
-            if (!data.videoUrl) {
-                throw new Error("Phan hoi khong co videoUrl");
+        .then((videoUrl) => {
+            if (!videoUrl) {
+                throw new Error("Khong nhan duoc video URL");
             }
 
-            videoEl.src = data.videoUrl;
+            videoEl.src = videoUrl;
             videoEl.load();
 
             if (statusEl) {
