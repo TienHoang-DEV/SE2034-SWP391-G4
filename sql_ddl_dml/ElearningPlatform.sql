@@ -1374,26 +1374,18 @@ VALUES (
     'active'
 );
 
-<<<<<<< HEAD
 -- ==========================================
 -- INSTRUCTOR SAMPLE DATA
 -- ==========================================
 -------------STEP 1 : register as a Student---------------
 INSERT INTO users
 (
-=======
--- =========================
--- ADMIN USER
--- =========================
-INSERT INTO users (
->>>>>>> 19ebe38fef8b4379f01b902b43def1abaccce28d
     role_id,
     first_name,
     last_name,
     email,
     phone,
     password_hash,
-<<<<<<< HEAD
     status
 )
 VALUES
@@ -1492,4 +1484,3 @@ IF EXISTS (SELECT 1 FROM courses WHERE id = 1)
     END
 GO
 
->>>>>>> 19ebe38fef8b4379f01b902b43def1abaccce28d
