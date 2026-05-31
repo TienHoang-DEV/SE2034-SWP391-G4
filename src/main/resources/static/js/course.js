@@ -31,14 +31,82 @@ function initializeSearch() {
 
 // Sidebar filter actions simulation
 function initializeFilters() {
-    const checkboxes = document.querySelectorAll(".sidebar-filters input[type='checkbox']");
+    const ratingCheckboxes = document.querySelectorAll(".filter-rating-checkbox");
+    const priceCheckboxes = document.querySelectorAll(".filter-price-checkbox");
+    const courseItems = document.querySelectorAll(".course-list-item");
+    const resultCountSpan = document.querySelector(".search-result-title + span"); // The "128 khóa học" text
     const tagLinks = document.querySelectorAll(".filter-tag-link");
-    const courseListItems = document.querySelectorAll(".course-list-item");
-    
-    // Checkboxes toggle simulation
-    checkboxes.forEach(box => {
-        box.addEventListener("change", () => {
+
+    function filterCourses() {
+        // Collect checked ratings
+        const checkedRatings = Array.from(ratingCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => parseInt(cb.value));
+
+        // Collect checked price ranges
+        const checkedPrices = Array.from(priceCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => {
+                const parts = cb.value.split("-");
+                return {
+                    min: parseFloat(parts[0]),
+                    max: parseFloat(parts[1])
+                };
+            });
+
+        let visibleCount = 0;
+
+        courseItems.forEach(item => {
+            const rating = parseFloat(item.getAttribute("data-rating")) || 0.0;
+            const price = parseFloat(item.getAttribute("data-price")) || 0.0;
+
+            // Rating Filter Match
+            // Match rating ranges: R star checkbox matches rating in [R, R+1) (or >= 5.0 for 5 star)
+            let ratingMatch = true;
+            if (checkedRatings.length > 0) {
+                ratingMatch = checkedRatings.some(r => {
+                    if (r === 5) {
+                        return rating >= 5.0;
+                    }
+                    return rating >= r && rating < r + 1;
+                });
+            }
+
+            // Price Filter Match
+            let priceMatch = true;
+            if (checkedPrices.length > 0) {
+                priceMatch = checkedPrices.some(range => {
+                    return price >= range.min && price <= range.max;
+                });
+            }
+
+            // Apply visibility
+            if (ratingMatch && priceMatch) {
+                item.style.setProperty("display", "flex", "important");
+                visibleCount++;
+            } else {
+                item.style.setProperty("display", "none", "important");
+            }
+        });
+
+        // Update the count in the header
+        if (resultCountSpan) {
+            resultCountSpan.textContent = `${visibleCount} khóa học`;
+        }
+    }
+
+    // Attach change event listeners to checkboxes
+    ratingCheckboxes.forEach(cb => {
+        cb.addEventListener("change", () => {
             simulateLoading();
+            filterCourses();
+        });
+    });
+
+    priceCheckboxes.forEach(cb => {
+        cb.addEventListener("change", () => {
+            simulateLoading();
+            filterCourses();
         });
     });
 
@@ -56,6 +124,9 @@ function initializeFilters() {
             simulateLoading();
         });
     });
+
+    // Run initial filter (just in case browser remembers checkbox state on reload)
+    filterCourses();
 }
 
 function simulateLoading() {
@@ -74,6 +145,19 @@ function simulateLoading() {
 // Shopping Cart Actions
 function initializeCartButtons() {
     const cartButtons = document.querySelectorAll(".btn-add-to-cart");
+    const cartBadge = document.getElementById("cart-badge-count");
+
+    // Fetch initial cart count from DB on page load
+    if (cartBadge) {
+        fetch('/api/cart/count')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cartBadge.textContent = data.cartSize;
+                }
+            })
+            .catch(err => console.error('Error fetching cart count:', err));
+    }
     
     // Create a Toast container if it doesn't exist
     let toastContainer = document.querySelector(".toast-container");
@@ -89,17 +173,48 @@ function initializeCartButtons() {
             e.preventDefault();
             e.stopPropagation();
             
-            // Get course title
-            const listItem = btn.closest(".course-list-item");
-            const title = listItem.querySelector(".course-item-title").textContent.trim();
-            
-            // Show Success Toast
-            showToast(title);
+            const courseId = btn.getAttribute("data-course-id");
+            if (!courseId) {
+                console.error("Course ID is missing on the button.");
+                return;
+            }
+
+            btn.disabled = true;
+
+            fetch(`/api/cart/add?courseId=${courseId}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                btn.disabled = false;
+                if (data.success) {
+                    // Update cart count
+                    if (cartBadge) {
+                        cartBadge.textContent = data.cartSize;
+                        
+                        // Visual bounce animation for the badge
+                        cartBadge.style.transform = 'scale(1.4)';
+                        setTimeout(() => {
+                            cartBadge.style.transform = '';
+                        }, 300);
+                    }
+
+                    // Show Success Toast with custom backend message
+                    showToast(data.message);
+                } else {
+                    alert(data.message || 'Không thể thêm vào giỏ hàng.');
+                }
+            })
+            .catch(err => {
+                btn.disabled = false;
+                console.error('Error adding course to cart:', err);
+                alert('Có lỗi xảy ra khi thêm vào giỏ hàng.');
+            });
         });
     });
 }
 
-function showToast(courseTitle) {
+function showToast(message) {
     const toastContainer = document.querySelector(".toast-container");
     
     // Toast Element
@@ -109,7 +224,7 @@ function showToast(courseTitle) {
             <div class="d-flex">
                 <div class="toast-body d-flex align-items-center gap-2">
                     <i data-lucide="check-circle" style="width: 18px; height: 18px;"></i>
-                    <span>Đã thêm <strong>${courseTitle}</strong> vào giỏ hàng thành công!</span>
+                    <span>${message}</span>
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>

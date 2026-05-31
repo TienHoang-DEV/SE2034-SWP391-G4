@@ -17,7 +17,7 @@
     <!-- Central Stylesheet -->
     <link rel="stylesheet" th:href="@{/css/home.css}">
     <!-- Courses Search Page Custom Stylesheet -->
-    <link rel="stylesheet" th:href="@{/css/courses.css}">
+    <link rel="stylesheet" th:href="@{/css/course.css}">
     
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -61,10 +61,10 @@
             <!-- User Utilities -->
             <div class="header-utilities d-flex align-items-center gap-3">
                 <!-- Cart Icon with badge number 2 -->
-                <a href="../cart/cart.html" class="btn btn-link nav-icon-btn text-muted p-2 rounded-circle position-relative" aria-label="Giỏ hàng">
+                <a th:href="@{/cart}" class="btn btn-link nav-icon-btn text-muted p-2 rounded-circle position-relative" aria-label="Giỏ hàng">
                     <i data-lucide="shopping-cart" style="width: 20px; height: 20px;"></i>
-                    <span class="position-absolute top-1 translate-middle badge rounded-circle bg-danger p-1 cart-count-badge" style="left: 75%; font-size: 10px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #fff;">
-                        2
+                    <span class="position-absolute top-1 translate-middle badge rounded-circle bg-danger p-1 cart-count-badge" id="cart-badge-count" style="left: 75%; font-size: 10px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #fff;" th:text="${cartSize ?: 0}">
+                        0
                     </span>
                 </a>
 
@@ -76,16 +76,19 @@
                 <!-- User Profile Dropdown -->
                 <div class="dropdown">
                     <button class="btn p-0 border-0 dropdown-toggle no-caret" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img th:src="@{/images/avatar.png}" alt="User Avatar" class="user-avatar rounded-circle border border-2 border-primary" style="width: 36px; height: 36px; object-fit: cover;">
+                        <img th:src="${session.user != null && session.user.email == '28tech@gmail.com' ? '/images/avatar.png' : '/images/student2.png'}" alt="User Avatar" class="user-avatar rounded-circle border border-2 border-primary" style="width: 36px; height: 36px; object-fit: cover;">
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2 p-2" aria-labelledby="profileDropdown" style="width: 220px; border-radius: var(--radius-lg);">
-                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../student_profile/student_profile.html"><i data-lucide="user" style="width:16px;"></i> Thông tin của tôi</a></li>
-                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../my_learning/my_learning.html"><i data-lucide="graduation-cap" style="width:16px;"></i> Việc học của tôi</a></li>
-                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../recommendations/recommendations.html"><i data-lucide="sparkles" style="width:16px;"></i> Khóa học đề xuất</a></li>
-                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted active bg-primary text-white" href="../courses/courses.html"><i data-lucide="search" style="width:16px;"></i> Tìm kiếm khóa học</a></li>
+                        <li class="px-3 py-2 border-bottom mb-1" th:if="${session.user != null}">
+                            <p class="user-name fw-semibold m-0 fs-7 text-dark" th:text="${session.user.lastName + ' ' + session.user.firstName}">Tên Học Viên</p>
+                            <p class="user-email text-muted m-0 fs-8 text-truncate" th:text="${session.user.email}">email@example.com</p>
+                        </li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" th:href="@{/student/profile}"><i data-lucide="user" style="width:16px;"></i> Thông tin của tôi</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" th:href="@{/student/my-learning}"><i data-lucide="graduation-cap" style="width:16px;"></i> Việc học của tôi</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" th:href="@{/student/recommendations}"><i data-lucide="sparkles" style="width:16px;"></i> Khóa học đề xuất</a></li>
                         <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="#"><i data-lucide="message-square" style="width:16px;"></i> Tin nhắn</a></li>
-                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../purchase_history/purchase_history.html"><i data-lucide="history" style="width:16px;"></i> Lịch sử mua hàng</a></li>
-                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="#"><i data-lucide="bar-chart-2" style="width:16px;"></i> Báo cáo</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" th:href="@{/student/purchase-history}"><i data-lucide="history" style="width:16px;"></i> Lịch sử mua hàng</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted active bg-primary text-white" th:href="@{/courses}"><i data-lucide="search" style="width:16px;"></i> Tìm kiếm khóa học</a></li>
                         <li><hr class="dropdown-divider my-2"></li>
                         <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-danger fw-semibold" th:href="@{/}"><i data-lucide="log-out" style="width:16px;"></i> Đăng xuất</a></li>
                     </ul>
@@ -126,36 +129,58 @@
                             </h4>
                             <div class="d-flex flex-column gap-2">
                                 <label class="d-flex align-items-center gap-2 fs-7 cursor-pointer text-muted-dark">
-                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle filter-rating-checkbox" value="5">
                                     <span class="d-flex align-items-center gap-1">
                                         <i data-lucide="star" class="star-icon star-filled"></i>
                                         <i data-lucide="star" class="star-icon star-filled"></i>
                                         <i data-lucide="star" class="star-icon star-filled"></i>
                                         <i data-lucide="star" class="star-icon star-filled"></i>
                                         <i data-lucide="star" class="star-icon star-filled"></i>
-                                        <span class="ms-1 text-muted fs-8">(2)</span>
+                                        <span class="ms-1 text-muted fs-8">5 sao</span>
                                     </span>
                                 </label>
                                 <label class="d-flex align-items-center gap-2 fs-7 cursor-pointer text-muted-dark">
-                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle filter-rating-checkbox" value="4">
                                     <span class="d-flex align-items-center gap-1">
                                         <i data-lucide="star" class="star-icon star-filled"></i>
                                         <i data-lucide="star" class="star-icon star-filled"></i>
                                         <i data-lucide="star" class="star-icon star-filled"></i>
                                         <i data-lucide="star" class="star-icon star-filled"></i>
                                         <i data-lucide="star" class="star-icon star-empty"></i>
-                                        <span class="ms-1 text-muted fs-8">(5)</span>
+                                        <span class="ms-1 text-muted fs-8">4 sao</span>
                                     </span>
                                 </label>
                                 <label class="d-flex align-items-center gap-2 fs-7 cursor-pointer text-muted-dark">
-                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle filter-rating-checkbox" value="3">
                                     <span class="d-flex align-items-center gap-1">
                                         <i data-lucide="star" class="star-icon star-filled"></i>
                                         <i data-lucide="star" class="star-icon star-filled"></i>
                                         <i data-lucide="star" class="star-icon star-filled"></i>
                                         <i data-lucide="star" class="star-icon star-empty"></i>
                                         <i data-lucide="star" class="star-icon star-empty"></i>
-                                        <span class="ms-1 text-muted fs-8">(1)</span>
+                                        <span class="ms-1 text-muted fs-8">3 sao</span>
+                                    </span>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 fs-7 cursor-pointer text-muted-dark">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle filter-rating-checkbox" value="2">
+                                    <span class="d-flex align-items-center gap-1">
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <span class="ms-1 text-muted fs-8">2 sao</span>
+                                    </span>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 fs-7 cursor-pointer text-muted-dark">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle filter-rating-checkbox" value="1">
+                                    <span class="d-flex align-items-center gap-1">
+                                        <i data-lucide="star" class="star-icon star-filled"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <i data-lucide="star" class="star-icon star-empty"></i>
+                                        <span class="ms-1 text-muted fs-8">1 sao</span>
                                     </span>
                                 </label>
                             </div>
@@ -163,46 +188,31 @@
                         
                         <hr class="my-3 text-muted opacity-25">
                         
-                        <!-- Filter Group 3: Duration -->
-                        <div class="filter-group mb-4">
-                            <h4 class="filter-title fw-bold fs-7 mb-3 d-flex align-items-center gap-2">
-                                <i data-lucide="clock" class="text-muted" style="width: 18px; height: 18px;"></i> Thời lượng
-                            </h4>
-                            <div class="d-flex flex-column gap-2 fs-7 text-muted-dark">
-                                <label class="d-flex align-items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
-                                    <span>3 - 5 phút</span>
-                                </label>
-                                <label class="d-flex align-items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
-                                    <span>5 - 7 phút</span>
-                                </label>
-                                <label class="d-flex align-items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
-                                    <span>7 - 10 phút</span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <hr class="my-3 text-muted opacity-25">
-                        
-                        <!-- Filter Group 4: Price -->
+                        <!-- Filter Group 3: Price -->
                         <div class="filter-group">
                             <h4 class="filter-title fw-bold fs-7 mb-3 d-flex align-items-center gap-2">
                                 <i data-lucide="coins" class="text-muted" style="width: 18px; height: 18px;"></i> Giá tiền
                             </h4>
                             <div class="d-flex flex-column gap-2 fs-7 text-muted-dark">
                                 <label class="d-flex align-items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle filter-price-checkbox" value="0-0">
+                                    <span>Miễn phí (0 VNĐ)</span>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle filter-price-checkbox" value="200000-500000">
                                     <span>200.000 - 500.000 VNĐ</span>
                                 </label>
                                 <label class="d-flex align-items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle filter-price-checkbox" value="500000-700000">
                                     <span>500.000 - 700.000 VNĐ</span>
                                 </label>
                                 <label class="d-flex align-items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" class="form-check-input border-secondary-subtle">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle filter-price-checkbox" value="700000-1000000">
                                     <span>700.000 - 1.000.000 VNĐ</span>
+                                </label>
+                                <label class="d-flex align-items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" class="form-check-input border-secondary-subtle filter-price-checkbox" value="1000000-99999999">
+                                    <span>Trên 1.000.000 VNĐ</span>
                                 </label>
                             </div>
                         </div>
@@ -236,31 +246,35 @@
                     <div class="d-flex flex-column gap-4 mb-5">
                         
                         <!-- Course Row Loop -->
-                        <div class="course-list-item d-flex gap-4 p-4 border border-light-subtle rounded-3 bg-white shadow-sm flex-md-row flex-column align-items-start" th:each="course : ${courses}">
+                        <div class="course-list-item d-flex gap-4 p-4 border border-light-subtle rounded-3 bg-white shadow-sm flex-md-row flex-column align-items-start" 
+                             th:each="course : ${courses}"
+                             th:data-rating="${course.averageRating}"
+                             th:data-price="${course.price}">
                             <!-- Left: Thumbnail -->
                             <div class="position-relative overflow-hidden rounded-3 flex-shrink-0 align-self-center align-self-md-start" style="width: 240px; height: 145px;">
                                 <img th:src="${course.thumbnailUrl != null ? course.thumbnailUrl : '/images/tech_course.png'}" th:alt="${course.title}" class="w-100 h-100 object-fit-cover">
                                 <span class="position-absolute top-0 start-0 badge-discount text-white fw-bold fs-8 px-2.5 py-1 m-3">GIẢM 30%</span>
-                                <span class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white fs-8 px-2.5 py-1 rounded-pill m-3 fw-medium">31 phút</span>
+                                <span class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white fs-8 px-2.5 py-1 rounded-pill m-3 fw-medium" th:text="${course.getTotalLessonsCount() * 10} + ' phút'">31 phút</span>
                             </div>
                             
                             <!-- Right: Info -->
                             <div class="flex-grow-1 w-100 d-flex flex-column justify-content-between h-100" style="min-height: 145px;">
                                 <div>
-                                    <h3 class="course-item-title fw-bold fs-6 mb-2 font-heading" th:text="${course.title}">
-                                        Guitar đệm hát 30 ngày cùng Hiển Râu
-                                    </h3>
+                                    <a th:href="@{/course/detail(id=${course.id})}" class="text-decoration-none text-dark">
+                                        <h3 class="course-item-title fw-bold fs-6 mb-2 font-heading" th:text="${course.title}">
+                                            Guitar đệm hát 30 ngày cùng Hiển Râu
+                                        </h3>
+                                    </a>
                                     
                                     <div class="rating-stars mb-2 d-flex align-items-center gap-1">
-                                        <i data-lucide="star" class="star-icon star-filled"></i>
-                                        <i data-lucide="star" class="star-icon star-filled"></i>
-                                        <i data-lucide="star" class="star-icon star-filled"></i>
-                                        <i data-lucide="star" class="star-icon star-filled"></i>
-                                        <i data-lucide="star" class="star-icon star-filled"></i>
-                                        <span class="text-muted fs-8 ms-1">(2 đánh giá)</span>
+                                        <i th:each="i : ${#numbers.sequence(1, 5)}"
+                                           data-lucide="star"
+                                           class="star-icon"
+                                           th:classappend="${i <= course.averageRating} ? 'star-filled' : 'star-empty'"></i>
+                                        <span class="text-muted fs-8 ms-1" th:text="'(' + ${course.ratingCount} + ' đánh giá)'">(2 đánh giá)</span>
                                     </div>
                                     
-                                    <a href="../student_profile/student_profile.html" class="instructor-name fw-bold fs-8 text-decoration-none d-block mb-3">NGUYỄN CÔNG THÁI SƠN</a>
+                                    <span class="instructor-name fw-bold fs-8 text-primary d-block mb-3" th:text="${course.instructor.lastName + ' ' + course.instructor.firstName}">NGUYỄN CÔNG THÁI SƠN</span>
                                 </div>
                                 
                                 <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-auto">
@@ -276,7 +290,7 @@
                                         <div class="text-end">
                                             <span class="price-current fw-extrabold fs-5 d-block" th:text="${#numbers.formatDecimal(course.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">209,300 VNĐ</span>
                                         </div>
-                                        <button class="btn btn-add-to-cart px-3 py-2 fw-bold fs-8 d-flex align-items-center gap-2 rounded-3">
+                                        <button class="btn btn-add-to-cart px-3 py-2 fw-bold fs-8 d-flex align-items-center gap-2 rounded-3" th:data-course-id="${course.id}">
                                             <i data-lucide="shopping-cart" style="width:16px;"></i> Thêm vào giỏ hàng
                                         </button>
                                     </div>
@@ -375,7 +389,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <!-- Custom JavaScript -->
-    <script th:src="@{/js/courses.js}"></script>
+    <script th:src="@{/js/course.js}"></script>
 <script>lucide.createIcons();</script>
 </body>
 </html>

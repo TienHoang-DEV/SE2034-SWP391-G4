@@ -14,8 +14,10 @@ import vn.edu.fpt.repository.UserRepository;
 import java.io.IOException;
 
 /**
- * Dev-only (hard-code) filter that ensures a session contains userId=4 and currentUser loaded from DB.
- * WARNING: This affects every request in the running application. Remove or gate by @Profile("dev") before production.
+ * Dev-only (hard-code) filter that ensures a session contains userId=4 and
+ * currentUser loaded from DB.
+ * WARNING: This affects every request in the running application. Remove or
+ * gate by @Profile("dev") before production.
  */
 @Component
 @Order(1)
@@ -28,7 +30,8 @@ public class DevHardcodeSessionFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
             HttpServletRequest req = (HttpServletRequest) request;
             HttpSession session = req.getSession();

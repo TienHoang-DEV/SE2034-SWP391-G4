@@ -9,28 +9,97 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Cart Logic & Bootstrap Toast Trigger
     const btnAddToCart = document.getElementById('btn-add-to-cart');
     const cartBadge = document.getElementById('cart-badge-count');
-    const toastElement = document.getElementById('cartToast');
+
+    // Fetch initial cart count from DB on page load
+    if (cartBadge) {
+        fetch('/api/cart/count')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cartBadge.textContent = data.cartSize;
+                }
+            })
+            .catch(err => console.error('Error fetching cart count:', err));
+    }
     
-    if (btnAddToCart && cartBadge && toastElement) {
-        // Initialize Bootstrap Toast instance
-        const cartToast = new bootstrap.Toast(toastElement, {
-            delay: 3000
-        });
-
+    if (btnAddToCart && cartBadge) {
         btnAddToCart.addEventListener('click', () => {
-            // Increment cart count
-            let count = parseInt(cartBadge.textContent) || 0;
-            count += 1;
-            cartBadge.textContent = count;
+            const courseId = btnAddToCart.getAttribute('data-course-id');
+            if (!courseId) {
+                console.error("Course ID is missing on the button.");
+                return;
+            }
 
-            // Visual bounce animation for the badge
-            cartBadge.style.transform = 'scale(1.4)';
-            setTimeout(() => {
-                cartBadge.style.transform = '';
-            }, 300);
+            btnAddToCart.disabled = true;
 
-            // Show Bootstrap Toast
-            cartToast.show();
+            fetch(`/api/cart/add?courseId=${courseId}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                btnAddToCart.disabled = false;
+                if (data.success) {
+                    // Update cart count
+                    cartBadge.textContent = data.cartSize;
+
+                    // Visual bounce animation for the badge
+                    cartBadge.style.transform = 'scale(1.4)';
+                    setTimeout(() => {
+                        cartBadge.style.transform = '';
+                    }, 300);
+
+                    // Show dynamic Success Toast
+                    showSuccessToast(data.message);
+                } else {
+                    alert(data.message || 'Không thể thêm vào giỏ hàng.');
+                }
+            })
+            .catch(err => {
+                btnAddToCart.disabled = false;
+                console.error('Error adding course to cart:', err);
+                alert('Có lỗi xảy ra khi thêm vào giỏ hàng.');
+            });
+        });
+    }
+
+    function showSuccessToast(message) {
+        let toastContainer = document.querySelector(".toast-container");
+        if (!toastContainer) {
+            toastContainer = document.createElement("div");
+            toastContainer.className = "toast-container position-fixed bottom-0 end-0 p-3";
+            toastContainer.style.zIndex = "1100";
+            document.body.appendChild(toastContainer);
+        }
+
+        const toastId = "toast-" + Date.now();
+        const toastHtml = `
+            <div id="${toastId}" class="toast align-items-center text-white bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body d-flex align-items-center gap-2">
+                        <i data-lucide="check-circle" style="width: 18px; height: 18px;"></i>
+                        <span>${message}</span>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        `;
+        
+        toastContainer.insertAdjacentHTML("beforeend", toastHtml);
+        const toastElement = document.getElementById(toastId);
+        
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons({
+                attrs: { class: 'lucide-icon' },
+                nameAttr: 'data-lucide',
+                node: toastElement
+            });
+        }
+
+        const bsToast = new bootstrap.Toast(toastElement, { delay: 3000 });
+        bsToast.show();
+        
+        toastElement.addEventListener("hidden.bs.toast", () => {
+            toastElement.remove();
         });
     }
 

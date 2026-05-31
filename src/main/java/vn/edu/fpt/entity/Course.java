@@ -94,4 +94,57 @@ public class Course extends BaseEntity {
         feedbacks.remove(feedback);
         feedback.setCourse(null);
     }
+
+    public double getAverageRating() {
+        if (feedbacks == null || feedbacks.isEmpty()) {
+            return 0.0;
+        }
+        double sum = 0;
+        for (Feedback fb : feedbacks) {
+            if (fb.getRating() != null) {
+                sum += fb.getRating();
+            }
+        }
+        double avg = sum / feedbacks.size();
+        return Math.round(avg * 10.0) / 10.0;
+    }
+
+    public int getRatingCount() {
+        return feedbacks == null ? 0 : feedbacks.size();
+    }
+
+    public int getStarCount(int star) {
+        if (feedbacks == null) {
+            return 0;
+        }
+        int count = 0;
+        for (Feedback fb : feedbacks) {
+            if (fb.getRating() != null && fb.getRating() == star) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public double getStarPercentage(int star) {
+        int total = getRatingCount();
+        if (total == 0) {
+            return 0.0;
+        }
+        double pct = (double) getStarCount(star) * 100.0 / total;
+        return Math.round(pct * 10.0) / 10.0;
+    }
+
+    public int getTotalLessonsCount() {
+        if (sections == null) {
+            return 0;
+        }
+        int count = 0;
+        for (CourseSection sec : sections) {
+            if (sec.getLessons() != null) {
+                count += sec.getLessons().size();
+            }
+        }
+        return count;
+    }
 }

@@ -9,6 +9,11 @@ import vn.edu.fpt.entity.*;
 import vn.edu.fpt.repository.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 @Component
 @RequiredArgsConstructor // tự động sinh constructor với tất cả các field final nên không cần gán @Autowired cho từng repository
@@ -26,6 +31,16 @@ public class DataInitializer implements CommandLineRunner {
     private final QuizAnswerRepository quizAnswerRepository;
     private final LessonMaterialRepository lessonMaterialRepository;
     private final EnrollmentRepository enrollmentRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final CouponRepository couponRepository;
+    private final CouponUsageRepository couponUsageRepository;
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final PaymentRepository paymentRepository;
+    private final FeedbackRepository feedbackRepository;
+    private final LessonProgressRepository lessonProgressRepository;
+    private final QuizAttemptRepository quizAttemptRepository;
 
     @Override
     public void run(String @NonNull... args) {
@@ -99,7 +114,7 @@ public class DataInitializer implements CommandLineRunner {
                 .title("Lập Trình C Nâng Cao - 28Tech")
                 .description("Khóa học nâng cao lập trình C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
-                .price(BigDecimal.ZERO)
+                .price(new BigDecimal("500000.00"))
                 .level("intermediate")
                 .status("published")
                 .build());
@@ -110,7 +125,7 @@ public class DataInitializer implements CommandLineRunner {
                 .title("Lập Trình C Thực Hành - 28Tech")
                 .description("Bài tập thực hành và project nhỏ với C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
-                .price(BigDecimal.ZERO)
+                .price(new BigDecimal("1200000.00"))
                 .level("beginner")
                 .status("published")
                 .build());
@@ -121,7 +136,7 @@ public class DataInitializer implements CommandLineRunner {
                 .title("Thuật Toán C với 28Tech")
                 .description("Giải thuật và cấu trúc dữ liệu cơ bản bằng C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
-                .price(BigDecimal.ZERO)
+                .price(new BigDecimal("800000.00"))
                 .level("advanced")
                 .status("published")
                 .build());
@@ -315,6 +330,318 @@ public class DataInitializer implements CommandLineRunner {
             }
         });
 
+        // Seed 10 diverse learner profiles with full mock data
+        seedLearnersData(learnerRole, instructor);
+    }
+
+    private void seedLearnersData(Role learnerRole, User instructor) {
+        // 1. Seed Coupons
+        Coupon welcome10 = couponRepository.findByCode("WELCOME10").orElse(null);
+        if (welcome10 == null) {
+            welcome10 = couponRepository.save(Coupon.builder()
+                    .instructor(instructor)
+                    .code("WELCOME10")
+                    .discountType("percent")
+                    .discountValue(new BigDecimal("10.00"))
+                    .usageLimit(100)
+                    .usedCount(0)
+                    .status("active")
+                    .expiredAt(LocalDateTime.now().plusMonths(6))
+                    .build());
+        }
+
+        Coupon devspecial = couponRepository.findByCode("DEVSPECIAL").orElse(null);
+        if (devspecial == null) {
+            devspecial = couponRepository.save(Coupon.builder()
+                    .instructor(instructor)
+                    .code("DEVSPECIAL")
+                    .discountType("fixed")
+                    .discountValue(new BigDecimal("100000.00"))
+                    .usageLimit(50)
+                    .usedCount(0)
+                    .status("active")
+                    .expiredAt(LocalDateTime.now().plusMonths(3))
+                    .build());
+        }
+
+        // 2. Fetch Courses
+        Course c1 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Lập Trình C Cơ Bản")).findFirst().orElse(null);
+        Course c2 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Lập Trình C Nâng Cao")).findFirst().orElse(null);
+        Course c3 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Lập Trình C Thực Hành")).findFirst().orElse(null);
+        Course c4 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Thuật Toán C")).findFirst().orElse(null);
+        Course c5 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 5")).findFirst().orElse(null);
+
+        // 3. Define learners
+        String[][] learnersInfo = {
+                {"Nguyễn Văn", "An", "an.nguyen@elearning.com", "0981112222"},
+                {"Trần Thị", "Bình", "binh.tran@elearning.com", "0982223333"},
+                {"Phạm Văn", "Cường", "cuong.pham@elearning.com", "0983334444"},
+                {"Hoàng Thị", "Dung", "dung.hoang@elearning.com", "0984445555"},
+                {"Đỗ Văn", "Em", "em.do@elearning.com", "0985556666"},
+                {"Lê Thu", "Giang", "giang.le@elearning.com", "0986667777"},
+                {"Vũ Thanh", "Hải", "hai.vu@elearning.com", "0987778888"},
+                {"Đỗ Khánh", "Huy", "huy.do@elearning.com", "0988889999"},
+                {"Bùi Anh", "Khoa", "khoa.bui@elearning.com", "0989990000"},
+                {"Đặng Quang", "Long", "long.dang@elearning.com", "0980001111"}
+        };
+
+        User[] users = new User[10];
+        for (int i = 0; i < 10; i++) {
+            String[] info = learnersInfo[i];
+            User u = userRepository.findByEmail(info[2]).orElse(null);
+            if (u == null) {
+                u = userRepository.save(User.builder()
+                        .role(learnerRole)
+                        .firstName(info[0])
+                        .lastName(info[1])
+                        .email(info[2])
+                        .phone(info[3])
+                        .passwordHash("123456")
+                        .status("active")
+                        .build());
+            }
+            users[i] = u;
+        }
+
+        // 4. Create carts & populate items
+        for (int i = 0; i < 10; i++) {
+            User u = users[i];
+            Cart cart = cartRepository.findByUser(u).orElse(null);
+            if (cart == null) {
+                cart = cartRepository.save(Cart.builder().user(u).build());
+            }
+            // Add items to cart based on the matrix
+            final Cart finalCart = cart;
+            if (i == 1 && cartItemRepository.findAll().stream().noneMatch(item -> item.getCart().getId().equals(finalCart.getId()))) { // Binh: C3
+                cartItemRepository.save(CartItem.builder().cart(cart).course(c3).build());
+            } else if (i == 3 && cartItemRepository.findAll().stream().noneMatch(item -> item.getCart().getId().equals(finalCart.getId()))) { // Dung: C2
+                cartItemRepository.save(CartItem.builder().cart(cart).course(c2).build());
+            } else if (i == 5 && cartItemRepository.findAll().stream().noneMatch(item -> item.getCart().getId().equals(finalCart.getId()))) { // Giang: C1
+                cartItemRepository.save(CartItem.builder().cart(cart).course(c1).build());
+            } else if (i == 7 && cartItemRepository.findAll().stream().noneMatch(item -> item.getCart().getId().equals(finalCart.getId()))) { // Huy: C1, C4
+                cartItemRepository.save(CartItem.builder().cart(cart).course(c1).build());
+                cartItemRepository.save(CartItem.builder().cart(cart).course(c4).build());
+            }
+        }
+
+        // 5. Create Orders, OrderItems, Payments, CouponUsages
+        // == Learner 0: An (Paid Order for C1 & C2)
+        createMockOrder(users[0], List.of(c1, c2), null, BigDecimal.ZERO, "paid", "MOMO", "success");
+
+        // == Learner 1: Binh (Paid Order for C1)
+        createMockOrder(users[1], List.of(c1), null, BigDecimal.ZERO, "paid", "VNPAY", "success");
+
+        // == Learner 2: Cuong (Paid Order for C2 with WELCOME10 coupon)
+        createMockOrder(users[2], List.of(c2), welcome10, new BigDecimal("50000.00"), "paid", "CARD", "success");
+
+        // == Learner 3: Dung (Paid Order for C3)
+        createMockOrder(users[3], List.of(c3), null, BigDecimal.ZERO, "paid", "MOMO", "success");
+
+        // == Learner 4: Em (Paid Order for C1 & C3)
+        createMockOrder(users[4], List.of(c1, c3), null, BigDecimal.ZERO, "paid", "VNPAY", "success");
+
+        // == Learner 5: Giang (Pending Order for C2)
+        createMockOrder(users[5], List.of(c2), null, BigDecimal.ZERO, "pending", "BANK_TRANSFER", "pending");
+
+        // == Learner 6: Hai (Paid Order for C4 with DEVSPECIAL coupon)
+        createMockOrder(users[6], List.of(c4), devspecial, new BigDecimal("100000.00"), "paid", "BANK_TRANSFER", "success");
+
+        // == Learner 8: Khoa (Paid Order for C5 with WELCOME10 coupon)
+        createMockOrder(users[8], List.of(c5), welcome10, new BigDecimal("0.00"), "paid", "MOMO", "success"); // C5 is 0 VND
+
+        // == Learner 9: Long (Paid Order for C1 & C5)
+        createMockOrder(users[9], List.of(c1, c5), null, BigDecimal.ZERO, "paid", "VNPAY", "success");
+
+
+        // 6. Create Enrollments, Lesson Progress, Quiz Attempts
+        // == An: C1 100% (4 lessons), C2 50% (2/4 sections or similar, say 1 lesson of section 1)
+        seedEnrollmentAndProgress(users[0], c1, 100, 4);
+        seedEnrollmentAndProgress(users[0], c2, 50, 1);
+        seedQuizAttempts(users[0], c1, 100, true);
+
+        // == Binh: C1 50% (2 lessons)
+        seedEnrollmentAndProgress(users[1], c1, 50, 2);
+        seedQuizAttempts(users[1], c1, 75, true);
+
+        // == Cuong: C2 0% (0 lessons)
+        seedEnrollmentAndProgress(users[2], c2, 0, 0);
+
+        // == Dung: C3 100% (all lessons in C3, which has 3 lessons in section 1)
+        seedEnrollmentAndProgress(users[3], c3, 100, 3);
+        seedQuizAttempts(users[3], c3, 100, true);
+
+        // == Em: C1 75% (3 lessons), C3 50% (1 lesson)
+        seedEnrollmentAndProgress(users[4], c1, 75, 3);
+        seedEnrollmentAndProgress(users[4], c3, 50, 1);
+        // Em failed once then passed C1 quizzes
+        seedQuizAttempts(users[4], c1, 50, false);
+        seedQuizAttempts(users[4], c1, 80, true);
+
+        // == Hai: C4 25% (1 lesson)
+        seedEnrollmentAndProgress(users[6], c4, 25, 1);
+        seedQuizAttempts(users[6], c4, 60, false); // Failed quiz
+
+        // == Khoa: C5 100% (all lessons in C5 section 1)
+        seedEnrollmentAndProgress(users[8], c5, 100, 3);
+        seedQuizAttempts(users[8], c5, 90, true);
+
+        // == Long: C1 100% (4 lessons), C5 100%
+        seedEnrollmentAndProgress(users[9], c1, 100, 4);
+        seedEnrollmentAndProgress(users[9], c5, 100, 3);
+        seedQuizAttempts(users[9], c1, 100, true);
+        seedQuizAttempts(users[9], c5, 100, true);
+
+
+        // 7. Feedbacks (distributing ratings 1 to 5)
+        // An -> C1: 5 stars
+        seedFeedback(users[0], c1, 5, "Khóa học C cơ bản vô cùng chất lượng, giảng viên giải thích cực kỳ tỉ mỉ và dễ nhớ!");
+        // Binh -> C1: 4 stars
+        seedFeedback(users[1], c1, 4, "Bài giảng chuẩn bị rất công phu, giao diện học tập trực quan. Tuy nhiên, một số bài tập tự luyện hơi khó.");
+        // Cuong -> C2: 5 stars
+        seedFeedback(users[2], c2, 5, "Tài liệu PDF đi kèm rất xịn, bài tập trắc nghiệm có giải thích chi tiết đáp án.");
+        // Dung -> C3: 5 stars
+        seedFeedback(users[3], c3, 5, "Lập trình C thực hành rất thực tế, nhiều bài tập hay.");
+        // Em -> C1: 3 stars
+        seedFeedback(users[4], c1, 3, "Khóa học ở mức khá tốt, phần giảng lý thuyết trực quan nhưng quiz bài 3 thi thoảng phản hồi chậm.");
+        // Hai -> C4: 2 stars
+        seedFeedback(users[6], c4, 2, "Thuật toán C hơi phức tạp so với trình độ của tôi, bài giảng đi nhanh quá.");
+        // Khoa -> C5: 5 stars
+        seedFeedback(users[8], c5, 5, "Khóa học chuyên đề rất hữu ích, giúp tôi hiểu sâu về mảng và con trỏ!");
+        // Long -> C1: 1 star
+        seedFeedback(users[9], c1, 1, "Chất lượng âm thanh video bài 2 và bài 3 mờ nhạt và rất khó nghe, mong admin sớm cải thiện.");
+    }
+
+    private void createMockOrder(User user, List<Course> courses, Coupon coupon, BigDecimal discount, String status, String method, String paymentStatus) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Course c : courses) {
+            total = total.add(c.getPrice());
+        }
+        total = total.subtract(discount);
+        if (total.compareTo(BigDecimal.ZERO) < 0) {
+            total = BigDecimal.ZERO;
+        }
+
+        // Check if order already exists for this user to avoid duplicates
+        final String finalStatus = status;
+        boolean exists = orderRepository.findAll().stream()
+                .anyMatch(o -> o.getUser().getId().equals(user.getId()) && o.getStatus().equals(finalStatus));
+        if (exists) return;
+
+        Order order = orderRepository.save(Order.builder()
+                .user(user)
+                .totalAmount(total)
+                .discountAmount(discount)
+                .status(status)
+                .paymentMethod(method)
+                .build());
+
+        for (Course c : courses) {
+            orderItemRepository.save(OrderItem.builder()
+                    .order(order)
+                    .course(c)
+                    .coupon(coupon)
+                    .priceSnapshot(c.getPrice())
+                    .discountAmount(coupon != null ? discount : BigDecimal.ZERO)
+                    .finalPrice(c.getPrice().subtract(coupon != null ? discount : BigDecimal.ZERO))
+                    .courseTitleSnapshot(c.getTitle())
+                    .build());
+        }
+
+        if ("success".equals(paymentStatus)) {
+            paymentRepository.save(Payment.builder()
+                    .order(order)
+                    .transactionCode("TX_" + user.getLastName().toUpperCase() + "_" + (System.currentTimeMillis() % 10000))
+                    .gateway(method)
+                    .gatewayTxId("GATEWAY_" + (System.currentTimeMillis() % 10000))
+                    .amount(total)
+                    .status("success")
+                    .paidAt(LocalDateTime.now())
+                    .build());
+
+            if (coupon != null) {
+                couponUsageRepository.save(CouponUsage.builder()
+                        .coupon(coupon)
+                        .user(user)
+                        .order(order)
+                        .discountAmount(discount)
+                        .usedAt(LocalDateTime.now())
+                        .build());
+            }
+        }
+    }
+
+    private void seedEnrollmentAndProgress(User user, Course course, int progress, int completedLessonsCount) {
+        if (course == null) return;
+        Enrollment enrollment = enrollmentRepository.findAll().stream()
+                .filter(e -> e.getUser().getId().equals(user.getId()) && e.getCourse().getId().equals(course.getId()))
+                .findFirst().orElse(null);
+
+        if (enrollment == null) {
+            enrollment = enrollmentRepository.save(Enrollment.builder()
+                    .user(user)
+                    .course(course)
+                    .progressPercent(new BigDecimal(progress))
+                    .completedAt(progress == 100 ? LocalDateTime.now() : null)
+                    .build());
+        }
+
+        // Get lessons of this course
+        final Enrollment finalEnrollment = enrollment;
+        List<Lesson> lessons = lessonRepository.findAll().stream()
+                .filter(l -> l.getCourseSection().getCourse().getId().equals(course.getId()))
+                .toList();
+
+        for (int i = 0; i < Math.min(completedLessonsCount, lessons.size()); i++) {
+            Lesson lesson = lessons.get(i);
+            boolean exists = lessonProgressRepository.findAll().stream()
+                    .anyMatch(lp -> lp.getEnrollment().getId().equals(finalEnrollment.getId()) && lp.getLesson().getId().equals(lesson.getId()));
+            if (!exists) {
+                lessonProgressRepository.save(LessonProgress.builder()
+                        .enrollment(finalEnrollment)
+                        .lesson(lesson)
+                        .completed(true)
+                        .lastAccessed(LocalDateTime.now())
+                        .build());
+            }
+        }
+    }
+
+    private void seedQuizAttempts(User user, Course course, int score, boolean passed) {
+        if (course == null) return;
+        List<Lesson> lessons = lessonRepository.findAll().stream()
+                .filter(l -> l.getCourseSection().getCourse().getId().equals(course.getId()))
+                .toList();
+
+        for (Lesson lesson : lessons) {
+            Quiz quiz = quizRepository.findAll().stream()
+                    .filter(q -> q.getLesson().getId().equals(lesson.getId()))
+                    .findFirst().orElse(null);
+            if (quiz != null) {
+                quizAttemptRepository.save(QuizAttempt.builder()
+                        .user(user)
+                        .quiz(quiz)
+                        .score(new BigDecimal(score))
+                        .passed(passed)
+                        .startedAt(LocalDateTime.now().minusMinutes(10))
+                        .submittedAt(LocalDateTime.now())
+                        .build());
+            }
+        }
+    }
+
+    private void seedFeedback(User user, Course course, int rating, String comment) {
+        if (course == null) return;
+        boolean exists = feedbackRepository.findAll().stream()
+                .anyMatch(f -> f.getUser().getId().equals(user.getId()) && f.getCourse().getId().equals(course.getId()));
+        if (!exists) {
+            feedbackRepository.save(Feedback.builder()
+                    .user(user)
+                    .course(course)
+                    .rating(rating)
+                    .comment(comment)
+                    .status("visible")
+                    .build());
+        }
     }
 
 

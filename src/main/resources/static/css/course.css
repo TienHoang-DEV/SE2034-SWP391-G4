@@ -38,12 +38,14 @@
     height: 14.5px;
 }
 
-.star-filled {
+.star-filled,
+.star-filled svg {
     color: #f59e0b !important;
     fill: #f59e0b !important;
 }
 
-.star-empty {
+.star-empty,
+.star-empty svg {
     color: #e2e8f0 !important;
     fill: #e2e8f0 !important;
 }

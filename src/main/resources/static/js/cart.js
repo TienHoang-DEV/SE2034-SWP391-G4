@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lucide.createIcons();
     }
     
+    loadCartStateFromDOM();
     initializeCheckboxes();
     initializeRemoveButtons();
     initializeInstructorVouchers();
@@ -13,18 +14,30 @@ document.addEventListener("DOMContentLoaded", () => {
     updateInvoice();
 });
 
-// Mock Prices State (Expanded to 3 items and grouped by instructor)
+// Mock Prices State (Initialized from DOM dynamically)
 let cartState = {
-    items: [
-        { id: "cart-item-1", price: 299000, discount: 89700, instructor: "Thanh", selected: true },
-        { id: "cart-item-2", price: 399000, discount: 39900, instructor: "Thanh", selected: true },
-        { id: "cart-item-3", price: 499000, discount: 99800, instructor: "Hoang", selected: true }
-    ],
+    items: [],
     instructorCoupons: {
         "Thanh": { code: "THANH10", rate: 0.10, applied: false },
         "Hoang": { code: "HOANG15", rate: 0.15, applied: false }
     }
 };
+
+// 0. Parse cart rows from Thymeleaf-rendered DOM
+function loadCartStateFromDOM() {
+    const itemRows = document.querySelectorAll(".cart-item-row");
+    cartState.items = [];
+    itemRows.forEach(row => {
+        const id = row.getAttribute("id");
+        const price = Math.round(parseFloat(row.getAttribute("data-price"))) || 0;
+        const discount = Math.round(parseFloat(row.getAttribute("data-discount"))) || 0;
+        const instructor = row.getAttribute("data-instructor");
+        const checkbox = row.querySelector(".item-checkbox");
+        const selected = checkbox ? checkbox.checked : true;
+        
+        cartState.items.push({ id, price, discount, instructor, selected });
+    });
+}
 
 // 1. Checkbox Interaction Logic (Multi-level Synchronization)
 function initializeCheckboxes() {
@@ -148,51 +161,75 @@ function initializeRemoveButtons() {
     
     removeBtns.forEach(btn => {
         btn.addEventListener("click", () => {
-            const targetId = btn.getAttribute("data-target");
-            const targetElement = document.getElementById(targetId);
-            
-            if (targetElement) {
-                // Add fade out animation to the item row
-                targetElement.classList.add("fade-out-item");
-                
-                // Wait for item row animation to finish
-                setTimeout(() => {
-                    const targetItem = cartState.items.find(item => item.id === targetId);
-                    const instructor = targetItem ? targetItem.instructor : null;
-                    
-                    if (targetElement.parentNode) {
-                        targetElement.remove();
-                    }
-                    
-                    // Update state
-                    cartState.items = cartState.items.filter(item => item.id !== targetId);
-                    
-                    // Check if there are any courses left under this instructor
-                    if (instructor) {
-                        const remainingInstructorItems = cartState.items.filter(item => item.instructor === instructor);
-                        const groupCard = document.getElementById(`group-${instructor}`);
-                        
-                        if (remainingInstructorItems.length === 0 && groupCard) {
-                            // Fade out the entire instructor card if no items left
-                            groupCard.classList.add("fade-out-item");
-                            setTimeout(() => {
-                                groupCard.remove();
-                                updateInvoice();
-                            }, 400);
-                            return; // updateInvoice is called inside the inner timeout
-                        } else if (groupCard) {
-                            // Update items count text in instructor header
-                            const countText = groupCard.querySelector(".group-items-count");
-                            if (countText) {
-                                countText.textContent = `${remainingInstructorItems.length} khóa học`;
-                            }
-                        }
-                    }
-                    
-                    // Recalculate bill
-                    updateInvoice();
-                }, 400);
+            const cartItemId = btn.getAttribute("data-item-id");
+            if (!cartItemId) {
+                console.error("Cart item database ID is missing.");
+                return;
             }
+
+            btn.disabled = true;
+
+            fetch(`/api/cart/remove?cartItemId=${cartItemId}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                btn.disabled = false;
+                if (data.success) {
+                    const targetId = btn.getAttribute("data-target");
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        // Add fade out animation to the item row
+                        targetElement.classList.add("fade-out-item");
+                        
+                        // Wait for item row animation to finish
+                        setTimeout(() => {
+                            const targetItem = cartState.items.find(item => item.id === targetId);
+                            const instructor = targetItem ? targetItem.instructor : null;
+                            
+                            if (targetElement.parentNode) {
+                                targetElement.remove();
+                            }
+                            
+                            // Update state
+                            cartState.items = cartState.items.filter(item => item.id !== targetId);
+                            
+                            // Check if there are any courses left under this instructor
+                            if (instructor) {
+                                const remainingInstructorItems = cartState.items.filter(item => item.instructor === instructor);
+                                const groupCard = document.getElementById(`group-${instructor}`);
+                                
+                                if (remainingInstructorItems.length === 0 && groupCard) {
+                                    // Fade out the entire instructor card if no items left
+                                    groupCard.classList.add("fade-out-item");
+                                    setTimeout(() => {
+                                        groupCard.remove();
+                                        updateInvoice();
+                                    }, 400);
+                                    return;
+                                } else if (groupCard) {
+                                    // Update items count text in instructor header
+                                    const countText = groupCard.querySelector(".group-items-count");
+                                    if (countText) {
+                                        countText.textContent = `${remainingInstructorItems.length} khóa học`;
+                                    }
+                                }
+                            }
+                            
+                            // Recalculate bill
+                            updateInvoice();
+                        }, 400);
+                    }
+                } else {
+                    alert(data.message || 'Không thể xóa khóa học.');
+                }
+            })
+            .catch(err => {
+                btn.disabled = false;
+                console.error('Error removing item:', err);
+                alert('Có lỗi xảy ra khi xóa khóa học.');
+            });
         });
     });
 }

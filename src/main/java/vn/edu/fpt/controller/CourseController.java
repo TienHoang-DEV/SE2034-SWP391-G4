@@ -43,4 +43,13 @@ public class CourseController {
     public String getall(){
         return "instructor_course/course_manager";
     }
+
+    @GetMapping("/course/detail")
+    public String showCourseDetail(@RequestParam("id") Integer id, Model model) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(
+                        org.springframework.http.HttpStatus.NOT_FOUND, "Không tìm thấy khóa học"));
+        model.addAttribute("course", course);
+        return "course/detail";
+    }
 }
