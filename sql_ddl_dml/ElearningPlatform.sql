@@ -1374,6 +1374,71 @@ VALUES (
     'active'
 );
 
+<<<<<<< HEAD
+-- ==========================================
+-- INSTRUCTOR SAMPLE DATA
+-- ==========================================
+-------------STEP 1 : register as a Student---------------
+INSERT INTO users
+(
+=======
+-- =========================
+-- ADMIN USER
+-- =========================
+INSERT INTO users (
+>>>>>>> 19ebe38fef8b4379f01b902b43def1abaccce28d
+    role_id,
+    first_name,
+    last_name,
+    email,
+    phone,
+    password_hash,
+<<<<<<< HEAD
+    status
+)
+VALUES
+(4,N'Nguyễn Văn',N'An','nguyenvanan@gmail.com','0900000001','12345678','active'),
+(4,N'Trần Minh',N'Bình','tranminhbinh@gmail.com','0900000002','12345678','active'),
+(4,N'Lê Quốc',N'Cường','lequoccuong@gmail.com','0900000003','12345678','active'),
+(4,N'Phạm Đức',N'Dũng','phamducdung@gmail.com','0900000004','12345678','active'),
+(4,N'Hoàng Thu',N'Giang','hoangthugiang@gmail.com','0900000005','12345678','active'),
+(4,N'Vũ Thanh',N'Hải','vuthanhhai@gmail.com','0900000006','12345678','active'),
+(4,N'Đỗ Khánh',N'Huy','dokhanhhuy@gmail.com','0900000007','12345678','active'),
+(4,N'Bùi Anh',N'Khoa','buianhkhoa@gmail.com','0900000008','12345678','active'),
+(4,N'Đặng Quang',N'Long','dangquanglong@gmail.com','0900000009','12345678','active'),
+(4,N'Phan Minh',N'Nam','phanminhnam@gmail.com','0900000010','12345678','active');
+
+---------STEP 2 : Send request to become a instructor and manager approved
+INSERT INTO instructor_requests
+(
+    user_id,
+    cv_url,
+    certificate_url,
+    description,
+    status,
+    reviewed_by
+)
+VALUES
+    (1,'https://blob/cv1.pdf','https://blob/cert1.pdf',N'5 năm kinh nghiệm Java Backend','approved',11),
+    (2,'https://blob/cv2.pdf','https://blob/cert2.pdf',N'Chuyên gia Spring Boot','approved',11),
+    (3,'https://blob/cv3.pdf','https://blob/cert3.pdf',N'Giảng viên SQL Server','approved',11),
+    (4,'https://blob/cv4.pdf','https://blob/cert4.pdf',N'Giảng viên ReactJS','approved',11),
+    (5,'https://blob/cv5.pdf','https://blob/cert5.pdf',N'Giảng viên Flutter','approved',11),
+    (6,'https://blob/cv6.pdf','https://blob/cert6.pdf',N'Chuyên gia Azure Cloud','approved',11),
+    (7,'https://blob/cv7.pdf','https://blob/cert7.pdf',N'Giảng viên Python Data Science','approved',11),
+    (8,'https://blob/cv8.pdf','https://blob/cert8.pdf',N'Giảng viên DevOps','approved',11),
+    (9,'https://blob/cv9.pdf','https://blob/cert9.pdf',N'Giảng viên Machine Learning','approved',11),
+    (10,'https://blob/cv10.pdf','https://blob/cert10.pdf',N'Giảng viên UI/UX Design','approved',11);
+
+--Manager cấp tiến hành cấp role
+UPDATE users
+SET role_id = 3,
+    updated_at = GETDATE()
+WHERE id BETWEEN 1 AND 10;
+----*NOTE : coi như có 1 manager có user id là 11 và người này là người duyệt đơn
+
+
+
 -- =========================
 -- MANAGER USER
 -- =========================
@@ -1427,3 +1492,4 @@ IF EXISTS (SELECT 1 FROM courses WHERE id = 1)
     END
 GO
 
+>>>>>>> 19ebe38fef8b4379f01b902b43def1abaccce28d
