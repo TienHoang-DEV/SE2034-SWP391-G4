@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -54,7 +55,8 @@ public class Course extends BaseEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CourseSection> sections = new HashSet<>();
+    @OrderBy("position ASC")
+    private Set<CourseSection> sections = new LinkedHashSet<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
