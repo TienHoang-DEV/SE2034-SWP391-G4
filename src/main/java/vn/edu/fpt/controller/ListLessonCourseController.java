@@ -63,6 +63,4 @@ public class ListLessonCourseController {
         return azureBlobService.generateSasUrl(AppConstants.AZURE_STORAGE_CONTAINER_VIDEOS, lesson.getVideoUrl());
     }
 
-    
-
 }
