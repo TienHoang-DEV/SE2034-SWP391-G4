@@ -31,7 +31,9 @@ public class AzureBlobService {
         String decodedBlobName = java.net.URLDecoder.decode(blobName, java.nio.charset.StandardCharsets.UTF_8);
         BlobClient blobClient = blobServiceClient
                 .getBlobContainerClient(containerName)
-                .getBlobClient(decodedBlobName);
+                .getBlobClient(decodedBlobName); //  .getBlobClient chỉ nhận tham số là tên file
+
+
 
         // Cấu hình thời gian hết hạn và quyền truy cập của SAS.
         BlobServiceSasSignatureValues sasValues = new BlobServiceSasSignatureValues(
