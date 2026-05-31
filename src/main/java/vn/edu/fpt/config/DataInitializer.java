@@ -9,6 +9,7 @@ import vn.edu.fpt.entity.*;
 import vn.edu.fpt.repository.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor // tự động sinh constructor với tất cả các field final nên không cần gán @Autowired cho từng repository
@@ -24,14 +25,41 @@ public class DataInitializer implements CommandLineRunner {
     private final QuizRepository quizRepository;
     private final QuizQuestionRepository quizQuestionRepository;
     private final QuizAnswerRepository quizAnswerRepository;
+    private final LessonMaterialRepository lessonMaterialRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     @Override
     public void run(String @NonNull... args) {
+        // Ensure default roles exist
+        Role adminRole = roleRepository.findByName("admin").orElse(null);
+        if (adminRole == null) {
+            adminRole = roleRepository.save(Role.builder()
+                    .name("admin")
+                    .description("Quản trị hệ thống")
+                    .build());
+        }
+
+        Role managerRole = roleRepository.findByName("manager").orElse(null);
+        if (managerRole == null) {
+            managerRole = roleRepository.save(Role.builder()
+                    .name("manager")
+                    .description("Quản lý nội dung")
+                    .build());
+        }
+
         Role instructorRole = roleRepository.findByName("instructor").orElse(null);
         if (instructorRole == null) {
             instructorRole = roleRepository.save(Role.builder()
                     .name("instructor")
                     .description("Giảng viên")
+                    .build());
+        }
+
+        Role learnerRole = roleRepository.findByName("learner").orElse(null);
+        if (learnerRole == null) {
+            learnerRole = roleRepository.save(Role.builder()
+                    .name("learner")
+                    .description("Học viên")
                     .build());
         }
 
@@ -59,7 +87,7 @@ public class DataInitializer implements CommandLineRunner {
                 .category(category)
                 .title("Lập Trình C Cơ Bản - 28Tech")
                 .description("Khóa học lập trình C cơ bản")
-                .thumbnailUrl("course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
+                .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
                 .price(BigDecimal.ZERO)
                 .level("beginner")
                 .status("published")
@@ -74,7 +102,7 @@ public class DataInitializer implements CommandLineRunner {
         lessonRepository.save(Lesson.builder()
                 .courseSection(section)
                 .title("Bài 1 - Giới thiệu ngôn ngữ C")
-                .videoUrl("videos/Recording 2026-05-28 212131.mp4")
+                .videoUrl("Recording 2026-05-28 212131.mp4")
                 .durationSeconds(600)
                 .position(1)
                 .published(true)
@@ -84,7 +112,7 @@ public class DataInitializer implements CommandLineRunner {
         Lesson lesson2 = lessonRepository.save(Lesson.builder()
                 .courseSection(section)
                 .title("Bài 2 - Kiểu dữ liệu và khai báo biến trong C")
-                .videoUrl("videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2002.%20Ki%E1%BB%83u%20d%E1%BB%AF%20li%E1%BB%87u%20v%C3%A0%20c%C3%A1ch%20khai%20b%C3%A1o%20bi%E1%BA%BFn%20trong%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C-C++.mp4")
+                .videoUrl("L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2002.%20Ki%E1%BB%83u%20d%E1%BB%AF%20li%E1%BB%87u%20v%C3%A0%20c%C3%A1ch%20khai%20b%C3%A1o%20bi%E1%BA%BFn%20trong%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C-C++.mp4")
                 .durationSeconds(900)
                 .position(2)
                 .published(true)
@@ -94,7 +122,7 @@ public class DataInitializer implements CommandLineRunner {
         Lesson lesson3 = lessonRepository.save(Lesson.builder()
                 .courseSection(section)
                 .title("Bài 3 - Xuất dữ liệu với printf")
-                .videoUrl("videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2003.%20C%C3%A1ch%20xu%E1%BA%A5t%20d%E1%BB%AF%20li%E1%BB%87u%20ra%20m%C3%A0n%20h%C3%ACnh%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20H%C3%A0m%20printf%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C.mp4")
+                .videoUrl("L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2003.%20C%C3%A1ch%20xu%E1%BA%A5t%20d%E1%BB%AF%20li%E1%BB%87u%20ra%20m%C3%A0n%20h%C3%ACnh%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20H%C3%A0m%20printf%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C.mp4")
                 .durationSeconds(850)
                 .position(3)
                 .published(true)
@@ -104,7 +132,7 @@ public class DataInitializer implements CommandLineRunner {
         Lesson lesson4 = lessonRepository.save(Lesson.builder()
                 .courseSection(section)
                 .title("Bài 4 - Nhập dữ liệu với scanf")
-                .videoUrl("videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2004.%20C%C3%A1ch%20nh%E1%BA%ADp%20d%E1%BB%AF%20li%E1%BB%87u%20t%E1%BB%AB%20b%C3%A0n%20ph%C3%ADm%20trong%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C.mp4")
+                .videoUrl("L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2004.%20C%C3%A1ch%20nh%E1%BA%ADp%20d%E1%BB%AF%20li%E1%BB%87u%20t%E1%BB%AB%20b%C3%A0n%20ph%C3%ADm%20trong%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C.mp4")
                 .durationSeconds(920)
                 .position(4)
                 .published(true)
@@ -114,6 +142,36 @@ public class DataInitializer implements CommandLineRunner {
         seedQuizForLesson2(lesson2);
         seedQuizForLesson3(lesson3);
         seedQuizForLesson4(lesson4);
+
+        seedLessonMaterials(instructor, course, lesson4);
+
+        // Seed test learner user 'Do Thanh' and enroll to course id=1
+        User learner = userRepository.findByEmail("dothanh2572005@gmail.com").orElse(null);
+        if (learner == null) {
+            learner = userRepository.save(User.builder()
+                    .role(learnerRole)
+                    .firstName("Do")
+                    .lastName("Thanh")
+                    .email("dothanh2572005@gmail.com")
+                    .phone(null)
+                    .passwordHash("123")
+                    .status("active")
+                    .build());
+        }
+
+        // Enroll into course id=1 if exists and not already enrolled
+        final User finalLearner = learner;
+        courseRepository.findById(1).ifPresent(c -> {
+            boolean already = enrollmentRepository.findAll().stream()
+                    .anyMatch(en -> en.getUser().getId().equals(finalLearner.getId()) && en.getCourse().getId().equals(c.getId()));
+            if (!already) {
+                enrollmentRepository.save(Enrollment.builder()
+                        .user(finalLearner)
+                        .course(c)
+                        .progressPercent(BigDecimal.ZERO)
+                        .build());
+            }
+        });
 
     }
 
@@ -230,5 +288,17 @@ public class DataInitializer implements CommandLineRunner {
                 .correct(correct)
                 .build();
         quizAnswerRepository.save(answer);
+    }
+
+    private void seedLessonMaterials(User instructor, Course course, Lesson lesson) {
+        LessonMaterial material = LessonMaterial.builder()
+                .instructor(instructor)
+                .course(course)
+                .lesson(lesson)
+                .fileName("[28Tech] BUOI 1.pdf")
+                .fileUrl("%5B28Tech%5D.%20BUOI%201.pdf")
+                .fileType("pdf")
+                .build();
+        lessonMaterialRepository.save(material);
     }
 }

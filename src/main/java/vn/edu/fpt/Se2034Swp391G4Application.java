@@ -21,6 +21,8 @@ public class Se2034Swp391G4Application {
         SpringApplication.run(Se2034Swp391G4Application.class, args);
 
         System.out.println(System.getProperty("AZURE_STORAGE_CONNECTION_STRING"));
+        System.out.println(System.getProperty("AZURE_STORAGE_CONNECTION_STRING"));
+        System.out.println(System.getProperty("AZURE_STORAGE_BASE_URL"));
     }
 
 }

@@ -6,6 +6,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -49,5 +51,47 @@ public class Course extends BaseEntity {
 
     @Column(name = "approved_at")
     private LocalDateTime approvedAt;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CourseSection> sections = new HashSet<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    private Set<Enrollment> enrollments = new HashSet<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    private Set<Feedback> feedbacks = new HashSet<>();
+
+    public void addSection(CourseSection section) {
+        sections.add(section);
+        section.setCourse(this);
+    }
+
+    public void removeSection(CourseSection section) {
+        sections.remove(section);
+        section.setCourse(null);
+    }
+
+    public void addEnrollment(Enrollment enrollment) {
+        enrollments.add(enrollment);
+        enrollment.setCourse(this);
+    }
+
+    public void removeEnrollment(Enrollment enrollment) {
+        enrollments.remove(enrollment);
+        enrollment.setCourse(null);
+    }
+
+    public void addFeedback(Feedback feedback) {
+        feedbacks.add(feedback);
+        feedback.setCourse(this);
+    }
+
+    public void removeFeedback(Feedback feedback) {
+        feedbacks.remove(feedback);
+        feedback.setCourse(null);
+    }
 }
 

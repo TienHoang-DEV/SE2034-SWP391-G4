@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academic Manager - Quản lý Giảng viên</title>
+    <title>Academic Manager - Quản lý Phản hồi</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="../../static/css/manager/instructor.css" th:href="@{/css/manager/instructor.css}">
+    <link rel="stylesheet" href="../../../static/css/manager/feedback.css" th:href="@{/css/manager/feedback.css}">
 </head>
 <body>
     <div class="app-container">
@@ -19,19 +19,19 @@
             <nav class="sidebar-nav">
                 <ul>
                     <li>
-                        <a href="dashboard.html"><i class="ph ph-squares-four"></i><span>Tổng quan</span></a>
+                        <a href="../dashboard/dashboard.html"><i class="ph ph-squares-four"></i><span>Tổng quan</span></a>
+                    </li>
+                    <li>
+                        <a href="../approval-instructor/instructor-list.html"><i class="ph ph-users"></i><span>Phê duyệt giảng viên</span></a>
+                    </li>
+                    <li>
+                        <a href="../approval-course/course-list.html"><i class="ph ph-book-open"></i><span>Phê duyệt khóa học</span></a>
+                    </li>
+                    <li>
+                        <a href="../revenue/revenue-list.html"><i class="ph ph-currency-circle-dollar"></i><span>Doanh thu</span></a>
                     </li>
                     <li class="active">
-                        <a href="instructor.html"><i class="ph ph-users"></i><span>Phê duyệt giảng viên</span></a>
-                    </li>
-                    <li>
-                        <a href="course.html"><i class="ph ph-book-open"></i><span>Phê duyệt khóa học</span></a>
-                    </li>
-                    <li>
-                        <a href="revenue.html"><i class="ph ph-currency-circle-dollar"></i><span>Doanh thu</span></a>
-                    </li>
-                    <li>
-                        <a href="feedback.html"><i class="ph ph-chat-circle-dots"></i><span>Phản hồi</span></a>
+                        <a href="feedback-report-list.html"><i class="ph ph-chat-circle-dots"></i><span>Phản hồi</span></a>
                     </li>
                 </ul>
             </nav>
@@ -49,35 +49,37 @@
             <main class="content">
                 <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
                     <div>
-                        <h1>Phê duyệt Giảng viên</h1>
-                        <p>Quản lý các đơn đăng ký và giảng viên đang hoạt động.</p>
+                        <h1>Phản hồi Bị báo cáo</h1>
+                        <p>Kiểm duyệt các đánh giá và bình luận của người dùng.</p>
                     </div>
                     <div class="header-actions">
-                        <input type="text" placeholder="Tìm kiếm giảng viên..." class="search-input">
+                        <input type="text" placeholder="Tìm kiếm theo khóa học hoặc học viên..." class="search-input" style="width: 300px;">
                         <select class="search-input" style="cursor: pointer; color: var(--text-main); font-family: inherit;">
                             <option value="">Tất cả trạng thái</option>
-                            <option value="PENDING">Đang chờ duyệt</option>
-                            <option value="APPROVED">Đã duyệt</option>
+                            <option value="PENDING">Chờ xử lý</option>
+                            <option value="VIOLATION">Vi phạm</option>
                         </select>
                     </div>
                 </div>
                 <div class="table-container">
                     <table class="data-table">
                         <thead>
-                            <tr><th>Giảng viên</th><th>Email</th><th>Ngày đăng ký</th><th>Trạng thái</th><th>Thao tác</th></tr>
+                            <tr><th>Khóa học</th><th>Học viên</th><th>Lượt báo cáo</th><th>Trạng thái</th><th>Thao tác</th></tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><div class="user-info"><img src="https://i.pravatar.cc/150?img=11" alt="Avatar" class="table-avatar"><span class="user-name">Nguyễn Văn A</span></div></td>
-                                <td>nguyenvana@example.com</td><td>5/24/2026</td>
+                                <td><strong>Các Mẫu React Nâng Cao</strong></td>
+                                <td>Trần Văn C</td>
+                                <td><span style="color: #f59e0b; font-weight: bold;">⚠️ 3</span></td>
                                 <td><span class="badge badge-warning">PENDING</span></td>
-                                <td><div class="actions"><i class="ph ph-eye"></i><a href="#" class="action-link">Xem Chi Tiết</a></div></td>
+                                <td><div class="actions"><i class="ph ph-eye"></i><a href="#" class="action-link">Kiểm duyệt</a></div></td>
                             </tr>
                             <tr>
-                                <td><div class="user-info"><img src="https://i.pravatar.cc/150?img=32" alt="Avatar" class="table-avatar"><span class="user-name">Trần Thị B</span></div></td>
-                                <td>tranthib@example.com</td><td>5/20/2026</td>
-                                <td><span class="badge badge-success">APPROVED</span></td>
-                                <td><div class="actions"><i class="ph ph-eye"></i><a href="#" class="action-link">Xem Chi Tiết</a></div></td>
+                                <td><strong>Nhập môn Học Máy</strong></td>
+                                <td>Lê Thị D</td>
+                                <td><span style="color: #f59e0b; font-weight: bold;">⚠️ 12</span></td>
+                                <td><span class="badge badge-danger">VIOLATION</span></td>
+                                <td><div class="actions"><i class="ph ph-eye"></i><a href="#" class="action-link">Kiểm duyệt</a></div></td>
                             </tr>
                         </tbody>
                     </table>

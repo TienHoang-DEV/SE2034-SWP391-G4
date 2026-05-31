@@ -17,7 +17,6 @@ Tài liệu này ghi nhanh nhiệm vụ chính tương ứng với từng nhánh
 | `feature/entity-initialization` | Khởi tạo các entity/domain model cơ bản và mapping JPA: User, Role, Course, Category, Order, OrderDetail, Material, Feedback, Coupon, ... | Nền tảng cho toàn bộ nghiệp vụ và migration database. |
 | `feature/avatar-upload` | Thêm chức năng tải lên/cập nhật avatar người dùng. | Liên quan hồ sơ cá nhân và media storage. |
 | `feature/security-secret-management` | Chuẩn hoá quản lý secret và cấu hình nhạy cảm: env vars, key, token, connection string. | Tăng an toàn vận hành. |
-| `feature/docker-and-ci` | Thêm Docker/Docker Compose và pipeline CI để build, test, package tự động. | Phục vụ triển khai và kiểm tra liên tục. |
 | `test/unit-and-integration` | Viết test unit và integration cho các luồng chính như auth, role, course, upload. | Bảo đảm chất lượng trước khi merge. |
 | `docs/update-requirements` | Cập nhật tài liệu yêu cầu/RDS, mapping use case, mô tả màn hình và checklist thực hiện. | Đồng bộ hoá tài liệu dự án. |
 | `feature/learner-ui` | Giao diện học viên: danh sách khóa học, giỏ hàng, đơn hàng, học bài, feedback. | Branch đã tồn tại; không tạo thêm. |
