@@ -60,6 +60,26 @@
     border-bottom: 1px solid #f1f5f9 !important;
 }
 
+/* Section header in accordion */
+.accordion .accordion-header .accordion-button {
+    padding: 0.75rem 1rem;
+}
+
+.accordion .text-start .d-block {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.lesson-link {
+    color: inherit;
+}
+
+.btn-open-lesson-document.disabled,
+.btn-download-lesson-document.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
 .lesson-item:hover:not(.active-lesson-item) {
     background-color: #f8fafc !important;
 }
@@ -100,7 +120,7 @@
     color: var(--text-muted);
     font-weight: 600;
     font-size: 15px;
-    font-family: var(--font-heading);
+    font-family: var(--font-heading), sans-serif;
     position: relative;
     transition: var(--transition);
 }
@@ -124,29 +144,21 @@
     border-radius: 99px;
 }
 
-/* Quiz questions */
-.quiz-question-box {
-    border-color: #e2e8f0 !important;
-}
-
-.quiz-option {
-    transition: var(--transition);
-    border-color: #e2e8f0 !important;
-}
-
-.quiz-option:hover {
-    background-color: #f8fafc;
-    border-color: #cbd5e1 !important;
-}
-
-.active-option {
-    border-color: var(--primary) !important;
-    background-color: #eff6ff !important;
-}
-
 /* Lesson document viewer */
 .lesson-document-viewer {
     max-width: 100%;
+}
+
+.quiz-iframe-shell {
+    min-height: 720px;
+}
+
+.quiz-iframe {
+    display: block;
+    width: 100%;
+    min-height: 720px;
+    border: 0;
+    background-color: #ffffff;
 }
 
 .lesson-document-frame-shell {
@@ -163,6 +175,43 @@
 
 .lesson-document-meta .badge {
     letter-spacing: 0.2px;
+}
+
+.lesson-document-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.lesson-document-stat {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 12px 14px;
+}
+
+.lesson-document-stat-label {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.lesson-document-stat-value {
+    display: block;
+    margin-top: 4px;
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 700;
+    word-break: break-word;
+}
+
+.lesson-document-stat-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #64748b;
 }
 
 /* Accordion details */
@@ -185,7 +234,7 @@
         min-height: auto;
         position: relative;
         top: 0;
-        border-start: 0 !important;
+        border-left: 0 !important;
         border-top: 1px solid #cbd5e1;
     }
 
@@ -193,27 +242,9 @@
     .lesson-document-frame {
         min-height: 520px;
     }
+
+    .lesson-document-stats {
+        grid-template-columns: 1fr;
+    }
 }
 
-/* Quiz Option correctness colors */
-.correct-option {
-    border-color: #22c55e !important;
-    background-color: #f0fdf4 !important;
-    color: #15803d !important;
-}
-
-.incorrect-option {
-    border-color: #ef4444 !important;
-    background-color: #fef2f2 !important;
-    color: #b91c1c !important;
-}
-
-.quiz-result-banner {
-    border-radius: 10px !important;
-    animation: fadeIn 0.4s ease-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}

@@ -1,0 +1,3 @@
+// No JavaScript is used on the lesson quiz page.
+
+
