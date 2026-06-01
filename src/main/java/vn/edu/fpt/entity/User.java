@@ -37,6 +37,9 @@ public class User extends BaseEntity{
     @Column(length = 20, unique = true, nullable = true)
     private String phone;
 
+    @Column(columnDefinition = "NVARCHAR(MAX)",nullable = true)
+    private String bio;
+
     @Column(length = 255, nullable = true)
     private String passwordHash;
 
@@ -51,6 +54,7 @@ public class User extends BaseEntity{
     @Builder.Default
     @OneToMany(mappedBy = "instructor", fetch = FetchType.LAZY)
     private Set<Course> courses = new HashSet<>();
+
 
     @Builder.Default
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)

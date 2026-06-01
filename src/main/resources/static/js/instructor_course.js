@@ -65,6 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebarAvatar = document.getElementById('sidebarAvatar');
     const profilePreviewAvatar = document.getElementById('profilePreviewAvatar');
 
+
+
+
     if (avatarInput) {
         avatarInput.addEventListener('change', function () {
             const file = this.files[0];
@@ -82,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
     // Live profile preview update
     const nameInput = document.getElementById('profileName');
     const bioEditor = document.getElementById('bioEditor');
@@ -90,6 +94,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const previewBio = document.getElementById('previewBio');
     const previewField = document.getElementById('previewField');
     const sidebarName = document.getElementById('sidebarName');
+
+    const bioHidden = document.getElementById('bioHidden');
+
+    if (bioEditor && bioHidden) {
+        bioEditor.addEventListener('input', function () {
+            bioHidden.value = bioEditor.innerHTML;
+        });
+    }
 
     function updateProfilePreview() {
         if (previewName && nameInput) previewName.textContent = nameInput.value || 'Họ và Tên';

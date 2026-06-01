@@ -67,6 +67,9 @@ CREATE TABLE users (
     phone VARCHAR(20) UNIQUE NULL,
     -- Số điện thoại (tuỳ chọn), duy nhất nếu có giá trị
 
+    bio NVARCHAR(MAX) NULL,
+    ---Giới thiệu bản thân của user (instructor)
+
     password_hash VARCHAR(255) NULL,
     -- Hash mật khẩu (BCrypt/Argon2). NULL nếu user chỉ login via Google
 
@@ -230,6 +233,8 @@ CREATE TABLE categories (
     CONSTRAINT FK_categories_parent
         FOREIGN KEY (parent_id) REFERENCES categories(id)
 );
+
+
 
 -- =========================
 -- COURSES
