@@ -117,7 +117,7 @@
                     <div class="card h-100 border-0 shadow-sm course-card overflow-hidden d-flex flex-column justify-content-between">
                         <a th:href="@{/course/detail(id=${course.id})}" class="text-decoration-none text-dark d-block">
                             <div class="position-relative overflow-hidden">
-                                <img th:src="${course.thumbnailUrl != null ? (course.thumbnailUrl.startsWith('http') ? course.thumbnailUrl : '/images/' + course.thumbnailUrl) : '/images/course_thumbnail.png'}" th:alt="${course.title}" class="w-100 object-fit-cover" style="height: 220px;">
+                                <img th:src="${course.thumbnailPath}" th:alt="${course.title}" class="w-100 object-fit-cover" style="height: 220px;">
                             </div>
                             <div class="card-body p-4 pb-1">
                                 <h3 class="course-card-title fw-bold fs-6 mb-3 font-heading leading-snug" th:text="${course.title}">

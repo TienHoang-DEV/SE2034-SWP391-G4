@@ -172,7 +172,7 @@
                                 
                                 <!-- Course Item dynamic loop -->
                                 <div class="list-group-item p-3 d-flex flex-sm-row flex-column gap-3 align-items-start border-light-subtle" th:each="item : ${order.items}">
-                                    <img th:src="${item.course.thumbnailUrl != null ? (item.course.thumbnailUrl.startsWith('http') ? item.course.thumbnailUrl : '/images/' + item.course.thumbnailUrl) : '/images/course_thumbnail.png'}" alt="course" class="rounded-3 flex-shrink-0 object-fit-cover align-self-center align-self-sm-start" style="width: 120px; height: 78px;">
+                                    <img th:src="${item.course.thumbnailPath}" alt="course" class="rounded-3 flex-shrink-0 object-fit-cover align-self-center align-self-sm-start" style="width: 120px; height: 78px;">
                                     <div class="flex-grow-1">
                                         <h4 class="fw-bold fs-7 mb-1 font-heading text-dark" th:text="${item.courseTitleSnapshot != null ? item.courseTitleSnapshot : item.course.title}">Đệm hát Guitar những bài hát của Eric Clapton</h4>
                                         <span class="text-muted fs-8 d-block mb-2" th:text="'Giảng viên: ' + ${item.course.instructor.lastName + ' ' + item.course.instructor.firstName}">Giảng viên: NGUYỄN CÔNG PHƯƠNG</span>

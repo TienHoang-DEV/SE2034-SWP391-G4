@@ -139,11 +139,12 @@
                 <!-- Course Card dynamic -->
                 <div class="col-lg-4 col-md-6 col-12 course-card-wrapper" 
                      th:each="enrollment : ${enrollments}" 
-                     th:data-completed="${enrollment.progressPercent != null && enrollment.progressPercent.doubleValue() >= 100 ? 'true' : 'false'}">
+                     th:data-completed="${enrollment.progressPercent != null && enrollment.progressPercent.doubleValue() >= 100 ? 'true' : 'false'}"
+                     th:data-course-id="${enrollment.course.id}">
                     <div class="card h-100 border-0 shadow-sm course-card overflow-hidden">
                         <!-- Thumbnail -->
                         <div class="position-relative overflow-hidden">
-                            <img th:src="${enrollment.course.thumbnailUrl != null ? (enrollment.course.thumbnailUrl.startsWith('http') ? enrollment.course.thumbnailUrl : '/images/' + enrollment.course.thumbnailUrl) : '/images/course_thumbnail.png'}" 
+                            <img th:src="${enrollment.course.thumbnailPath}" 
                                  th:alt="${enrollment.course.title}" class="w-100 object-fit-cover" style="height: 220px; transition: transform 0.5s ease;">
                         </div>
                         

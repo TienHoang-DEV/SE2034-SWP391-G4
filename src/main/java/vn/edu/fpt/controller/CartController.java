@@ -8,8 +8,10 @@ import vn.edu.fpt.entity.Cart;
 import vn.edu.fpt.entity.CartItem;
 import vn.edu.fpt.entity.Course;
 import vn.edu.fpt.entity.User;
+import vn.edu.fpt.entity.Enrollment;
 import vn.edu.fpt.repository.CourseRepository;
 import vn.edu.fpt.repository.UserRepository;
+import vn.edu.fpt.repository.EnrollmentRepository;
 import vn.edu.fpt.service.CartItemService;
 import vn.edu.fpt.service.CartService;
 
@@ -25,13 +27,16 @@ public class CartController {
     private final CartItemService cartItemService;
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     public CartController(CartService cartService, CartItemService cartItemService,
-                          CourseRepository courseRepository, UserRepository userRepository) {
+                          CourseRepository courseRepository, UserRepository userRepository,
+                          EnrollmentRepository enrollmentRepository) {
         this.cartService = cartService;
         this.cartItemService = cartItemService;
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
     private User getMockUser() {
@@ -133,6 +138,49 @@ public class CartController {
             response.put("success", false);
             response.put("cartSize", 0);
             return ResponseEntity.ok(response);
+        }
+    }
+
+    @PostMapping("/api/cart/checkout")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> checkoutCart() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            User user = getMockUser();
+            Cart cart = cartService.getOrCreateCartForUser(user);
+            java.util.Set<CartItem> items = cart.getItems();
+
+            if (items == null || items.isEmpty()) {
+                response.put("success", false);
+                response.put("message", "Giỏ hàng rỗng.");
+                return ResponseEntity.ok(response);
+            }
+
+            java.util.List<CartItem> itemsList = new java.util.ArrayList<>(items);
+            for (CartItem item : itemsList) {
+                Course course = item.getCourse();
+                boolean alreadyEnrolled = enrollmentRepository.existsByUserAndCourse(user, course);
+                if (!alreadyEnrolled) {
+                    Enrollment enrollment = Enrollment.builder()
+                            .user(user)
+                            .course(course)
+                            .progressPercent(java.math.BigDecimal.ZERO)
+                            .build();
+                    enrollmentRepository.save(enrollment);
+                }
+                cartItemService.deleteById(item.getId());
+            }
+
+            cart.getItems().clear();
+            cartService.save(cart);
+
+            response.put("success", true);
+            response.put("message", "Thanh toán thành công! Khóa học đã được thêm vào Việc Học Của Tôi.");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Thanh toán thất bại: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
         }
     }
 }

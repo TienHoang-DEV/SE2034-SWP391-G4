@@ -147,4 +147,63 @@ public class Course extends BaseEntity {
         }
         return count;
     }
+
+    public String getFirstLessonVideoUrl() {
+        if (sections == null || sections.isEmpty()) return null;
+        for (CourseSection sec : sections) {
+            if (sec.getLessons() != null && !sec.getLessons().isEmpty()) {
+                for (Lesson lesson : sec.getLessons()) {
+                    if (lesson.getVideoUrl() != null && !lesson.getVideoUrl().trim().isEmpty()) {
+                        return lesson.getVideoUrl();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public Integer getFirstLessonId() {
+        if (sections == null || sections.isEmpty()) return null;
+        for (CourseSection sec : sections) {
+            if (sec.getLessons() != null && !sec.getLessons().isEmpty()) {
+                for (Lesson lesson : sec.getLessons()) {
+                    if (lesson.getVideoUrl() != null && !lesson.getVideoUrl().trim().isEmpty()) {
+                        return lesson.getId();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public String getThumbnailPath() {
+        if (thumbnailUrl == null || thumbnailUrl.trim().isEmpty()) {
+            return "/images/course_thumbnail.png";
+        }
+        if (thumbnailUrl.startsWith("http://") || thumbnailUrl.startsWith("https://")) {
+            return thumbnailUrl;
+        }
+        if (thumbnailUrl.startsWith(vn.edu.fpt.util.AppConstants.AZURE_STORAGE_CONTAINER_COURSE_THUMBNAILS + "/")) {
+            return vn.edu.fpt.util.AppConstants.AZURE_STORAGE_BASE_URL + "/" + thumbnailUrl;
+        }
+        // Check if it is a known local image in static/images
+        if (thumbnailUrl.equals("acoustic_course.png") || 
+            thumbnailUrl.equals("course_thumbnail.png") ||
+            thumbnailUrl.equals("cuisine_course.png") ||
+            thumbnailUrl.equals("dome_hero.png") ||
+            thumbnailUrl.equals("eric_clapton_fan.png") ||
+            thumbnailUrl.equals("guitar_bolero_classical.png") ||
+            thumbnailUrl.equals("guitar_expert.png") ||
+            thumbnailUrl.equals("guitar_les_paul.png") ||
+            thumbnailUrl.equals("guitar_natural_acoustic.png") ||
+            thumbnailUrl.equals("guitar_stratocaster_sunburst.png") ||
+            thumbnailUrl.equals("guitar_sunburst_acoustic.png") ||
+            thumbnailUrl.equals("tech_course.png")) {
+            return "/images/" + thumbnailUrl;
+        }
+        // Default fallback: resolve from Azure Blob Storage course-thumbnails container
+        return vn.edu.fpt.util.AppConstants.AZURE_STORAGE_BASE_URL + "/" + 
+               vn.edu.fpt.util.AppConstants.AZURE_STORAGE_CONTAINER_COURSE_THUMBNAILS + "/" + 
+               thumbnailUrl;
+    }
 }

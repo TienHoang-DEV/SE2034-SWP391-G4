@@ -103,7 +103,7 @@
             <!-- Breadcrumbs -->
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="../home/home_logged_in.html" class="text-muted text-decoration-none fs-8 fw-medium">Trang Chủ</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/}" class="text-muted text-decoration-none fs-8 fw-medium">Trang Chủ</a></li>
                     <li class="breadcrumb-item active text-primary fs-8 fw-bold" aria-current="page">Giỏ Hàng</li>
                 </ol>
             </nav>
@@ -171,7 +171,7 @@
                                         <input class="form-check-input border-primary item-checkbox" type="checkbox" th:data-id="'cart-item-' + ${item.id}" th:data-instructor="${entry.key.lastName}" checked style="width: 17px; height: 17px; cursor: pointer;">
                                     </div>
                                     <!-- Thumbnail -->
-                                    <img th:src="${item.course.thumbnailUrl != null ? (item.course.thumbnailUrl.startsWith('http') ? item.course.thumbnailUrl : '/images/' + item.course.thumbnailUrl) : '/images/course_thumbnail.png'}" th:alt="${item.course.title}" class="rounded-3 flex-shrink-0 object-fit-cover align-self-center align-self-sm-start" style="width: 130px; height: 80px;">
+                                    <img th:src="${item.course.thumbnailPath}" th:alt="${item.course.title}" class="rounded-3 flex-shrink-0 object-fit-cover align-self-center align-self-sm-start" style="width: 130px; height: 80px;">
                                     
                                     <!-- Content info -->
                                     <div class="flex-grow-1 w-100 d-flex flex-column justify-content-between" style="min-height: 80px;">
@@ -247,7 +247,7 @@
                             </div>
                             <h3 class="fw-bold fs-5 font-heading text-dark mb-2">Giỏ hàng của bạn đang trống!</h3>
                             <p class="text-muted fs-7 mb-4 px-3" style="max-width: 440px;">Hãy tiếp tục tham gia và lựa chọn các khóa học chất lượng cao trên nền tảng của chúng tôi để bắt đầu học.</p>
-                            <a href="../home/home_logged_in.html" class="btn btn-primary rounded-3 px-4 py-2.5 fw-bold fs-7 shadow-primary d-inline-flex align-items-center gap-2">
+                            <a th:href="@{/courses}" class="btn btn-primary rounded-3 px-4 py-2.5 fw-bold fs-7 shadow-primary d-inline-flex align-items-center gap-2">
                                 <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Tiếp tục mua sắm
                             </a>
                         </div>

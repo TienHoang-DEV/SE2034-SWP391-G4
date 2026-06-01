@@ -90,15 +90,40 @@ public class DataInitializer implements CommandLineRunner {
                     .build());
         }
 
-        Category category = categoryRepository.save(Category.builder()
-                .name("Lập trình")
-                .description("Các khóa học lập trình")
+        Category frontEndCategory = categoryRepository.save(Category.builder()
+                .name("Lập trình Front-End")
+                .description("Khóa học về Lập trình Front-End")
                 .status("active")
                 .build());
 
+        Category backEndCategory = categoryRepository.save(Category.builder()
+                .name("Lập trình Back-End")
+                .description("Khóa học về Lập trình Back-End")
+                .status("active")
+                .build());
+
+        Category iosCategory = categoryRepository.save(Category.builder()
+                .name("Lập trình iOS")
+                .description("Khóa học lập trình ứng dụng iOS")
+                .status("active")
+                .build());
+
+        Category htmlCat = categoryRepository.save(Category.builder().name("HTML").description("Khóa học thiết kế giao diện với HTML").parent(frontEndCategory).status("active").build());
+        Category cssCat = categoryRepository.save(Category.builder().name("CSS").description("Khóa học định dạng giao diện với CSS").parent(frontEndCategory).status("active").build());
+        Category reactCat = categoryRepository.save(Category.builder().name("React").description("Khóa học thư viện ReactJS").parent(frontEndCategory).status("active").build());
+
+        Category nodeCat = categoryRepository.save(Category.builder().name("Node.js").description("Khóa học lập trình Back-End với Node.js").parent(backEndCategory).status("active").build());
+        Category pythonCat = categoryRepository.save(Category.builder().name("Python").description("Khóa học ngôn ngữ lập trình Python").parent(backEndCategory).status("active").build());
+        Category javaCat = categoryRepository.save(Category.builder().name("Java").description("Khóa học ngôn ngữ lập trình Java").parent(backEndCategory).status("active").build());
+        Category phpCat = categoryRepository.save(Category.builder().name("PHP").description("Khóa học ngôn ngữ lập trình PHP").parent(backEndCategory).status("active").build());
+        Category netCat = categoryRepository.save(Category.builder().name(".NET").description("Khóa học lập trình với .NET Framework / .NET Core").parent(backEndCategory).status("active").build());
+
+        Category swiftCat = categoryRepository.save(Category.builder().name("Swift").description("Khóa học ngôn ngữ lập trình Swift").parent(iosCategory).status("active").build());
+        Category swiftuiCat = categoryRepository.save(Category.builder().name("SwiftUI").description("Khóa học UI Framework SwiftUI cho iOS").parent(iosCategory).status("active").build());
+
         Course course = courseRepository.save(Course.builder()
                 .instructor(instructor)
-                .category(category)
+                .category(htmlCat)
                 .title("Lập Trình C Cơ Bản - 28Tech")
                 .description("Khóa học lập trình C cơ bản")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
@@ -110,33 +135,33 @@ public class DataInitializer implements CommandLineRunner {
         // Create 3 more courses similar to the first one
         Course course2 = courseRepository.save(Course.builder()
                 .instructor(instructor)
-                .category(category)
+                .category(cssCat)
                 .title("Lập Trình C Nâng Cao - 28Tech")
                 .description("Khóa học nâng cao lập trình C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
-                .price(new BigDecimal("500000.00"))
+                .price(new BigDecimal("350000.00"))
                 .level("intermediate")
                 .status("published")
                 .build());
 
         Course course3 = courseRepository.save(Course.builder()
                 .instructor(instructor)
-                .category(category)
+                .category(reactCat)
                 .title("Lập Trình C Thực Hành - 28Tech")
                 .description("Bài tập thực hành và project nhỏ với C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
-                .price(new BigDecimal("1200000.00"))
+                .price(new BigDecimal("600000.00"))
                 .level("beginner")
                 .status("published")
                 .build());
 
         Course course4 = courseRepository.save(Course.builder()
                 .instructor(instructor)
-                .category(category)
+                .category(nodeCat)
                 .title("Thuật Toán C với 28Tech")
                 .description("Giải thuật và cấu trúc dữ liệu cơ bản bằng C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
-                .price(new BigDecimal("800000.00"))
+                .price(new BigDecimal("850000.00"))
                 .level("advanced")
                 .status("published")
                 .build());
@@ -287,19 +312,26 @@ public class DataInitializer implements CommandLineRunner {
 
         // Seed 10 more courses (course 5 -> course 14)
         String[][] extraCourseConfigs = {
-                {"Lập Trình C Chuyên Đề 5 - 28Tech", "Khóa học chuyên đề C số 5", "beginner"},
-                {"Lập Trình C Chuyên Đề 6 - 28Tech", "Khóa học chuyên đề C số 6", "intermediate"},
-                {"Lập Trình C Chuyên Đề 7 - 28Tech", "Khóa học chuyên đề C số 7", "advanced"},
-                {"Lập Trình C Chuyên Đề 8 - 28Tech", "Khóa học chuyên đề C số 8", "beginner"},
-                {"Lập Trình C Chuyên Đề 9 - 28Tech", "Khóa học chuyên đề C số 9", "intermediate"},
-                {"Lập Trình C Chuyên Đề 10 - 28Tech", "Khóa học chuyên đề C số 10", "advanced"},
-                {"Lập Trình C Chuyên Đề 11 - 28Tech", "Khóa học chuyên đề C số 11", "beginner"},
-                {"Lập Trình C Chuyên Đề 12 - 28Tech", "Khóa học chuyên đề C số 12", "intermediate"},
-                {"Lập Trình C Chuyên Đề 13 - 28Tech", "Khóa học chuyên đề C số 13", "advanced"},
-                {"Lập Trình C Chuyên Đề 14 - 28Tech", "Khóa học chuyên đề C số 14", "intermediate"}
+                {"Lập Trình C Chuyên Đề 5 - 28Tech", "Khóa học chuyên đề C số 5", "beginner", "1500000.00"},
+                {"Lập Trình C Chuyên Đề 6 - 28Tech", "Khóa học chuyên đề C số 6", "intermediate", "0.00"},
+                {"Lập Trình C Chuyên Đề 7 - 28Tech", "Khóa học chuyên đề C số 7", "advanced", "250000.00"},
+                {"Lập Trình C Chuyên Đề 8 - 28Tech", "Khóa học chuyên đề C số 8", "beginner", "550000.00"},
+                {"Lập Trình C Chuyên Đề 9 - 28Tech", "Khóa học chuyên đề C số 9", "intermediate", "900000.00"},
+                {"Lập Trình C Chuyên Đề 10 - 28Tech", "Khóa học chuyên đề C số 10", "advanced", "1100000.00"},
+                {"Lập Trình C Chuyên Đề 11 - 28Tech", "Khóa học chuyên đề C số 11", "beginner", "0.00"},
+                {"Lập Trình C Chuyên Đề 12 - 28Tech", "Khóa học chuyên đề C số 12", "intermediate", "450000.00"},
+                {"Lập Trình C Chuyên Đề 13 - 28Tech", "Khóa học chuyên đề C số 13", "advanced", "650000.00"},
+                {"Lập Trình C Chuyên Đề 14 - 28Tech", "Khóa học chuyên đề C số 14", "intermediate", "950000.00"}
         };
-        for (String[] cfg : extraCourseConfigs) {
-            createAndSeedCourse(instructor, category, cfg[0], cfg[1], cfg[2]);
+        
+        List<Category> childCategories = List.of(
+            htmlCat, cssCat, reactCat, nodeCat, pythonCat, javaCat, phpCat, netCat, swiftCat, swiftuiCat
+        );
+
+        for (int i = 0; i < extraCourseConfigs.length; i++) {
+            String[] cfg = extraCourseConfigs[i];
+            Category targetCat = childCategories.get((i + 4) % childCategories.size());
+            createAndSeedCourse(instructor, targetCat, cfg[0], cfg[1], cfg[2], new BigDecimal(cfg[3]));
         }
 
         // Seed test learner user 'Do Thanh' and enroll to course id=1
@@ -370,6 +402,15 @@ public class DataInitializer implements CommandLineRunner {
         Course c3 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Lập Trình C Thực Hành")).findFirst().orElse(null);
         Course c4 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Thuật Toán C")).findFirst().orElse(null);
         Course c5 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 5")).findFirst().orElse(null);
+        Course c6 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 6")).findFirst().orElse(null);
+        Course c7 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 7")).findFirst().orElse(null);
+        Course c8 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 8")).findFirst().orElse(null);
+        Course c9 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 9")).findFirst().orElse(null);
+        Course c10 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 10")).findFirst().orElse(null);
+        Course c11 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 11")).findFirst().orElse(null);
+        Course c12 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 12")).findFirst().orElse(null);
+        Course c13 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 13")).findFirst().orElse(null);
+        Course c14 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 14")).findFirst().orElse(null);
 
         // 3. Define learners
         String[][] learnersInfo = {
@@ -492,23 +533,62 @@ public class DataInitializer implements CommandLineRunner {
         seedQuizAttempts(users[9], c5, 100, true);
 
 
-        // 7. Feedbacks (distributing ratings 1 to 5)
-        // An -> C1: 5 stars
+        // 7. Feedbacks (distributing ratings to produce fractional averages like 4.7, 4.3, 3.7, 2.7, 3.3)
+        // An -> C1: 5 stars, Binh -> C1: 4 stars, Long -> C1: 1 star -> avg = 3.3 stars
         seedFeedback(users[0], c1, 5, "Khóa học C cơ bản vô cùng chất lượng, giảng viên giải thích cực kỳ tỉ mỉ và dễ nhớ!");
-        // Binh -> C1: 4 stars
         seedFeedback(users[1], c1, 4, "Bài giảng chuẩn bị rất công phu, giao diện học tập trực quan. Tuy nhiên, một số bài tập tự luyện hơi khó.");
-        // Cuong -> C2: 5 stars
-        seedFeedback(users[2], c2, 5, "Tài liệu PDF đi kèm rất xịn, bài tập trắc nghiệm có giải thích chi tiết đáp án.");
-        // Dung -> C3: 5 stars
-        seedFeedback(users[3], c3, 5, "Lập trình C thực hành rất thực tế, nhiều bài tập hay.");
-        // Em -> C1: 3 stars
-        seedFeedback(users[4], c1, 3, "Khóa học ở mức khá tốt, phần giảng lý thuyết trực quan nhưng quiz bài 3 thi thoảng phản hồi chậm.");
-        // Hai -> C4: 2 stars
-        seedFeedback(users[6], c4, 2, "Thuật toán C hơi phức tạp so với trình độ của tôi, bài giảng đi nhanh quá.");
-        // Khoa -> C5: 5 stars
-        seedFeedback(users[8], c5, 5, "Khóa học chuyên đề rất hữu ích, giúp tôi hiểu sâu về mảng và con trỏ!");
-        // Long -> C1: 1 star
         seedFeedback(users[9], c1, 1, "Chất lượng âm thanh video bài 2 và bài 3 mờ nhạt và rất khó nghe, mong admin sớm cải thiện.");
+
+        // Cuong -> C2: 5 stars, An -> C2: 5 stars, Binh -> C2: 4 stars -> avg = 4.7 stars
+        seedFeedback(users[2], c2, 5, "Tài liệu PDF đi kèm rất xịn, bài tập trắc nghiệm có giải thích chi tiết đáp án.");
+        seedFeedback(users[0], c2, 5, "Khóa học nâng cao siêu hay, kiến thức sâu sắc.");
+        seedFeedback(users[1], c2, 4, "Khá tốt nhưng cần thêm bài tập thực hành.");
+
+        // Dung -> C3: 5 stars, Binh -> C3: 4 stars, Cuong -> C3: 4 stars -> avg = 4.3 stars
+        seedFeedback(users[3], c3, 5, "Lập trình C thực hành rất thực tế, nhiều bài tập hay.");
+        seedFeedback(users[1], c3, 4, "Bài tập đa dạng, rất bám sát thực tế đi làm.");
+        seedFeedback(users[2], c3, 4, "Giao diện bài thực hành chạy mượt mà.");
+
+        // Hai -> C4: 4 stars, Cuong -> C4: 3 stars, An -> C4: 3 stars -> avg = 3.3 stars
+        seedFeedback(users[6], c4, 4, "Nội dung cấu trúc dữ liệu và giải thuật chi tiết.");
+        seedFeedback(users[2], c4, 3, "Thuật toán C hơi phức tạp so với trình độ của tôi, bài giảng đi nhanh quá.");
+        seedFeedback(users[0], c4, 3, "Nội dung tạm ổn.");
+
+        // Khoa -> C5: 5 stars, Dung -> C5: 4 stars, An -> C5: 2 stars -> avg = 3.7 stars
+        seedFeedback(users[8], c5, 5, "Khóa học chuyên đề rất hữu ích, giúp tôi hiểu sâu về mảng và con trỏ!");
+        seedFeedback(users[3], c5, 4, "Học rất ổn.");
+        seedFeedback(users[0], c5, 2, "Hơi khó so với người mới bắt đầu.");
+
+        // Additional feedbacks to cover all stars and courses
+        if (c6 != null) {
+            seedFeedback(users[0], c6, 4, "Khá tốt!");
+            seedFeedback(users[1], c6, 4, "Bài giảng rõ ràng.");
+            seedFeedback(users[2], c6, 3, "Được."); // avg = 3.7 stars
+        }
+        if (c7 != null) seedFeedback(users[1], c7, 1, "Quá tệ!");
+        if (c8 != null) {
+            seedFeedback(users[2], c8, 3, "Bình thường.");
+            seedFeedback(users[3], c8, 3, "Hơi khó hiểu.");
+            seedFeedback(users[4], c8, 2, "Chưa thực sự chi tiết."); // avg = 2.7 stars
+        }
+        if (c9 != null) seedFeedback(users[3], c9, 4, "Rất hay.");
+        if (c10 != null) {
+            seedFeedback(users[4], c10, 5, "Tuyệt vời.");
+            seedFeedback(users[5], c10, 5, "Khá hay.");
+            seedFeedback(users[6], c10, 4, "Nội dung phong phú."); // avg = 4.7 stars
+        }
+        if (c11 != null) seedFeedback(users[5], c11, 2, "Hơi sơ sài.");
+        if (c12 != null) {
+            seedFeedback(users[6], c12, 4, "Được.");
+            seedFeedback(users[7], c12, 4, "Bổ ích.");
+            seedFeedback(users[8], c12, 3, "Tạm được."); // avg = 3.7 stars
+        }
+        if (c13 != null) seedFeedback(users[7], c13, 4, "Tốt.");
+        if (c14 != null) {
+            seedFeedback(users[8], c14, 5, "Cực tốt.");
+            seedFeedback(users[9], c14, 4, "Chất lượng.");
+            seedFeedback(users[0], c14, 4, "Học xong làm được ngay."); // avg = 4.3 stars
+        }
     }
 
     private void createMockOrder(User user, List<Course> courses, Coupon coupon, BigDecimal discount, String status, String method, String paymentStatus) {
@@ -836,14 +916,14 @@ public class DataInitializer implements CommandLineRunner {
         seedLessonMaterials(instructor, course, lLast);
     }
 
-    private void createAndSeedCourse(User instructor, Category category, String title, String description, String level) {
+    private void createAndSeedCourse(User instructor, Category category, String title, String description, String level, BigDecimal price) {
         Course newCourse = courseRepository.save(Course.builder()
                 .instructor(instructor)
                 .category(category)
                 .title(title)
                 .description(description)
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
-                .price(BigDecimal.ZERO)
+                .price(price)
                 .level(level)
                 .status("published")
                 .build());

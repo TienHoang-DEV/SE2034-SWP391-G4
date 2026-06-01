@@ -26,16 +26,20 @@ public class GlobalControllerAdvice {
     @ModelAttribute("cartSize")
     public int getCartSize(HttpServletRequest request) {
         try {
+            User user = null;
             HttpSession session = request.getSession(false);
             if (session != null) {
                 User sessionUser = (User) session.getAttribute("user");
                 if (sessionUser != null) {
-                    User user = userRepository.findById(sessionUser.getId()).orElse(null);
-                    if (user != null) {
-                        Cart cart = cartService.getOrCreateCartForUser(user);
-                        return cartItemService.countItemsInCart(cart);
-                    }
+                    user = userRepository.findById(sessionUser.getId()).orElse(null);
                 }
+            }
+            if (user == null) {
+                user = userRepository.findByEmail("28tech@gmail.com").orElse(null);
+            }
+            if (user != null) {
+                Cart cart = cartService.getOrCreateCartForUser(user);
+                return cartItemService.countItemsInCart(cart);
             }
         } catch (Exception ignored) {
         }

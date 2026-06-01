@@ -938,8 +938,8 @@ INSERT INTO categories (
     status
 )
 VALUES (
-    N'Lập trình',
-    N'Các khóa học lập trình',
+    N'Lập trình Front-End',
+    N'Khóa học về Lập trình Front-End',
     NULL,
     'active'
 );
@@ -2202,5 +2202,81 @@ VALUES
 (@UserCuongId, @C2Id, 5, N'Tài liệu PDF đi kèm rất xịn, bài tập trắc nghiệm có giải thích chi tiết đáp án giúp củng cố kiến thức tốt.', 'visible', DATEADD(day, -2, GETDATE())),
 (@UserDungId, @C3Id, 5, N'Spring Boot thực chiến rất dễ hiểu. Hướng dẫn cài đặt cấu hình cực kỳ chi tiết cho những ai mới học Java Web!', 'visible', DATEADD(day, -1, GETDATE())),
 (@UserEmId, @C1Id, 3, N'Khóa học ở mức khá tốt, phần giảng lý thuyết trực quan nhưng hệ thống quiz bài 3 thi thoảng bị chậm phản hồi.', 'visible', DATEADD(day, -1, GETDATE()));
+
+GO
+
+-- ============================================================================
+-- INSERT NEW CATEGORIES AND SUB-CATEGORIES
+-- ============================================================================
+
+-- Lập trình Front-End sub-categories (đã được chèn ở trên với ID = 1)
+DECLARE @ParentFE INT = 1;
+
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'HTML', N'Khóa học thiết kế giao diện với HTML', @ParentFE, 'active');
+DECLARE @CatHTML INT = SCOPE_IDENTITY();
+
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'CSS', N'Khóa học định dạng giao diện với CSS', @ParentFE, 'active');
+DECLARE @CatCSS INT = SCOPE_IDENTITY();
+
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'React', N'Khóa học thư viện ReactJS', @ParentFE, 'active');
+DECLARE @CatReact INT = SCOPE_IDENTITY();
+
+-- Lập trình Back-End & sub-categories
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'Lập trình Back-End', N'Khóa học về Lập trình Back-End', NULL, 'active');
+DECLARE @ParentBE INT = SCOPE_IDENTITY();
+
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'Node.js', N'Khóa học lập trình Back-End với Node.js', @ParentBE, 'active');
+DECLARE @CatNode INT = SCOPE_IDENTITY();
+
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'Python', N'Khóa học ngôn ngữ lập trình Python', @ParentBE, 'active');
+DECLARE @CatPython INT = SCOPE_IDENTITY();
+
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'Java', N'Khóa học ngôn ngữ lập trình Java', @ParentBE, 'active');
+DECLARE @CatJava INT = SCOPE_IDENTITY();
+
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'PHP', N'Khóa học ngôn ngữ lập trình PHP', @ParentBE, 'active');
+DECLARE @CatPHP INT = SCOPE_IDENTITY();
+
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'.NET', N'Khóa học lập trình với .NET Framework / .NET Core', @ParentBE, 'active');
+DECLARE @CatNET INT = SCOPE_IDENTITY();
+
+-- Lập trình iOS & sub-categories
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'Lập trình iOS', N'Khóa học lập trình ứng dụng iOS', NULL, 'active');
+DECLARE @ParentIOS INT = SCOPE_IDENTITY();
+
+-- Insert Children iOS
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'Swift', N'Khóa học ngôn ngữ lập trình Swift', @ParentIOS, 'active');
+DECLARE @CatSwift INT = SCOPE_IDENTITY();
+
+INSERT INTO categories (name, description, parent_id, status) 
+VALUES (N'SwiftUI', N'Khóa học UI Framework SwiftUI cho iOS', @ParentIOS, 'active');
+DECLARE @CatSwiftUI INT = SCOPE_IDENTITY();
+
+-- Update course category IDs to distribute them
+UPDATE courses SET category_id = @CatHTML WHERE id = 1;
+UPDATE courses SET category_id = @CatCSS WHERE id = 2;
+UPDATE courses SET category_id = @CatReact WHERE id = 3;
+UPDATE courses SET category_id = @CatNode WHERE id = 4;
+UPDATE courses SET category_id = @CatPython WHERE id = 5;
+UPDATE courses SET category_id = @CatJava WHERE id = 6;
+UPDATE courses SET category_id = @CatPHP WHERE id = 7;
+UPDATE courses SET category_id = @CatNET WHERE id = 8;
+UPDATE courses SET category_id = @CatSwift WHERE id = 9;
+UPDATE courses SET category_id = @CatSwiftUI WHERE id = 10;
+UPDATE courses SET category_id = @CatHTML WHERE id = 11;
+UPDATE courses SET category_id = @CatCSS WHERE id = 12;
+UPDATE courses SET category_id = @CatReact WHERE id = 13;
+UPDATE courses SET category_id = @CatNode WHERE id = 14;
 
 GO
