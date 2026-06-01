@@ -10,20 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import vn.edu.fpt.entity.Category;
 import vn.edu.fpt.entity.User;
 import vn.edu.fpt.service.CategoryService;
 import vn.edu.fpt.service.UserService;
 
-import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
 @RequestMapping("/instructor")
 @Controller
-public class CourseController {
+public class InstructorProfileController {
      private UserService service;
      private CategoryService categoryService;
-    public CourseController(UserService userService, CategoryService categoryService) {
+    public InstructorProfileController(UserService userService, CategoryService categoryService) {
         this.service = userService;
         this.categoryService = categoryService;
     }
