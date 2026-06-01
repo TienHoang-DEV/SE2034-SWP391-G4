@@ -3,6 +3,7 @@ package vn.edu.fpt.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.entity.Cart;
+import vn.edu.fpt.entity.User;
 import vn.edu.fpt.repository.CartRepository;
 
 import java.util.List;
@@ -15,6 +16,11 @@ public class CartService {
 
     public CartService(CartRepository cartRepository) {
         this.repository = cartRepository;
+    }
+
+    public Cart getOrCreateCartForUser(User user) {
+        return repository.findByUser(user)
+                .orElseGet(() -> repository.save(Cart.builder().user(user).build()));
     }
 
     public List<Cart> findAll() { return repository.findAll(); }

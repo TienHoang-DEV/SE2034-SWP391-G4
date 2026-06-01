@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lucide.createIcons();
     }
     
+    loadCartStateFromDOM();
     initializeCheckboxes();
     initializeRemoveButtons();
     initializeInstructorVouchers();
@@ -13,18 +14,38 @@ document.addEventListener("DOMContentLoaded", () => {
     updateInvoice();
 });
 
-// Mock Prices State (Expanded to 3 items and grouped by instructor)
+// Mock Prices State (Initialized from DOM dynamically)
 let cartState = {
-    items: [
-        { id: "cart-item-1", price: 299000, discount: 89700, instructor: "Thanh", selected: true },
-        { id: "cart-item-2", price: 399000, discount: 39900, instructor: "Thanh", selected: true },
-        { id: "cart-item-3", price: 499000, discount: 99800, instructor: "Hoang", selected: true }
-    ],
+    items: [],
     instructorCoupons: {
         "Thanh": { code: "THANH10", rate: 0.10, applied: false },
         "Hoang": { code: "HOANG15", rate: 0.15, applied: false }
     }
 };
+
+// 0. Parse cart rows from Thymeleaf-rendered DOM
+function loadCartStateFromDOM() {
+    const itemRows = document.querySelectorAll(".cart-item-row");
+    cartState.items = [];
+    itemRows.forEach(row => {
+        const id = row.getAttribute("id");
+        const price = Math.round(parseFloat(row.getAttribute("data-price"))) || 0;
+        const discount = Math.round(parseFloat(row.getAttribute("data-discount"))) || 0;
+        const instructor = row.getAttribute("data-instructor");
+        const checkbox = row.querySelector(".item-checkbox");
+        const selected = checkbox ? checkbox.checked : true;
+        
+        cartState.items.push({ id, price, discount, instructor, selected });
+        
+        if (instructor && !cartState.instructorCoupons[instructor]) {
+            cartState.instructorCoupons[instructor] = {
+                code: instructor.toUpperCase() + "10",
+                rate: 0.10,
+                applied: false
+            };
+        }
+    });
+}
 
 // 1. Checkbox Interaction Logic (Multi-level Synchronization)
 function initializeCheckboxes() {
@@ -148,51 +169,75 @@ function initializeRemoveButtons() {
     
     removeBtns.forEach(btn => {
         btn.addEventListener("click", () => {
-            const targetId = btn.getAttribute("data-target");
-            const targetElement = document.getElementById(targetId);
-            
-            if (targetElement) {
-                // Add fade out animation to the item row
-                targetElement.classList.add("fade-out-item");
-                
-                // Wait for item row animation to finish
-                setTimeout(() => {
-                    const targetItem = cartState.items.find(item => item.id === targetId);
-                    const instructor = targetItem ? targetItem.instructor : null;
-                    
-                    if (targetElement.parentNode) {
-                        targetElement.remove();
-                    }
-                    
-                    // Update state
-                    cartState.items = cartState.items.filter(item => item.id !== targetId);
-                    
-                    // Check if there are any courses left under this instructor
-                    if (instructor) {
-                        const remainingInstructorItems = cartState.items.filter(item => item.instructor === instructor);
-                        const groupCard = document.getElementById(`group-${instructor}`);
-                        
-                        if (remainingInstructorItems.length === 0 && groupCard) {
-                            // Fade out the entire instructor card if no items left
-                            groupCard.classList.add("fade-out-item");
-                            setTimeout(() => {
-                                groupCard.remove();
-                                updateInvoice();
-                            }, 400);
-                            return; // updateInvoice is called inside the inner timeout
-                        } else if (groupCard) {
-                            // Update items count text in instructor header
-                            const countText = groupCard.querySelector(".group-items-count");
-                            if (countText) {
-                                countText.textContent = `${remainingInstructorItems.length} khóa học`;
-                            }
-                        }
-                    }
-                    
-                    // Recalculate bill
-                    updateInvoice();
-                }, 400);
+            const cartItemId = btn.getAttribute("data-item-id");
+            if (!cartItemId) {
+                console.error("Cart item database ID is missing.");
+                return;
             }
+
+            btn.disabled = true;
+
+            fetch(`/api/cart/remove?cartItemId=${cartItemId}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                btn.disabled = false;
+                if (data.success) {
+                    const targetId = btn.getAttribute("data-target");
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        // Add fade out animation to the item row
+                        targetElement.classList.add("fade-out-item");
+                        
+                        // Wait for item row animation to finish
+                        setTimeout(() => {
+                            const targetItem = cartState.items.find(item => item.id === targetId);
+                            const instructor = targetItem ? targetItem.instructor : null;
+                            
+                            if (targetElement.parentNode) {
+                                targetElement.remove();
+                            }
+                            
+                            // Update state
+                            cartState.items = cartState.items.filter(item => item.id !== targetId);
+                            
+                            // Check if there are any courses left under this instructor
+                            if (instructor) {
+                                const remainingInstructorItems = cartState.items.filter(item => item.instructor === instructor);
+                                const groupCard = document.getElementById(`group-${instructor}`);
+                                
+                                if (remainingInstructorItems.length === 0 && groupCard) {
+                                    // Fade out the entire instructor card if no items left
+                                    groupCard.classList.add("fade-out-item");
+                                    setTimeout(() => {
+                                        groupCard.remove();
+                                        updateInvoice();
+                                    }, 400);
+                                    return;
+                                } else if (groupCard) {
+                                    // Update items count text in instructor header
+                                    const countText = groupCard.querySelector(".group-items-count");
+                                    if (countText) {
+                                        countText.textContent = `${remainingInstructorItems.length} khóa học`;
+                                    }
+                                }
+                            }
+                            
+                            // Recalculate bill
+                            updateInvoice();
+                        }, 400);
+                    }
+                } else {
+                    alert(data.message || 'Không thể xóa khóa học.');
+                }
+            })
+            .catch(err => {
+                btn.disabled = false;
+                console.error('Error removing item:', err);
+                alert('Có lỗi xảy ra khi xóa khóa học.');
+            });
         });
     });
 }
@@ -406,58 +451,76 @@ function initializeCheckoutButton() {
             const selectedItems = cartState.items.filter(item => item.selected);
             if (selectedItems.length === 0) return;
 
-            alert("Đăng ký thành công! Hệ thống đang xử lý đơn hàng giả lập. Email xác nhận và liên kết khóa học đã được gửi tới tài khoản của bạn!");
-            
-            // Clear cart entirely (or just selected items)
-            cartState.items = cartState.items.filter(item => !item.selected);
-            
-            // Reset instructor coupon applied states
-            Object.keys(cartState.instructorCoupons).forEach(inst => {
-                cartState.instructorCoupons[inst].applied = false;
-                const input = document.getElementById(`voucher-input-${inst}`);
-                if (input) input.value = "";
-                const successIcon = document.getElementById(`voucher-success-icon-${inst}`);
-                if (successIcon) successIcon.classList.add("d-none");
-                const msgContainer = document.getElementById(`voucher-msg-container-${inst}`);
-                if (msgContainer) msgContainer.classList.add("d-none");
-            });
+            checkoutBtn.disabled = true;
 
-            // Reset DOM elements of removed groups completely
-            const instructorCards = document.querySelectorAll(".instructor-group-card");
-            instructorCards.forEach(card => {
-                const inst = card.getAttribute("data-instructor");
-                const remainingItems = cartState.items.filter(item => item.instructor === inst);
-                if (remainingItems.length === 0) {
-                    card.remove();
-                } else {
-                    // Remove checked courses from DOM
-                    const checkedCbs = card.querySelectorAll(".item-checkbox:checked");
-                    checkedCbs.forEach(cb => {
-                        const row = cb.closest(".cart-item-row");
-                        if (row) row.remove();
+            fetch("/api/cart/checkout", {
+                method: "POST"
+            })
+            .then(response => response.json())
+            .then(data => {
+                checkoutBtn.disabled = false;
+                if (data.success) {
+                    alert(data.message);
+                    
+                    // Clear cart entirely (or just selected items)
+                    cartState.items = cartState.items.filter(item => !item.selected);
+                    
+                    // Reset instructor coupon applied states
+                    Object.keys(cartState.instructorCoupons).forEach(inst => {
+                        cartState.instructorCoupons[inst].applied = false;
+                        const input = document.getElementById(`voucher-input-${inst}`);
+                        if (input) input.value = "";
+                        const successIcon = document.getElementById(`voucher-success-icon-${inst}`);
+                        if (successIcon) successIcon.classList.add("d-none");
+                        const msgContainer = document.getElementById(`voucher-msg-container-${inst}`);
+                        if (msgContainer) msgContainer.classList.add("d-none");
                     });
-                    // Reset group items count header text
-                    const countText = card.querySelector(".group-items-count");
-                    if (countText) {
-                        countText.textContent = `${remainingItems.length} khóa học`;
+
+                    // Reset DOM elements of removed groups completely
+                    const instructorCards = document.querySelectorAll(".instructor-group-card");
+                    instructorCards.forEach(card => {
+                        const inst = card.getAttribute("data-instructor");
+                        const remainingItems = cartState.items.filter(item => item.instructor === inst);
+                        if (remainingItems.length === 0) {
+                            card.remove();
+                        } else {
+                            // Remove checked courses from DOM
+                            const checkedCbs = card.querySelectorAll(".item-checkbox:checked");
+                            checkedCbs.forEach(cb => {
+                                const row = cb.closest(".cart-item-row");
+                                if (row) row.remove();
+                            });
+                            // Reset group items count header text
+                            const countText = card.querySelector(".group-items-count");
+                            if (countText) {
+                                countText.textContent = `${remainingItems.length} khóa học`;
+                            }
+                            // Reset instructor checkbox status
+                            const instCb = card.querySelector(".instructor-checkbox");
+                            if (instCb) {
+                                instCb.checked = false;
+                                instCb.indeterminate = false;
+                            }
+                        }
+                    });
+
+                    // Reset Select All Checkout bar checkbox
+                    const globalCheckbox = document.getElementById("select-all-checkout");
+                    if (globalCheckbox) {
+                        globalCheckbox.checked = false;
+                        globalCheckbox.indeterminate = false;
                     }
-                    // Reset instructor checkbox status
-                    const instCb = card.querySelector(".instructor-checkbox");
-                    if (instCb) {
-                        instCb.checked = false;
-                        instCb.indeterminate = false;
-                    }
+
+                    updateInvoice();
+                } else {
+                    alert(data.message || "Thanh toán thất bại.");
                 }
+            })
+            .catch(err => {
+                checkoutBtn.disabled = false;
+                console.error("Checkout error:", err);
+                alert("Có lỗi xảy ra khi xử lý thanh toán.");
             });
-
-            // Reset Select All Checkout bar checkbox
-            const globalCheckbox = document.getElementById("select-all-checkout");
-            if (globalCheckbox) {
-                globalCheckbox.checked = false;
-                globalCheckbox.indeterminate = false;
-            }
-
-            updateInvoice();
         });
     }
 }

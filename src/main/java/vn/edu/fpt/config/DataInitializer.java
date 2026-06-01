@@ -9,7 +9,11 @@ import vn.edu.fpt.entity.*;
 import vn.edu.fpt.repository.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 @Component
 @RequiredArgsConstructor // tự động sinh constructor với tất cả các field final nên không cần gán @Autowired cho từng repository
@@ -27,6 +31,16 @@ public class DataInitializer implements CommandLineRunner {
     private final QuizAnswerRepository quizAnswerRepository;
     private final LessonMaterialRepository lessonMaterialRepository;
     private final EnrollmentRepository enrollmentRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final CouponRepository couponRepository;
+    private final CouponUsageRepository couponUsageRepository;
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final PaymentRepository paymentRepository;
+    private final FeedbackRepository feedbackRepository;
+    private final LessonProgressRepository lessonProgressRepository;
+    private final QuizAttemptRepository quizAttemptRepository;
 
     @Override
     public void run(String @NonNull... args) {
@@ -76,15 +90,40 @@ public class DataInitializer implements CommandLineRunner {
                     .build());
         }
 
-        Category category = categoryRepository.save(Category.builder()
-                .name("Lập trình")
-                .description("Các khóa học lập trình")
+        Category frontEndCategory = categoryRepository.save(Category.builder()
+                .name("Lập trình Front-End")
+                .description("Khóa học về Lập trình Front-End")
                 .status("active")
                 .build());
 
+        Category backEndCategory = categoryRepository.save(Category.builder()
+                .name("Lập trình Back-End")
+                .description("Khóa học về Lập trình Back-End")
+                .status("active")
+                .build());
+
+        Category iosCategory = categoryRepository.save(Category.builder()
+                .name("Lập trình iOS")
+                .description("Khóa học lập trình ứng dụng iOS")
+                .status("active")
+                .build());
+
+        Category htmlCat = categoryRepository.save(Category.builder().name("HTML").description("Khóa học thiết kế giao diện với HTML").parent(frontEndCategory).status("active").build());
+        Category cssCat = categoryRepository.save(Category.builder().name("CSS").description("Khóa học định dạng giao diện với CSS").parent(frontEndCategory).status("active").build());
+        Category reactCat = categoryRepository.save(Category.builder().name("React").description("Khóa học thư viện ReactJS").parent(frontEndCategory).status("active").build());
+
+        Category nodeCat = categoryRepository.save(Category.builder().name("Node.js").description("Khóa học lập trình Back-End với Node.js").parent(backEndCategory).status("active").build());
+        Category pythonCat = categoryRepository.save(Category.builder().name("Python").description("Khóa học ngôn ngữ lập trình Python").parent(backEndCategory).status("active").build());
+        Category javaCat = categoryRepository.save(Category.builder().name("Java").description("Khóa học ngôn ngữ lập trình Java").parent(backEndCategory).status("active").build());
+        Category phpCat = categoryRepository.save(Category.builder().name("PHP").description("Khóa học ngôn ngữ lập trình PHP").parent(backEndCategory).status("active").build());
+        Category netCat = categoryRepository.save(Category.builder().name(".NET").description("Khóa học lập trình với .NET Framework / .NET Core").parent(backEndCategory).status("active").build());
+
+        Category swiftCat = categoryRepository.save(Category.builder().name("Swift").description("Khóa học ngôn ngữ lập trình Swift").parent(iosCategory).status("active").build());
+        Category swiftuiCat = categoryRepository.save(Category.builder().name("SwiftUI").description("Khóa học UI Framework SwiftUI cho iOS").parent(iosCategory).status("active").build());
+
         Course course = courseRepository.save(Course.builder()
                 .instructor(instructor)
-                .category(category)
+                .category(htmlCat)
                 .title("Lập Trình C Cơ Bản - 28Tech")
                 .description("Khóa học lập trình C cơ bản")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
@@ -96,33 +135,33 @@ public class DataInitializer implements CommandLineRunner {
         // Create 3 more courses similar to the first one
         Course course2 = courseRepository.save(Course.builder()
                 .instructor(instructor)
-                .category(category)
+                .category(cssCat)
                 .title("Lập Trình C Nâng Cao - 28Tech")
                 .description("Khóa học nâng cao lập trình C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
-                .price(BigDecimal.ZERO)
+                .price(new BigDecimal("350000.00"))
                 .level("intermediate")
                 .status("published")
                 .build());
 
         Course course3 = courseRepository.save(Course.builder()
                 .instructor(instructor)
-                .category(category)
+                .category(reactCat)
                 .title("Lập Trình C Thực Hành - 28Tech")
                 .description("Bài tập thực hành và project nhỏ với C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
-                .price(BigDecimal.ZERO)
+                .price(new BigDecimal("600000.00"))
                 .level("beginner")
                 .status("published")
                 .build());
 
         Course course4 = courseRepository.save(Course.builder()
                 .instructor(instructor)
-                .category(category)
+                .category(nodeCat)
                 .title("Thuật Toán C với 28Tech")
                 .description("Giải thuật và cấu trúc dữ liệu cơ bản bằng C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
-                .price(BigDecimal.ZERO)
+                .price(new BigDecimal("850000.00"))
                 .level("advanced")
                 .status("published")
                 .build());
@@ -273,19 +312,26 @@ public class DataInitializer implements CommandLineRunner {
 
         // Seed 10 more courses (course 5 -> course 14)
         String[][] extraCourseConfigs = {
-                {"Lập Trình C Chuyên Đề 5 - 28Tech", "Khóa học chuyên đề C số 5", "beginner"},
-                {"Lập Trình C Chuyên Đề 6 - 28Tech", "Khóa học chuyên đề C số 6", "intermediate"},
-                {"Lập Trình C Chuyên Đề 7 - 28Tech", "Khóa học chuyên đề C số 7", "advanced"},
-                {"Lập Trình C Chuyên Đề 8 - 28Tech", "Khóa học chuyên đề C số 8", "beginner"},
-                {"Lập Trình C Chuyên Đề 9 - 28Tech", "Khóa học chuyên đề C số 9", "intermediate"},
-                {"Lập Trình C Chuyên Đề 10 - 28Tech", "Khóa học chuyên đề C số 10", "advanced"},
-                {"Lập Trình C Chuyên Đề 11 - 28Tech", "Khóa học chuyên đề C số 11", "beginner"},
-                {"Lập Trình C Chuyên Đề 12 - 28Tech", "Khóa học chuyên đề C số 12", "intermediate"},
-                {"Lập Trình C Chuyên Đề 13 - 28Tech", "Khóa học chuyên đề C số 13", "advanced"},
-                {"Lập Trình C Chuyên Đề 14 - 28Tech", "Khóa học chuyên đề C số 14", "intermediate"}
+                {"Lập Trình C Chuyên Đề 5 - 28Tech", "Khóa học chuyên đề C số 5", "beginner", "1500000.00"},
+                {"Lập Trình C Chuyên Đề 6 - 28Tech", "Khóa học chuyên đề C số 6", "intermediate", "0.00"},
+                {"Lập Trình C Chuyên Đề 7 - 28Tech", "Khóa học chuyên đề C số 7", "advanced", "250000.00"},
+                {"Lập Trình C Chuyên Đề 8 - 28Tech", "Khóa học chuyên đề C số 8", "beginner", "550000.00"},
+                {"Lập Trình C Chuyên Đề 9 - 28Tech", "Khóa học chuyên đề C số 9", "intermediate", "900000.00"},
+                {"Lập Trình C Chuyên Đề 10 - 28Tech", "Khóa học chuyên đề C số 10", "advanced", "1100000.00"},
+                {"Lập Trình C Chuyên Đề 11 - 28Tech", "Khóa học chuyên đề C số 11", "beginner", "0.00"},
+                {"Lập Trình C Chuyên Đề 12 - 28Tech", "Khóa học chuyên đề C số 12", "intermediate", "450000.00"},
+                {"Lập Trình C Chuyên Đề 13 - 28Tech", "Khóa học chuyên đề C số 13", "advanced", "650000.00"},
+                {"Lập Trình C Chuyên Đề 14 - 28Tech", "Khóa học chuyên đề C số 14", "intermediate", "950000.00"}
         };
-        for (String[] cfg : extraCourseConfigs) {
-            createAndSeedCourse(instructor, category, cfg[0], cfg[1], cfg[2]);
+        
+        List<Category> childCategories = List.of(
+            htmlCat, cssCat, reactCat, nodeCat, pythonCat, javaCat, phpCat, netCat, swiftCat, swiftuiCat
+        );
+
+        for (int i = 0; i < extraCourseConfigs.length; i++) {
+            String[] cfg = extraCourseConfigs[i];
+            Category targetCat = childCategories.get((i + 4) % childCategories.size());
+            createAndSeedCourse(instructor, targetCat, cfg[0], cfg[1], cfg[2], new BigDecimal(cfg[3]));
         }
 
         // Seed test learner user 'Do Thanh' and enroll to course id=1
@@ -316,6 +362,366 @@ public class DataInitializer implements CommandLineRunner {
             }
         });
 
+        // Seed 10 diverse learner profiles with full mock data
+        seedLearnersData(learnerRole, instructor);
+    }
+
+    private void seedLearnersData(Role learnerRole, User instructor) {
+        // 1. Seed Coupons
+        Coupon welcome10 = couponRepository.findByCode("WELCOME10").orElse(null);
+        if (welcome10 == null) {
+            welcome10 = couponRepository.save(Coupon.builder()
+                    .instructor(instructor)
+                    .code("WELCOME10")
+                    .discountType("percent")
+                    .discountValue(new BigDecimal("10.00"))
+                    .usageLimit(100)
+                    .usedCount(0)
+                    .status("active")
+                    .expiredAt(LocalDateTime.now().plusMonths(6))
+                    .build());
+        }
+
+        Coupon devspecial = couponRepository.findByCode("DEVSPECIAL").orElse(null);
+        if (devspecial == null) {
+            devspecial = couponRepository.save(Coupon.builder()
+                    .instructor(instructor)
+                    .code("DEVSPECIAL")
+                    .discountType("fixed")
+                    .discountValue(new BigDecimal("100000.00"))
+                    .usageLimit(50)
+                    .usedCount(0)
+                    .status("active")
+                    .expiredAt(LocalDateTime.now().plusMonths(3))
+                    .build());
+        }
+
+        // 2. Fetch Courses
+        Course c1 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Lập Trình C Cơ Bản")).findFirst().orElse(null);
+        Course c2 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Lập Trình C Nâng Cao")).findFirst().orElse(null);
+        Course c3 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Lập Trình C Thực Hành")).findFirst().orElse(null);
+        Course c4 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Thuật Toán C")).findFirst().orElse(null);
+        Course c5 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 5")).findFirst().orElse(null);
+        Course c6 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 6")).findFirst().orElse(null);
+        Course c7 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 7")).findFirst().orElse(null);
+        Course c8 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 8")).findFirst().orElse(null);
+        Course c9 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 9")).findFirst().orElse(null);
+        Course c10 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 10")).findFirst().orElse(null);
+        Course c11 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 11")).findFirst().orElse(null);
+        Course c12 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 12")).findFirst().orElse(null);
+        Course c13 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 13")).findFirst().orElse(null);
+        Course c14 = courseRepository.findAll().stream().filter(c -> c.getTitle().contains("Chuyên Đề 14")).findFirst().orElse(null);
+
+        // 3. Define learners
+        String[][] learnersInfo = {
+                {"Nguyễn Văn", "An", "an.nguyen@elearning.com", "0981112222"},
+                {"Trần Thị", "Bình", "binh.tran@elearning.com", "0982223333"},
+                {"Phạm Văn", "Cường", "cuong.pham@elearning.com", "0983334444"},
+                {"Hoàng Thị", "Dung", "dung.hoang@elearning.com", "0984445555"},
+                {"Đỗ Văn", "Em", "em.do@elearning.com", "0985556666"},
+                {"Lê Thu", "Giang", "giang.le@elearning.com", "0986667777"},
+                {"Vũ Thanh", "Hải", "hai.vu@elearning.com", "0987778888"},
+                {"Đỗ Khánh", "Huy", "huy.do@elearning.com", "0988889999"},
+                {"Bùi Anh", "Khoa", "khoa.bui@elearning.com", "0989990000"},
+                {"Đặng Quang", "Long", "long.dang@elearning.com", "0980001111"}
+        };
+
+        User[] users = new User[10];
+        for (int i = 0; i < 10; i++) {
+            String[] info = learnersInfo[i];
+            User u = userRepository.findByEmail(info[2]).orElse(null);
+            if (u == null) {
+                u = userRepository.save(User.builder()
+                        .role(learnerRole)
+                        .firstName(info[0])
+                        .lastName(info[1])
+                        .email(info[2])
+                        .phone(info[3])
+                        .passwordHash("123456")
+                        .status("active")
+                        .build());
+            }
+            users[i] = u;
+        }
+
+        // 4. Create carts & populate items
+        for (int i = 0; i < 10; i++) {
+            User u = users[i];
+            Cart cart = cartRepository.findByUser(u).orElse(null);
+            if (cart == null) {
+                cart = cartRepository.save(Cart.builder().user(u).build());
+            }
+            // Add items to cart based on the matrix
+            final Cart finalCart = cart;
+            if (i == 1 && cartItemRepository.findAll().stream().noneMatch(item -> item.getCart().getId().equals(finalCart.getId()))) { // Binh: C3
+                cartItemRepository.save(CartItem.builder().cart(cart).course(c3).build());
+            } else if (i == 3 && cartItemRepository.findAll().stream().noneMatch(item -> item.getCart().getId().equals(finalCart.getId()))) { // Dung: C2
+                cartItemRepository.save(CartItem.builder().cart(cart).course(c2).build());
+            } else if (i == 5 && cartItemRepository.findAll().stream().noneMatch(item -> item.getCart().getId().equals(finalCart.getId()))) { // Giang: C1
+                cartItemRepository.save(CartItem.builder().cart(cart).course(c1).build());
+            } else if (i == 7 && cartItemRepository.findAll().stream().noneMatch(item -> item.getCart().getId().equals(finalCart.getId()))) { // Huy: C1, C4
+                cartItemRepository.save(CartItem.builder().cart(cart).course(c1).build());
+                cartItemRepository.save(CartItem.builder().cart(cart).course(c4).build());
+            }
+        }
+
+        // 5. Create Orders, OrderItems, Payments, CouponUsages
+        // == Learner 0: An (Paid Order for C1 & C2)
+        createMockOrder(users[0], List.of(c1, c2), null, BigDecimal.ZERO, "paid", "MOMO", "success");
+
+        // == Learner 1: Binh (Paid Order for C1)
+        createMockOrder(users[1], List.of(c1), null, BigDecimal.ZERO, "paid", "VNPAY", "success");
+
+        // == Learner 2: Cuong (Paid Order for C2 with WELCOME10 coupon)
+        createMockOrder(users[2], List.of(c2), welcome10, new BigDecimal("50000.00"), "paid", "CARD", "success");
+
+        // == Learner 3: Dung (Paid Order for C3)
+        createMockOrder(users[3], List.of(c3), null, BigDecimal.ZERO, "paid", "MOMO", "success");
+
+        // == Learner 4: Em (Paid Order for C1 & C3)
+        createMockOrder(users[4], List.of(c1, c3), null, BigDecimal.ZERO, "paid", "VNPAY", "success");
+
+        // == Learner 5: Giang (Pending Order for C2)
+        createMockOrder(users[5], List.of(c2), null, BigDecimal.ZERO, "pending", "BANK_TRANSFER", "pending");
+
+        // == Learner 6: Hai (Paid Order for C4 with DEVSPECIAL coupon)
+        createMockOrder(users[6], List.of(c4), devspecial, new BigDecimal("100000.00"), "paid", "BANK_TRANSFER", "success");
+
+        // == Learner 8: Khoa (Paid Order for C5 with WELCOME10 coupon)
+        createMockOrder(users[8], List.of(c5), welcome10, new BigDecimal("0.00"), "paid", "MOMO", "success"); // C5 is 0 VND
+
+        // == Learner 9: Long (Paid Order for C1 & C5)
+        createMockOrder(users[9], List.of(c1, c5), null, BigDecimal.ZERO, "paid", "VNPAY", "success");
+
+
+        // 6. Create Enrollments, Lesson Progress, Quiz Attempts
+        // == An: C1 100% (4 lessons), C2 50% (2/4 sections or similar, say 1 lesson of section 1)
+        seedEnrollmentAndProgress(users[0], c1, 100, 4);
+        seedEnrollmentAndProgress(users[0], c2, 50, 1);
+        seedQuizAttempts(users[0], c1, 100, true);
+
+        // == Binh: C1 50% (2 lessons)
+        seedEnrollmentAndProgress(users[1], c1, 50, 2);
+        seedQuizAttempts(users[1], c1, 75, true);
+
+        // == Cuong: C2 0% (0 lessons)
+        seedEnrollmentAndProgress(users[2], c2, 0, 0);
+
+        // == Dung: C3 100% (all lessons in C3, which has 3 lessons in section 1)
+        seedEnrollmentAndProgress(users[3], c3, 100, 3);
+        seedQuizAttempts(users[3], c3, 100, true);
+
+        // == Em: C1 75% (3 lessons), C3 50% (1 lesson)
+        seedEnrollmentAndProgress(users[4], c1, 75, 3);
+        seedEnrollmentAndProgress(users[4], c3, 50, 1);
+        // Em failed once then passed C1 quizzes
+        seedQuizAttempts(users[4], c1, 50, false);
+        seedQuizAttempts(users[4], c1, 80, true);
+
+        // == Hai: C4 25% (1 lesson)
+        seedEnrollmentAndProgress(users[6], c4, 25, 1);
+        seedQuizAttempts(users[6], c4, 60, false); // Failed quiz
+
+        // == Khoa: C5 100% (all lessons in C5 section 1)
+        seedEnrollmentAndProgress(users[8], c5, 100, 3);
+        seedQuizAttempts(users[8], c5, 90, true);
+
+        // == Long: C1 100% (4 lessons), C5 100%
+        seedEnrollmentAndProgress(users[9], c1, 100, 4);
+        seedEnrollmentAndProgress(users[9], c5, 100, 3);
+        seedQuizAttempts(users[9], c1, 100, true);
+        seedQuizAttempts(users[9], c5, 100, true);
+
+
+        // 7. Feedbacks (distributing ratings to produce fractional averages like 4.7, 4.3, 3.7, 2.7, 3.3)
+        // An -> C1: 5 stars, Binh -> C1: 4 stars, Long -> C1: 1 star -> avg = 3.3 stars
+        seedFeedback(users[0], c1, 5, "Khóa học C cơ bản vô cùng chất lượng, giảng viên giải thích cực kỳ tỉ mỉ và dễ nhớ!");
+        seedFeedback(users[1], c1, 4, "Bài giảng chuẩn bị rất công phu, giao diện học tập trực quan. Tuy nhiên, một số bài tập tự luyện hơi khó.");
+        seedFeedback(users[9], c1, 1, "Chất lượng âm thanh video bài 2 và bài 3 mờ nhạt và rất khó nghe, mong admin sớm cải thiện.");
+
+        // Cuong -> C2: 5 stars, An -> C2: 5 stars, Binh -> C2: 4 stars -> avg = 4.7 stars
+        seedFeedback(users[2], c2, 5, "Tài liệu PDF đi kèm rất xịn, bài tập trắc nghiệm có giải thích chi tiết đáp án.");
+        seedFeedback(users[0], c2, 5, "Khóa học nâng cao siêu hay, kiến thức sâu sắc.");
+        seedFeedback(users[1], c2, 4, "Khá tốt nhưng cần thêm bài tập thực hành.");
+
+        // Dung -> C3: 5 stars, Binh -> C3: 4 stars, Cuong -> C3: 4 stars -> avg = 4.3 stars
+        seedFeedback(users[3], c3, 5, "Lập trình C thực hành rất thực tế, nhiều bài tập hay.");
+        seedFeedback(users[1], c3, 4, "Bài tập đa dạng, rất bám sát thực tế đi làm.");
+        seedFeedback(users[2], c3, 4, "Giao diện bài thực hành chạy mượt mà.");
+
+        // Hai -> C4: 4 stars, Cuong -> C4: 3 stars, An -> C4: 3 stars -> avg = 3.3 stars
+        seedFeedback(users[6], c4, 4, "Nội dung cấu trúc dữ liệu và giải thuật chi tiết.");
+        seedFeedback(users[2], c4, 3, "Thuật toán C hơi phức tạp so với trình độ của tôi, bài giảng đi nhanh quá.");
+        seedFeedback(users[0], c4, 3, "Nội dung tạm ổn.");
+
+        // Khoa -> C5: 5 stars, Dung -> C5: 4 stars, An -> C5: 2 stars -> avg = 3.7 stars
+        seedFeedback(users[8], c5, 5, "Khóa học chuyên đề rất hữu ích, giúp tôi hiểu sâu về mảng và con trỏ!");
+        seedFeedback(users[3], c5, 4, "Học rất ổn.");
+        seedFeedback(users[0], c5, 2, "Hơi khó so với người mới bắt đầu.");
+
+        // Additional feedbacks to cover all stars and courses
+        if (c6 != null) {
+            seedFeedback(users[0], c6, 4, "Khá tốt!");
+            seedFeedback(users[1], c6, 4, "Bài giảng rõ ràng.");
+            seedFeedback(users[2], c6, 3, "Được."); // avg = 3.7 stars
+        }
+        if (c7 != null) seedFeedback(users[1], c7, 1, "Quá tệ!");
+        if (c8 != null) {
+            seedFeedback(users[2], c8, 3, "Bình thường.");
+            seedFeedback(users[3], c8, 3, "Hơi khó hiểu.");
+            seedFeedback(users[4], c8, 2, "Chưa thực sự chi tiết."); // avg = 2.7 stars
+        }
+        if (c9 != null) seedFeedback(users[3], c9, 4, "Rất hay.");
+        if (c10 != null) {
+            seedFeedback(users[4], c10, 5, "Tuyệt vời.");
+            seedFeedback(users[5], c10, 5, "Khá hay.");
+            seedFeedback(users[6], c10, 4, "Nội dung phong phú."); // avg = 4.7 stars
+        }
+        if (c11 != null) seedFeedback(users[5], c11, 2, "Hơi sơ sài.");
+        if (c12 != null) {
+            seedFeedback(users[6], c12, 4, "Được.");
+            seedFeedback(users[7], c12, 4, "Bổ ích.");
+            seedFeedback(users[8], c12, 3, "Tạm được."); // avg = 3.7 stars
+        }
+        if (c13 != null) seedFeedback(users[7], c13, 4, "Tốt.");
+        if (c14 != null) {
+            seedFeedback(users[8], c14, 5, "Cực tốt.");
+            seedFeedback(users[9], c14, 4, "Chất lượng.");
+            seedFeedback(users[0], c14, 4, "Học xong làm được ngay."); // avg = 4.3 stars
+        }
+    }
+
+    private void createMockOrder(User user, List<Course> courses, Coupon coupon, BigDecimal discount, String status, String method, String paymentStatus) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Course c : courses) {
+            total = total.add(c.getPrice());
+        }
+        total = total.subtract(discount);
+        if (total.compareTo(BigDecimal.ZERO) < 0) {
+            total = BigDecimal.ZERO;
+        }
+
+        // Check if order already exists for this user to avoid duplicates
+        final String finalStatus = status;
+        boolean exists = orderRepository.findAll().stream()
+                .anyMatch(o -> o.getUser().getId().equals(user.getId()) && o.getStatus().equals(finalStatus));
+        if (exists) return;
+
+        Order order = orderRepository.save(Order.builder()
+                .user(user)
+                .totalAmount(total)
+                .discountAmount(discount)
+                .status(status)
+                .paymentMethod(method)
+                .build());
+
+        for (Course c : courses) {
+            orderItemRepository.save(OrderItem.builder()
+                    .order(order)
+                    .course(c)
+                    .coupon(coupon)
+                    .priceSnapshot(c.getPrice())
+                    .discountAmount(coupon != null ? discount : BigDecimal.ZERO)
+                    .finalPrice(c.getPrice().subtract(coupon != null ? discount : BigDecimal.ZERO))
+                    .courseTitleSnapshot(c.getTitle())
+                    .build());
+        }
+
+        if ("success".equals(paymentStatus)) {
+            paymentRepository.save(Payment.builder()
+                    .order(order)
+                    .transactionCode("TX_" + user.getLastName().toUpperCase() + "_" + (System.currentTimeMillis() % 10000))
+                    .gateway(method)
+                    .gatewayTxId("GATEWAY_" + (System.currentTimeMillis() % 10000))
+                    .amount(total)
+                    .status("success")
+                    .paidAt(LocalDateTime.now())
+                    .build());
+
+            if (coupon != null) {
+                couponUsageRepository.save(CouponUsage.builder()
+                        .coupon(coupon)
+                        .user(user)
+                        .order(order)
+                        .discountAmount(discount)
+                        .usedAt(LocalDateTime.now())
+                        .build());
+            }
+        }
+    }
+
+    private void seedEnrollmentAndProgress(User user, Course course, int progress, int completedLessonsCount) {
+        if (course == null) return;
+        Enrollment enrollment = enrollmentRepository.findAll().stream()
+                .filter(e -> e.getUser().getId().equals(user.getId()) && e.getCourse().getId().equals(course.getId()))
+                .findFirst().orElse(null);
+
+        if (enrollment == null) {
+            enrollment = enrollmentRepository.save(Enrollment.builder()
+                    .user(user)
+                    .course(course)
+                    .progressPercent(new BigDecimal(progress))
+                    .completedAt(progress == 100 ? LocalDateTime.now() : null)
+                    .build());
+        }
+
+        // Get lessons of this course
+        final Enrollment finalEnrollment = enrollment;
+        List<Lesson> lessons = lessonRepository.findAll().stream()
+                .filter(l -> l.getCourseSection().getCourse().getId().equals(course.getId()))
+                .toList();
+
+        for (int i = 0; i < Math.min(completedLessonsCount, lessons.size()); i++) {
+            Lesson lesson = lessons.get(i);
+            boolean exists = lessonProgressRepository.findAll().stream()
+                    .anyMatch(lp -> lp.getEnrollment().getId().equals(finalEnrollment.getId()) && lp.getLesson().getId().equals(lesson.getId()));
+            if (!exists) {
+                lessonProgressRepository.save(LessonProgress.builder()
+                        .enrollment(finalEnrollment)
+                        .lesson(lesson)
+                        .completed(true)
+                        .lastAccessed(LocalDateTime.now())
+                        .build());
+            }
+        }
+    }
+
+    private void seedQuizAttempts(User user, Course course, int score, boolean passed) {
+        if (course == null) return;
+        List<Lesson> lessons = lessonRepository.findAll().stream()
+                .filter(l -> l.getCourseSection().getCourse().getId().equals(course.getId()))
+                .toList();
+
+        for (Lesson lesson : lessons) {
+            Quiz quiz = quizRepository.findAll().stream()
+                    .filter(q -> q.getLesson().getId().equals(lesson.getId()))
+                    .findFirst().orElse(null);
+            if (quiz != null) {
+                quizAttemptRepository.save(QuizAttempt.builder()
+                        .user(user)
+                        .quiz(quiz)
+                        .score(new BigDecimal(score))
+                        .passed(passed)
+                        .startedAt(LocalDateTime.now().minusMinutes(10))
+                        .submittedAt(LocalDateTime.now())
+                        .build());
+            }
+        }
+    }
+
+    private void seedFeedback(User user, Course course, int rating, String comment) {
+        if (course == null) return;
+        boolean exists = feedbackRepository.findAll().stream()
+                .anyMatch(f -> f.getUser().getId().equals(user.getId()) && f.getCourse().getId().equals(course.getId()));
+        if (!exists) {
+            feedbackRepository.save(Feedback.builder()
+                    .user(user)
+                    .course(course)
+                    .rating(rating)
+                    .comment(comment)
+                    .status("visible")
+                    .build());
+        }
     }
 
 
@@ -510,14 +916,14 @@ public class DataInitializer implements CommandLineRunner {
         seedLessonMaterials(instructor, course, lLast);
     }
 
-    private void createAndSeedCourse(User instructor, Category category, String title, String description, String level) {
+    private void createAndSeedCourse(User instructor, Category category, String title, String description, String level, BigDecimal price) {
         Course newCourse = courseRepository.save(Course.builder()
                 .instructor(instructor)
                 .category(category)
                 .title(title)
                 .description(description)
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
-                .price(BigDecimal.ZERO)
+                .price(price)
                 .level(level)
                 .status("published")
                 .build());

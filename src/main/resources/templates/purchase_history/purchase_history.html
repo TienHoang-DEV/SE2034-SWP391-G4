@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -61,10 +61,10 @@
             <!-- User Utilities -->
             <div class="header-utilities d-flex align-items-center gap-3">
                 <!-- Cart Icon -->
-                <a href="../cart/cart.html" class="btn btn-link nav-icon-btn text-muted p-2 rounded-circle position-relative" aria-label="Giỏ hàng">
+                <a th:href="@{/cart}" class="btn btn-link nav-icon-btn text-muted p-2 rounded-circle position-relative" aria-label="Giỏ hàng">
                     <i data-lucide="shopping-cart" style="width: 20px; height: 20px;"></i>
-                    <span class="position-absolute top-1 translate-middle badge rounded-circle bg-danger p-1 cart-count-badge" style="left: 75%; font-size: 10px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #fff;">
-                        2
+                    <span class="position-absolute top-1 translate-middle badge rounded-circle bg-danger p-1 cart-count-badge" style="left: 75%; font-size: 10px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #fff;" th:text="${cartSize ?: 0}">
+                        0
                     </span>
                 </a>
 
@@ -76,14 +76,18 @@
                 <!-- User Profile Dropdown -->
                 <div class="dropdown">
                     <button class="btn p-0 border-0 dropdown-toggle no-caret" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img th:src="@{/images/student2.png}" alt="User Avatar" class="user-avatar rounded-circle border border-primary" style="width: 36px; height: 36px; object-fit: cover;">
+                        <img th:src="${session.user != null && session.user.email == '28tech@gmail.com' ? '/images/avatar.png' : '/images/student2.png'}" alt="User Avatar" class="user-avatar rounded-circle border border-primary" style="width: 36px; height: 36px; object-fit: cover;">
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2 p-2" aria-labelledby="profileDropdown" style="width: 220px; border-radius: var(--radius-lg);">
-                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../student_profile/student_profile.html"><i data-lucide="user" style="width:16px;"></i> Thông tin của tôi</a></li>
-                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../my_learning/my_learning.html"><i data-lucide="graduation-cap" style="width:16px;"></i> Việc học của tôi</a></li>
-                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../recommendations/recommendations.html"><i data-lucide="sparkles" style="width:16px;"></i> Khóa học đề xuất</a></li>
-                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted active bg-primary text-white" href="../purchase_history/purchase_history.html"><i data-lucide="history" style="width:16px;"></i> Lịch sử mua hàng</a></li>
-                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" href="../courses/courses.html"><i data-lucide="search" style="width:16px;"></i> Tìm kiếm khóa học</a></li>
+                        <li class="px-3 py-2 border-bottom mb-1" th:if="${session.user != null}">
+                            <p class="user-name fw-semibold m-0 fs-7 text-dark" th:text="${session.user.lastName + ' ' + session.user.firstName}">Tên Học Viên</p>
+                            <p class="user-email text-muted m-0 fs-8 text-truncate" th:text="${session.user.email}">email@example.com</p>
+                        </li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" th:href="@{/student/profile}"><i data-lucide="user" style="width:16px;"></i> Thông tin của tôi</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" th:href="@{/student/my-learning}"><i data-lucide="graduation-cap" style="width:16px;"></i> Việc học của tôi</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" th:href="@{/student/recommendations}"><i data-lucide="sparkles" style="width:16px;"></i> Khóa học đề xuất</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted active bg-primary text-white" th:href="@{/student/purchase-history}"><i data-lucide="history" style="width:16px;"></i> Lịch sử mua hàng</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted" th:href="@{/courses}"><i data-lucide="search" style="width:16px;"></i> Tìm kiếm khóa học</a></li>
                         <li><hr class="dropdown-divider my-2"></li>
                         <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-danger fw-semibold" th:href="@{/}"><i data-lucide="log-out" style="width:16px;"></i> Đăng xuất</a></li>
                     </ul>
@@ -99,8 +103,8 @@
             <!-- Breadcrumbs -->
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="../home/home_logged_in.html" class="text-muted text-decoration-none fs-8 fw-medium">Trang Chủ</a></li>
-                    <li class="breadcrumb-item"><a href="../student_profile/student_profile.html" class="text-muted text-decoration-none fs-8 fw-medium">Hồ Sơ Cá Nhân</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/}" class="text-muted text-decoration-none fs-8 fw-medium">Trang Chủ</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/student/profile}" class="text-muted text-decoration-none fs-8 fw-medium">Hồ Sơ Cá Nhân</a></li>
                     <li class="breadcrumb-item active text-primary fs-8 fw-bold" aria-current="page">Lịch Sử Mua Hàng</li>
                 </ol>
             </nav>
@@ -108,34 +112,40 @@
             <h1 class="page-title fw-bold font-heading mb-4 fs-3">Lịch Sử Mua Hàng</h1>
 
             <!-- Orders Container -->
-            <div class="d-flex flex-column gap-4">
+            <div class="d-flex flex-column gap-4" th:if="${orders != null && !orders.isEmpty()}">
 
-                <!-- Order Card 1 -->
-                <div class="card border border-light-subtle rounded-3 bg-white shadow-sm overflow-hidden order-card">
+                <!-- Order Card dynamic -->
+                <div class="card border border-light-subtle rounded-3 bg-white shadow-sm overflow-hidden order-card" 
+                     th:each="order, orderStat : ${orders}">
                     <!-- Order Header -->
                     <div class="card-header bg-light bg-opacity-50 border-bottom border-light-subtle p-3">
                         <div class="row align-items-center g-3">
                             <div class="col-md-6 col-12 d-flex flex-wrap align-items-center gap-3">
                                 <div>
                                     <span class="d-block text-muted fs-8 fw-medium text-uppercase tracking-wider">Mã đơn hàng</span>
-                                    <span class="fw-bold text-dark fs-7">#LH83921</span>
+                                    <span class="fw-bold text-dark fs-7" th:text="'#LH' + ${order.id}">#LH83921</span>
                                 </div>
                                 <div class="border-start border-light-subtle ps-3 d-none d-sm-block">
                                     <span class="d-block text-muted fs-8 fw-medium text-uppercase tracking-wider">Ngày mua</span>
-                                    <span class="fw-semibold text-muted-dark fs-7">28/05/2026</span>
+                                    <span class="fw-semibold text-muted-dark fs-7" th:text="${order.createdAt != null ? #temporals.format(order.createdAt, 'dd/MM/yyyy') : ''}">28/05/2026</span>
                                 </div>
                                 <div class="border-start border-light-subtle ps-3 d-none d-sm-block">
                                     <span class="d-block text-muted fs-8 fw-medium text-uppercase tracking-wider">Thanh toán</span>
-                                    <span class="fw-semibold text-muted-dark fs-7">ATM / Internet Banking</span>
+                                    <span class="fw-semibold text-muted-dark fs-7" th:text="${order.paymentMethod != null ? order.paymentMethod : 'N/A'}">ATM / Internet Banking</span>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12 text-md-end d-flex align-items-center justify-content-between justify-content-md-end gap-3 flex-wrap">
-                                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill fs-8 fw-semibold d-inline-flex align-items-center gap-1">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill fs-8 fw-semibold d-inline-flex align-items-center gap-1"
+                                      th:if="${order.status == 'paid' || order.status == 'success'}">
                                     <i data-lucide="check-circle-2" style="width:14px; height:14px;"></i> Thành công
+                                </span>
+                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-1.5 rounded-pill fs-8 fw-semibold d-inline-flex align-items-center gap-1"
+                                      th:if="${order.status != 'paid' && order.status != 'success'}">
+                                    <i data-lucide="clock" style="width:14px; height:14px;"></i> <span th:text="${order.status == 'pending' ? 'Chờ duyệt' : order.status}">Đang xử lý</span>
                                 </span>
                                 <div class="text-md-end">
                                     <span class="d-none d-md-block text-muted fs-8 fw-medium text-uppercase tracking-wider">Tổng tiền</span>
-                                    <span class="fw-extrabold text-primary fs-5">478,400 VNĐ</span>
+                                    <span class="fw-extrabold text-primary fs-5" th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">478,400 VNĐ</span>
                                 </div>
                             </div>
                         </div>
@@ -146,9 +156,9 @@
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                             <span class="text-muted-dark fs-7 fw-medium">
                                 <i data-lucide="package" class="me-1 text-muted" style="width: 16px; height: 16px; vertical-align: text-bottom;"></i>
-                                Đơn hàng gồm 2 khóa học
+                                Đơn hàng gồm <span th:text="${order.items.size()}">2</span> khóa học
                             </span>
-                            <button class="btn btn-outline-primary btn-sm rounded-3 px-3 py-1.5 fw-semibold fs-8 d-inline-flex align-items-center gap-1 btn-toggle-order" data-bs-toggle="collapse" data-bs-target="#order-1-details" aria-expanded="true" aria-controls="order-1-details">
+                            <button class="btn btn-outline-primary btn-sm rounded-3 px-3 py-1.5 fw-semibold fs-8 d-inline-flex align-items-center gap-1 btn-toggle-order" data-bs-toggle="collapse" th:data-bs-target="'#order-' + ${order.id} + '-details'" aria-expanded="true" th:aria-controls="'order-' + ${order.id} + '-details'">
                                 <span>Ẩn chi tiết</span>
                                 <i data-lucide="chevron-up" class="toggle-icon" style="width: 14px; height: 14px;"></i>
                             </button>
@@ -156,39 +166,23 @@
                     </div>
 
                     <!-- Collapsible Order Items Details -->
-                    <div class="collapse show" id="order-1-details">
+                    <div class="collapse show" th:id="'order-' + ${order.id} + '-details'">
                         <div class="card-body p-0 bg-white">
                             <div class="list-group list-group-flush border-0">
                                 
-                                <!-- Course Item 1 -->
-                                <div class="list-group-item p-3 d-flex flex-sm-row flex-column gap-3 align-items-start border-light-subtle">
-                                    <img th:src="@{/images/acoustic_course.png}" alt="Acoustic course" class="rounded-3 flex-shrink-0 object-fit-cover align-self-center align-self-sm-start" style="width: 120px; height: 78px;">
+                                <!-- Course Item dynamic loop -->
+                                <div class="list-group-item p-3 d-flex flex-sm-row flex-column gap-3 align-items-start border-light-subtle" th:each="item : ${order.items}">
+                                    <img th:src="${item.course.thumbnailPath}" alt="course" class="rounded-3 flex-shrink-0 object-fit-cover align-self-center align-self-sm-start" style="width: 120px; height: 78px;">
                                     <div class="flex-grow-1">
-                                        <h4 class="fw-bold fs-7 mb-1 font-heading text-dark">Đệm hát Guitar những bài hát của Eric Clapton</h4>
-                                        <span class="text-muted fs-8 d-block mb-2">Giảng viên: NGUYỄN CÔNG PHƯƠNG</span>
-                                        <a href="../learning/learning.html" class="btn btn-primary btn-sm rounded-3 px-3 py-1.5 fw-bold fs-8 d-inline-flex align-items-center gap-1">
+                                        <h4 class="fw-bold fs-7 mb-1 font-heading text-dark" th:text="${item.courseTitleSnapshot != null ? item.courseTitleSnapshot : item.course.title}">Đệm hát Guitar những bài hát của Eric Clapton</h4>
+                                        <span class="text-muted fs-8 d-block mb-2" th:text="'Giảng viên: ' + ${item.course.instructor.lastName + ' ' + item.course.instructor.firstName}">Giảng viên: NGUYỄN CÔNG PHƯƠNG</span>
+                                        <a th:href="@{/course/{id}(id=${item.course.id})}" class="btn btn-primary btn-sm rounded-3 px-3 py-1.5 fw-bold fs-8 d-inline-flex align-items-center gap-1">
                                             <i data-lucide="play-circle" style="width: 14px; height: 14px;"></i> Vào học ngay
                                         </a>
                                     </div>
                                     <div class="text-sm-end align-self-center align-self-sm-start mt-2 mt-sm-0">
-                                        <span class="fw-bold text-dark fs-7">209,300 VNĐ</span>
-                                        <span class="d-block text-decoration-line-through text-muted fs-8 mt-0.5">299,000 VNĐ</span>
-                                    </div>
-                                </div>
-
-                                <!-- Course Item 2 -->
-                                <div class="list-group-item p-3 d-flex flex-sm-row flex-column gap-3 align-items-start border-0">
-                                    <img th:src="@{/images/course_thumbnail.png}" alt="Electric course" class="rounded-3 flex-shrink-0 object-fit-cover align-self-center align-self-sm-start" style="width: 120px; height: 78px;">
-                                    <div class="flex-grow-1">
-                                        <h4 class="fw-bold fs-7 mb-1 font-heading text-dark">Guitar điện cơ bản cùng Khoa (FPTU MUSIC)</h4>
-                                        <span class="text-muted fs-8 d-block mb-2">Giảng viên: ĐĂNG HIỂN KHOA</span>
-                                        <a href="../learning/learning.html" class="btn btn-primary btn-sm rounded-3 px-3 py-1.5 fw-bold fs-8 d-inline-flex align-items-center gap-1">
-                                            <i data-lucide="play-circle" style="width: 14px; height: 14px;"></i> Vào học ngay
-                                        </a>
-                                    </div>
-                                    <div class="text-sm-end align-self-center align-self-sm-start mt-2 mt-sm-0">
-                                        <span class="fw-bold text-dark fs-7">269,100 VNĐ</span>
-                                        <span class="d-block text-decoration-line-through text-muted fs-8 mt-0.5">299,000 VNĐ</span>
+                                        <span class="fw-bold text-dark fs-7" th:text="${#numbers.formatDecimal(item.finalPrice, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">209,300 VNĐ</span>
+                                        <span class="d-block text-decoration-line-through text-muted fs-8 mt-0.5" th:if="${item.priceSnapshot != null && item.priceSnapshot.compareTo(item.finalPrice) > 0}" th:text="${#numbers.formatDecimal(item.priceSnapshot, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">299,000 VNĐ</span>
                                     </div>
                                 </div>
 
@@ -197,77 +191,20 @@
                     </div>
                 </div>
 
-                <!-- Order Card 2 -->
-                <div class="card border border-light-subtle rounded-3 bg-white shadow-sm overflow-hidden order-card">
-                    <!-- Order Header -->
-                    <div class="card-header bg-light bg-opacity-50 border-bottom border-light-subtle p-3">
-                        <div class="row align-items-center g-3">
-                            <div class="col-md-6 col-12 d-flex flex-wrap align-items-center gap-3">
-                                <div>
-                                    <span class="d-block text-muted fs-8 fw-medium text-uppercase tracking-wider">Mã đơn hàng</span>
-                                    <span class="fw-bold text-dark fs-7">#LH82710</span>
-                                </div>
-                                <div class="border-start border-light-subtle ps-3 d-none d-sm-block">
-                                    <span class="d-block text-muted fs-8 fw-medium text-uppercase tracking-wider">Ngày mua</span>
-                                    <span class="fw-semibold text-muted-dark fs-7">15/04/2026</span>
-                                </div>
-                                <div class="border-start border-light-subtle ps-3 d-none d-sm-block">
-                                    <span class="d-block text-muted fs-8 fw-medium text-uppercase tracking-wider">Thanh toán</span>
-                                    <span class="fw-semibold text-muted-dark fs-7">Ví điện tử MoMo</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-12 text-md-end d-flex align-items-center justify-content-between justify-content-md-end gap-3 flex-wrap">
-                                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill fs-8 fw-semibold d-inline-flex align-items-center gap-1">
-                                    <i data-lucide="check-circle-2" style="width:14px; height:14px;"></i> Thành công
-                                </span>
-                                <div class="text-md-end">
-                                    <span class="d-none d-md-block text-muted fs-8 fw-medium text-uppercase tracking-wider">Tổng tiền</span>
-                                    <span class="fw-extrabold text-primary fs-5">199,000 VNĐ</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            </div>
 
-                    <!-- Card Body -->
-                    <div class="p-3 border-bottom border-light-subtle bg-white">
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                            <span class="text-muted-dark fs-7 fw-medium">
-                                <i data-lucide="package" class="me-1 text-muted" style="width: 16px; height: 16px; vertical-align: text-bottom;"></i>
-                                Đơn hàng gồm 1 khóa học
-                            </span>
-                            <button class="btn btn-outline-primary btn-sm rounded-3 px-3 py-1.5 fw-semibold fs-8 d-inline-flex align-items-center gap-1 btn-toggle-order" data-bs-toggle="collapse" data-bs-target="#order-2-details" aria-expanded="false" aria-controls="order-2-details">
-                                <span>Xem chi tiết</span>
-                                <i data-lucide="chevron-down" class="toggle-icon" style="width: 14px; height: 14px;"></i>
-                            </button>
-                        </div>
+            <!-- Empty State -->
+            <div class="card border border-light-subtle rounded-3 p-5 bg-white text-center shadow-sm" th:if="${orders == null || orders.isEmpty()}">
+                <div class="d-flex flex-column align-items-center justify-content-center py-4">
+                    <div class="empty-cart-icon-wrapper rounded-circle bg-light d-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                        <i data-lucide="history" class="text-muted" style="width: 36px; height: 36px;"></i>
                     </div>
-
-                    <!-- Collapsible Order Items Details -->
-                    <div class="collapse" id="order-2-details">
-                        <div class="card-body p-0 bg-white">
-                            <div class="list-group list-group-flush border-0">
-                                
-                                <!-- Course Item 1 -->
-                                <div class="list-group-item p-3 d-flex flex-sm-row flex-column gap-3 align-items-start border-0">
-                                    <img th:src="@{/images/guitar_bolero_classical.png}" alt="Bolero Classical course" class="rounded-3 flex-shrink-0 object-fit-cover align-self-center align-self-sm-start" style="width: 120px; height: 78px;">
-                                    <div class="flex-grow-1">
-                                        <h4 class="fw-bold fs-7 mb-1 font-heading text-dark">Tự học Guitar Bolero cổ điển</h4>
-                                        <span class="text-muted fs-8 d-block mb-2">Giảng viên: NGUYỄN CÔNG PHƯƠNG</span>
-                                        <a href="../learning/learning.html" class="btn btn-primary btn-sm rounded-3 px-3 py-1.5 fw-bold fs-8 d-inline-flex align-items-center gap-1">
-                                            <i data-lucide="play-circle" style="width: 14px; height: 14px;"></i> Vào học ngay
-                                        </a>
-                                    </div>
-                                    <div class="text-sm-end align-self-center align-self-sm-start mt-2 mt-sm-0">
-                                        <span class="fw-bold text-dark fs-7">199,000 VNĐ</span>
-                                        <span class="d-block text-decoration-line-through text-muted fs-8 mt-0.5">299,000 VNĐ</span>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
+                    <h3 class="fw-bold fs-5 font-heading text-dark mb-2">Bạn chưa mua khóa học nào!</h3>
+                    <p class="text-muted fs-7 mb-4 px-3" style="max-width: 440px;">Hãy tiếp tục chọn lựa các khóa học để phục vụ việc học tập của bạn.</p>
+                    <a th:href="@{/courses}" class="btn btn-primary rounded-3 px-4 py-2.5 fw-bold fs-7 shadow-primary d-inline-flex align-items-center gap-2">
+                        Tiếp tục mua sắm
+                    </a>
                 </div>
-
             </div>
 
         </div>

@@ -152,7 +152,8 @@ body {
     transform: scale(1.12);
 }
 
-.course-review-star i {
+.course-review-star i,
+.course-review-star svg {
     transition: var(--transition);
 }
 
@@ -160,7 +161,8 @@ body {
     color: var(--accent-yellow) !important;
 }
 
-.course-review-star.is-selected i {
+.course-review-star.is-selected i,
+.course-review-star.is-selected svg {
     fill: var(--accent-yellow) !important;
 }
 
