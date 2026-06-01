@@ -46,6 +46,7 @@ public class CourseController {
                         .orElseThrow(() -> new IllegalStateException("Không tìm thấy người dùng nào trong DB để giả lập.")));
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @GetMapping("/courses")
     public String showCourseList(
             @RequestParam(value = "search", required = false) String search,
@@ -62,13 +63,37 @@ public class CourseController {
         }
         
         List<Category> parentCategories = categoryRepository.findByParentIsNullAndStatus("active");
+        
+        // Khởi tạo các collection Lazy để Thymeleaf có thể sử dụng (vì OSIV có thể đang bị tắt)
+        for (Category parent : parentCategories) {
+            org.hibernate.Hibernate.initialize(parent.getChildren());
+            for (Category child : parent.getChildren()) {
+                org.hibernate.Hibernate.initialize(child.getCourses());
+            }
+        }
+        
+        for (Course course : courses) {
+            org.hibernate.Hibernate.initialize(course.getInstructor());
+            org.hibernate.Hibernate.initialize(course.getCategory());
+            org.hibernate.Hibernate.initialize(course.getFeedbacks());
+            org.hibernate.Hibernate.initialize(course.getSections());
+            if (course.getSections() != null) {
+                for (vn.edu.fpt.entity.CourseSection section : course.getSections()) {
+                    org.hibernate.Hibernate.initialize(section.getLessons());
+                }
+            }
+        }
+
         model.addAttribute("parentCategories", parentCategories);
         
         User user = getSessionUser();
         java.util.Set<Integer> enrolledCourseIds = new java.util.HashSet<>();
         if (user != null) {
             enrolledCourseIds = enrollmentRepository.findByUser(user).stream()
-                    .map(e -> e.getCourse().getId())
+                    .map(e -> {
+                        org.hibernate.Hibernate.initialize(e.getCourse());
+                        return e.getCourse().getId();
+                    })
                     .collect(java.util.stream.Collectors.toSet());
         }
         model.addAttribute("enrolledCourseIds", enrolledCourseIds);
@@ -87,16 +112,38 @@ public class CourseController {
         return "instructor_course/course_manager";
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @GetMapping("/course/detail")
     public String showCourseDetail(@RequestParam("id") Integer id, Model model) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException("Khóa học không tìm thấy"));
 
+        org.hibernate.Hibernate.initialize(course.getInstructor());
+        org.hibernate.Hibernate.initialize(course.getCategory());
+        org.hibernate.Hibernate.initialize(course.getFeedbacks());
+        if (course.getFeedbacks() != null) {
+            for (vn.edu.fpt.entity.Feedback fb : course.getFeedbacks()) {
+                org.hibernate.Hibernate.initialize(fb.getUser());
+            }
+        }
+        
+        org.hibernate.Hibernate.initialize(course.getEnrollments());
+        
+        org.hibernate.Hibernate.initialize(course.getSections());
+        if (course.getSections() != null) {
+            for (vn.edu.fpt.entity.CourseSection section : course.getSections()) {
+                org.hibernate.Hibernate.initialize(section.getLessons());
+            }
+        }
+
         User user = getSessionUser();
         java.util.Set<Integer> enrolledCourseIds = new java.util.HashSet<>();
         if (user != null) {
             enrolledCourseIds = enrollmentRepository.findByUser(user).stream()
-                    .map(e -> e.getCourse().getId())
+                    .map(e -> {
+                        org.hibernate.Hibernate.initialize(e.getCourse());
+                        return e.getCourse().getId();
+                    })
                     .collect(java.util.stream.Collectors.toSet());
         }
         model.addAttribute("enrolledCourseIds", enrolledCourseIds);

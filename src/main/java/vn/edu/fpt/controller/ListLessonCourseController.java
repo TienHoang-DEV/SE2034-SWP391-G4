@@ -30,10 +30,13 @@ public class ListLessonCourseController {
     @Autowired
     AzureBlobService azureBlobService;
 
+    @org.springframework.transaction.annotation.Transactional
     @GetMapping("/course/{courseId}")
     public String listSection(@PathVariable Integer courseId) {
         Course course = courseService.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException("Khóa học không tìm thấy"));
+
+        org.hibernate.Hibernate.initialize(course.getSections());
 
         if (course.getSections() == null || course.getSections().isEmpty()) {
             throw new CourseNotFoundException("Khóa học không có section nào");
@@ -41,6 +44,8 @@ public class ListLessonCourseController {
 
         Iterator<CourseSection> iterator = course.getSections().iterator();
         CourseSection courseSection = iterator.next();
+        
+        org.hibernate.Hibernate.initialize(courseSection.getLessons());
 
         if (courseSection.getLessons() == null || courseSection.getLessons().isEmpty()) {
             throw new CourseNotFoundException("Section không có bài học nào");
@@ -50,13 +55,21 @@ public class ListLessonCourseController {
         return String.format("redirect:/course/%d/section/%d/lesson/%d", courseId, courseSection.getId(), firstLessonId);
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @GetMapping("/course/{courseId}/section/{sectionId}/lesson/{lessonId}")
     public String viewLesson(Model model, @PathVariable Integer courseId, @PathVariable Integer sectionId, @PathVariable Integer lessonId) {
         Course course = courseService.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException("Khóa học không tìm thấy"));
+                
+        org.hibernate.Hibernate.initialize(course.getSections());
+        for(CourseSection sec : course.getSections()) {
+            org.hibernate.Hibernate.initialize(sec.getLessons());
+        }
 
         Lesson lesson = lessonService.findByIdWithMaterials(lessonId)
                 .orElseThrow(() -> new CourseNotFoundException("Bài học không tìm thấy"));
+                
+        org.hibernate.Hibernate.initialize(lesson.getMaterials());
 
         Set<CourseSection> sections = course.getSections();
         model.addAttribute("course", course);
@@ -66,7 +79,7 @@ public class ListLessonCourseController {
 
         String thumbnailUrl = course.getThumbnailUrl();
         if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
-            model.addAttribute("posterUrl", System.getProperty("AZURE_STORAGE_BASE_URL") + "/" + System.getProperty("AZURE_STORAGE_CONTAINER_COURSE_THUMBNAILS") + "/" + thumbnailUrl);
+            model.addAttribute("posterUrl", vn.edu.fpt.util.AppConstants.AZURE_STORAGE_BASE_URL + "/" + vn.edu.fpt.util.AppConstants.AZURE_STORAGE_CONTAINER_COURSE_THUMBNAILS + "/" + thumbnailUrl);
         }
 
         return "learning/learning";

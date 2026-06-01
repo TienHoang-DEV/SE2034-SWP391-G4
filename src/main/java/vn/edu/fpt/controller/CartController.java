@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
+@org.springframework.transaction.annotation.Transactional
 public class CartController {
 
     private final CartService cartService;
@@ -59,11 +60,33 @@ public class CartController {
                         .orElseThrow(() -> new IllegalStateException("Không tìm thấy người dùng nào trong DB để giả lập.")));
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @GetMapping("/cart")
     public String showCartPage(Model model) {
         User user = getMockUser();
         Cart cart = cartService.getOrCreateCartForUser(user);
         
+        // Khởi tạo các item trong giỏ hàng để tránh LazyInitializationException
+        org.hibernate.Hibernate.initialize(cart.getItems());
+        
+        // Khởi tạo course, instructor và các lazy collection cần thiết cho view
+        if (cart.getItems() != null) {
+            for (CartItem item : cart.getItems()) {
+                org.hibernate.Hibernate.initialize(item.getCourse());
+                if (item.getCourse() != null) {
+                    org.hibernate.Hibernate.initialize(item.getCourse().getInstructor());
+                    org.hibernate.Hibernate.initialize(item.getCourse().getCategory());
+                    org.hibernate.Hibernate.initialize(item.getCourse().getFeedbacks());
+                    org.hibernate.Hibernate.initialize(item.getCourse().getSections());
+                    if (item.getCourse().getSections() != null) {
+                        for (vn.edu.fpt.entity.CourseSection section : item.getCourse().getSections()) {
+                            org.hibernate.Hibernate.initialize(section.getLessons());
+                        }
+                    }
+                }
+            }
+        }
+
         // Nhóm các CartItem theo Giảng viên của khóa học
         Map<User, List<CartItem>> itemsByInstructor = cart.getItems().stream()
                 .collect(Collectors.groupingBy(item -> item.getCourse().getInstructor()));
