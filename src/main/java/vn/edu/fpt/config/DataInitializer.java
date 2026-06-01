@@ -80,7 +80,7 @@ public class DataInitializer implements CommandLineRunner {
         User instructor = userRepository.findByEmail("28tech@gmail.com").orElse(null);
         if (instructor == null) {
             instructor = userRepository.save(User.builder()
-                    .role(instructorRole)
+                    .roles(Set.of(instructorRole))
                     .firstName("28")
                     .lastName("Tech")
                     .email("28tech@gmail.com")
@@ -338,7 +338,7 @@ public class DataInitializer implements CommandLineRunner {
         User learner = userRepository.findByEmail("dothanh2572005@gmail.com").orElse(null);
         if (learner == null) {
             learner = userRepository.save(User.builder()
-                    .role(learnerRole)
+                    .roles(Set.of(learnerRole))
                     .firstName("Do")
                     .lastName("Thanh")
                     .email("dothanh2572005@gmail.com")

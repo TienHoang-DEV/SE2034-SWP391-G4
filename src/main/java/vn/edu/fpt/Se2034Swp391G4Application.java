@@ -5,10 +5,13 @@ import io.github.cdimascio.dotenv.DotenvEntry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import vn.edu.fpt.entity.User;
+import vn.edu.fpt.service.UserService;
 
 @SpringBootApplication
 @EnableJpaAuditing
 public class Se2034Swp391G4Application {
+    
 
     public static void main(String[] args) {
         // Load .env early so values are available as system properties and env for Spring
@@ -23,6 +26,8 @@ public class Se2034Swp391G4Application {
         System.out.println(System.getProperty("AZURE_STORAGE_CONNECTION_STRING"));
         System.out.println(System.getProperty("AZURE_STORAGE_CONNECTION_STRING"));
         System.out.println(System.getProperty("AZURE_STORAGE_BASE_URL"));
+
+        System.out.println();
     }
 
 }

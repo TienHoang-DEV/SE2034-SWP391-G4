@@ -52,6 +52,9 @@ public class Course extends BaseEntity {
     @Column(name = "approved_at")
     private LocalDateTime approvedAt;
 
+    @Column(name = "rejection_reason", columnDefinition = "NVARCHAR(1000)")
+    private String rejectionReason;
+
     @Builder.Default
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("position ASC")

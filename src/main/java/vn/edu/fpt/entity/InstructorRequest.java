@@ -22,8 +22,9 @@ public class InstructorRequest extends BaseEntity {
 
     @Column(name = "certificate_url", length = 500)
     private String certificateUrl;
+    @Column(name = "rejection_reason", length = 1000)
+    private String rejectionReason;
 
-    
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String description;
 

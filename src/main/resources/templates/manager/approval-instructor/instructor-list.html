@@ -1,5 +1,6 @@
-﻿<!DOCTYPE html>
-<html lang="vi">
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="../../../static/css/manager/instructor.css" th:href="@{/css/manager/instructor.css}">
 </head>
+
 <body>
     <div class="app-container">
         <aside class="sidebar">
@@ -19,27 +21,32 @@
             <nav class="sidebar-nav">
                 <ul>
                     <li>
-                        <a href="../dashboard/dashboard.html"><i class="ph ph-squares-four"></i><span>Tổng quan</span></a>
+                        <a href="../dashboard/dashboard.html"><i class="ph ph-squares-four"></i><span>Tổng
+                                quan</span></a>
                     </li>
                     <li class="active">
-                        <a href="instructor-list.html"><i class="ph ph-users"></i><span>Phê duyệt giảng viên</span></a>
+                        <a th:href="@{/manager/instructor/list}"><i class="ph ph-users"></i><span>Phê duyệt giảng
+                                viên</span></a>
                     </li>
                     <li>
-                        <a href="../approval-course/course-list.html"><i class="ph ph-book-open"></i><span>Phê duyệt khóa học</span></a>
+                        <a href="../approval-course/course-list.html"><i class="ph ph-book-open"></i><span>Phê duyệt
+                                khóa học</span></a>
                     </li>
                     <li>
-                        <a href="../revenue/revenue-list.html"><i class="ph ph-currency-circle-dollar"></i><span>Doanh thu</span></a>
+                        <a href="../revenue/revenue-list.html"><i class="ph ph-currency-circle-dollar"></i><span>Doanh
+                                thu</span></a>
                     </li>
                     <li>
-                        <a href="../feedback-report/feedback-report-list.html"><i class="ph ph-chat-circle-dots"></i><span>Phản hồi</span></a>
+                        <a href="../feedback-report/feedback-report-list.html"><i
+                                class="ph ph-chat-circle-dots"></i><span>Phản hồi</span></a>
                     </li>
                 </ul>
             </nav>
-            <div class="sidebar-footer" style="padding: 20px; border-top: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; margin-top: auto;">
-                <div class="avatar" style="width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-blue); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; flex-shrink: 0;">M</div>
-                <div class="profile-info" style="overflow: hidden;">
-                    <div style="font-weight: 600; font-size: 0.95rem; color: var(--text-main); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Quản trị viên</div>
-                    <div style="font-size: 0.8rem; color: var(--text-gray); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">admin@system.com</div>
+            <div class="sidebar-footer">
+                <div class="avatar footer-avatar">M</div>
+                <div class="profile-info">
+                    <div class="profile-name">Quản trị viên</div>
+                    <div class="profile-email">admin@system.com</div>
                 </div>
             </div>
         </aside>
@@ -47,37 +54,73 @@
         <div class="main-wrapper">
 
             <main class="content">
-                <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <form th:action="@{/manager/instructor/list}" method="get" class="page-header page-header-top">
                     <div>
                         <h1>Phê duyệt Giảng viên</h1>
                         <p>Quản lý các đơn đăng ký và giảng viên đang hoạt động.</p>
                     </div>
                     <div class="header-actions">
-                        <input type="text" placeholder="Tìm kiếm giảng viên..." class="search-input">
-                        <select class="search-input" style="cursor: pointer; color: var(--text-main); font-family: inherit;">
-                            <option value="">Tất cả trạng thái</option>
-                            <option value="PENDING">Đang chờ duyệt</option>
-                            <option value="APPROVED">Đã duyệt</option>
+                        <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm giảng viên..."
+                            class="search-input">
+                        <select name="status" class="search-input search-select" onchange="this.form.submit()">
+                            <option value="" th:selected="${status == null or status == ''}">Tất cả trạng thái</option>
+                            <option value="pending"
+                                th:selected="${status != null and #strings.toLowerCase(status) == 'pending'}">Đang chờ
+                                duyệt</option>
+                            <option value="approved"
+                                th:selected="${status != null and #strings.toLowerCase(status) == 'approved'}">Đã duyệt
+                            </option>
+                            <option value="rejected"
+                                th:selected="${status != null and #strings.toLowerCase(status) == 'rejected'}">Từ chối
+                            </option>
+                            <option value="blocked"
+                                th:selected="${status != null and #strings.toLowerCase(status) == 'blocked'}">Bị chặn
+                            </option>
                         </select>
+                        <button type="submit" style="display: none;">Search</button>
                     </div>
-                </div>
+                </form>
                 <div class="table-container">
                     <table class="data-table">
                         <thead>
-                            <tr><th>Giảng viên</th><th>Email</th><th>Ngày đăng ký</th><th>Trạng thái</th><th>Thao tác</th></tr>
+                            <tr>
+                                <th>Giảng viên</th>
+                                <th>Email</th>
+                                <th>Ngày đăng ký</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><div class="user-info"><img src="https://i.pravatar.cc/150?img=11" alt="Avatar" class="table-avatar"><span class="user-name">Nguyễn Văn A</span></div></td>
-                                <td>nguyenvana@example.com</td><td>5/24/2026</td>
-                                <td><span class="badge badge-warning">PENDING</span></td>
-                                <td><div class="actions"><i class="ph ph-eye"></i><a href="#" class="action-link">Xem Chi Tiết</a></div></td>
+                            <tr th:each="request : ${requestPage.content}">
+                                <td>
+                                    <div class="user-info">
+                                        <img th:src="${request.user.avatarUrl != null ? request.user.avatarUrl : '/images/default-avatar.png'}"
+                                            alt="Avatar" class="table-avatar">
+                                        <span class="user-name"
+                                            th:text="${request.user.firstName + ' ' + request.user.lastName}">Nguyễn Văn
+                                            A</span>
+                                    </div>
+                                </td>
+                                <td th:text="${request.user.email}">nguyenvana@example.com</td>
+                                <td
+                                    th:text="${request.createdAt != null ? #temporals.format(request.createdAt, 'dd/MM/yyyy') : ''}">
+                                    5/24/2026</td>
+                                <td>
+                                    <span
+                                        th:class="${'badge badge-' + (#strings.toLowerCase(request.status) == 'pending' ? 'warning' : (#strings.toLowerCase(request.status) == 'approved' ? 'success' : (#strings.toLowerCase(request.status) == 'rejected' ? 'danger' : (#strings.toLowerCase(request.status) == 'blocked' ? 'dark' : 'secondary'))))}"
+                                        th:text="${request.status}">pending</span>
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <a href="#" class="action-btn"><i class="ph ph-eye"></i> Xem Chi Tiết</a>
+                                        <a href="#" class="action-btn"><i class="ph ph-pencil-simple"></i> Sửa</a>
+                                    </div>
+                                </td>
                             </tr>
-                            <tr>
-                                <td><div class="user-info"><img src="https://i.pravatar.cc/150?img=32" alt="Avatar" class="table-avatar"><span class="user-name">Trần Thị B</span></div></td>
-                                <td>tranthib@example.com</td><td>5/20/2026</td>
-                                <td><span class="badge badge-success">APPROVED</span></td>
-                                <td><div class="actions"><i class="ph ph-eye"></i><a href="#" class="action-link">Xem Chi Tiết</a></div></td>
+                            <tr th:if="${requestPage.empty}">
+                                <td colspan="5" style="text-align: center; padding: 20px;">Không tìm thấy giảng viên
+                                    nào.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -86,5 +129,5 @@
         </div>
     </div>
 </body>
-</html>
 
+</html>
