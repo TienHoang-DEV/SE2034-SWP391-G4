@@ -300,6 +300,7 @@ body {
 .badge-success { background: #cce5ff; color: #004085; }
 .badge-danger { background: #f8d7da; color: #721c24; }
 .badge-secondary { background: #e2e3e5; color: #383d41; }
+.badge-dark { background: #343a40; color: #fff; }
 .actions { display: flex; align-items: center; gap: 8px; color: var(--primary-blue); cursor: pointer; }
 .action-link { text-decoration: none; color: var(--primary-blue); font-weight: 500; font-size: 0.9rem; }
 .action-icon { color: var(--text-gray); font-size: 1.2rem; cursor: pointer; }
@@ -324,3 +325,74 @@ body {
 .rev-card h3 { font-size: 0.9rem; font-weight: 500; margin-bottom: 10px; opacity: 0.9; }
 .rev-card .rev-val { font-size: 2rem; font-weight: 700; margin-bottom: 5px; }
 .rev-card .rev-sub { font-size: 0.85rem; }
+
+/* Sidebar Footer */
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.footer-avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    overflow: hidden;
+}
+
+.profile-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.profile-email {
+    font-size: 0.8rem;
+    color: var(--text-gray);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* Page Header Top */
+.page-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.search-select {
+    cursor: pointer;
+    color: var(--text-main);
+    font-family: inherit;
+}
+
+/* Action Buttons */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    color: var(--primary-blue);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.action-btn:hover {
+    color: var(--primary-blue-hover);
+}

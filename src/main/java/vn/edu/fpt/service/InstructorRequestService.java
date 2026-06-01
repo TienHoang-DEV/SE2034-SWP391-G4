@@ -7,6 +7,8 @@ import vn.edu.fpt.repository.InstructorRequestRepository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @Transactional
@@ -17,9 +19,27 @@ public class InstructorRequestService {
         this.repository = instructorRequestRepository;
     }
 
-    public List<InstructorRequest> findAll() { return repository.findAll(); }
-    public Optional<InstructorRequest> findById(Integer id) { return repository.findById(id); }
-    public InstructorRequest save(InstructorRequest entity) { return repository.save(entity); }
-    public void deleteById(Integer id) { repository.deleteById(id); }
-    public boolean existsById(Integer id) { return repository.existsById(id); }
+    public List<InstructorRequest> findAll() {
+        return repository.findAll();
+    }
+
+    public Optional<InstructorRequest> findById(Integer id) {
+        return repository.findById(id);
+    }
+
+    public InstructorRequest save(InstructorRequest entity) {
+        return repository.save(entity);
+    }
+
+    public void deleteById(Integer id) {
+        repository.deleteById(id);
+    }
+
+    public boolean existsById(Integer id) {
+        return repository.existsById(id);
+    }
+
+    public Page<InstructorRequest> searchAndFilter(String keyword, String status, Pageable pageable) {
+        return repository.searchAndFilter(keyword, status, pageable);
+    }
 }
