@@ -32,14 +32,12 @@ public class AzureBlobService {
         BlobClient blobClient = blobServiceClient
                 .getBlobContainerClient(containerName)
                 .getBlobClient(decodedBlobName); //  .getBlobClient chỉ nhận tham số là tên file
-
-
-
         // Cấu hình thời gian hết hạn và quyền truy cập của SAS.
+
+        
         BlobServiceSasSignatureValues sasValues = new BlobServiceSasSignatureValues(
                 OffsetDateTime.now().plusHours(AppConstants.SAS_EXPIRATION_HOURS), new BlobSasPermission().setReadPermission(true)
         );
-
         // Ghép URL gốc của blob với chuỗi SAS để trả về link truy cập tạm thời.
         return blobClient.getBlobUrl() + "?" + blobClient.generateSas(sasValues);
     }
