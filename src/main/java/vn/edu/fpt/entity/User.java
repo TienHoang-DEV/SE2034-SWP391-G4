@@ -21,9 +21,14 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends BaseEntity{
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @Builder.Default
+    private Set<Role> roles = new HashSet<>();
 
     @Column(columnDefinition = "Nvarchar(255)", nullable = false)
     private String firstName;
