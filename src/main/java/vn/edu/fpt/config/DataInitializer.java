@@ -432,7 +432,7 @@ public class DataInitializer implements CommandLineRunner {
             User u = userRepository.findByEmail(info[2]).orElse(null);
             if (u == null) {
                 u = userRepository.save(User.builder()
-                        .role(learnerRole)
+                        .roles(Set.of(learnerRole))
                         .firstName(info[0])
                         .lastName(info[1])
                         .email(info[2])
