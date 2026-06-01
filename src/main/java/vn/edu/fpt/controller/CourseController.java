@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import vn.edu.fpt.exception.CourseNotFoundException;
 import vn.edu.fpt.repository.CourseRepository;
 import vn.edu.fpt.repository.CategoryRepository;
 import vn.edu.fpt.entity.Course;
@@ -89,9 +90,8 @@ public class CourseController {
     @GetMapping("/course/detail")
     public String showCourseDetail(@RequestParam("id") Integer id, Model model) {
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(
-                        org.springframework.http.HttpStatus.NOT_FOUND, "Không tìm thấy khóa học"));
-        
+                .orElseThrow(() -> new CourseNotFoundException("Khóa học không tìm thấy"));
+
         User user = getSessionUser();
         java.util.Set<Integer> enrolledCourseIds = new java.util.HashSet<>();
         if (user != null) {

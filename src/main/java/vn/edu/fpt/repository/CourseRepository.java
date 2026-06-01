@@ -19,7 +19,10 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     Optional<Course> findFirstByOrderByIdAsc();
 
     @Query("""
-            select c from Course c where c.id = :id
+            select distinct c from Course c
+            left join fetch c.sections s
+            left join fetch s.lessons
+            where c.id = :id
             """)
     Optional<Course> findByIdJoinFetch(@Param("id") Integer id);
 }

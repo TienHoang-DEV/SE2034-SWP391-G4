@@ -36,7 +36,8 @@
             <button class="btn btn-link text-muted p-2 rounded-circle me-1" id="btn-sidebar-toggle"
                     aria-label="Toggle sidebar">
                 <i data-lucide="menu" style="width: 22px; height: 22px;"></i>
-             <a class="navbar-brand d-flex align-items-center gap-2 m-0" th:href="@{/}">
+            </button>
+            <a class="navbar-brand d-flex align-items-center gap-2 m-0" th:href="@{/}">
                 <div class="logo-icon-box d-flex align-items-center justify-content-center bg-primary text-white"
                      style="width: 32px; height: 32px; border-radius: 8px;">
                     <i data-lucide="zap" style="width: 18px; height: 18px; fill: currentColor;"></i>
@@ -105,7 +106,7 @@
             <div class="video-player-container position-relative overflow-hidden bg-dark">
                 <video
                         id="lesson-video"
-                        th:data-lesson-id="${lesson.getId()}"
+                        th:data-lesson-id="${lesson.id}"
                         class="w-100"
                         style="height: 700px; object-fit: cover;"
                         controls
@@ -207,7 +208,7 @@
 
                 <!-- Tab Panel 3: Lesson Document (Hidden by default) -->
                 <div class="tab-panel-item d-none" id="panel-document">
-                    <div th:each="material : ${lesson.getMaterials()}">
+                    <div th:each="material : ${materials}">
                         <div class="lesson-document-viewer">
                             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
                                 <div>
@@ -262,7 +263,7 @@
                                 <div class="lesson-document-stat">
                                     <span class="lesson-document-stat-label">Upload lúc</span>
                                     <span class="lesson-document-stat-value"
-                                          th:text="${material.createdAt != null ? #temporals.format(material.createdAt, 'dd/MM/yyyy HH:mm') : '—'}">—</span>
+                                          th:text="${material.createdAt != null ? material.createdAt : '—'}">—</span>
                                 </div>
                             </div>
                             <div class="lesson-document-frame-shell border rounded-3 overflow-hidden bg-light">
@@ -271,7 +272,7 @@
                                         class="lesson-document-frame"
                                         title="Tài liệu bài học"
                                         loading="lazy"
-                                        th:attr="data-document-endpoint=@{/temp/material/lesson/{lessonId}/url(lessonId=${lesson.id})}, data-file-name=${material != null ? material.fileName : ''}, data-file-type=${material != null ? material.fileType : ''}, data-file-size=${material != null ? material.fileSize : ''}, data-created-at=${material != null and material.createdAt != null ? #temporals.format(material.createdAt, 'dd/MM/yyyy HH:mm') : ''}"
+                                        th:attr="data-document-endpoint=@{/temp/material/lesson/{lessonId}/url(lessonId=${lesson.id})}, data-file-name=${material != null ? material.fileName : ''}, data-file-type=${material != null ? material.fileType : ''}, data-file-size=${material != null ? material.fileSize : ''}, data-created-at=${material != null and material.createdAt != null ? material.createdAt : ''}"
                                         allowfullscreen>
                                 </iframe>
                             </div>
@@ -284,7 +285,7 @@
                         </div>
                     </div>
                     <div class="lesson-document-stats lesson-document-stats-empty mb-3"
-                         th:if="${lesson.getMaterials() == null || lesson.getMaterials().isEmpty()}">
+                         th:if="${materials == null || materials.isEmpty()}">
                         <div class="lesson-document-stat lesson-document-stat-empty">
                             Chưa có tài liệu nào được gắn với bài học này.
                         </div>
@@ -331,7 +332,7 @@
                                         <div class="flex-grow-1">
                                             <a th:href="@{/course/{courseId}/section/{sectionId}/lesson/{lessonId}(courseId=${course.id},sectionId=${section.id},lessonId=${secLesson.id})}"
                                                class="fs-7 text-muted-dark d-block fw-semibold leading-snug text-decoration-none lesson-link" th:text="${secLesson.title}">Lesson title</a>
-                                            <span class="d-flex align-items-center gap-1 text-muted fs-8 mt-1"><i data-lucide="clock" style="width:12px;"></i> <span th:text="${secLesson.durationSeconds != null ? T(java.lang.String).format('%d:%02d', secLesson.durationSeconds / 60, secLesson.durationSeconds mod 60) : '—'}">—</span></span>
+                                            <span class="d-flex align-items-center gap-1 text-muted fs-8 mt-1"><i data-lucide="clock" style="width:12px;"></i> <span th:text="${secLesson.durationSeconds != null ? T(java.lang.String).format('%d:%02d', secLesson.durationSeconds / 60, secLesson.durationSeconds % 60) : '—'}">—</span></span>
                                         </div>
                                     </div>
 
