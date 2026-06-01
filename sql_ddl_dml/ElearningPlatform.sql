@@ -55,9 +55,6 @@ CREATE TABLE users (
     id INT PRIMARY KEY IDENTITY(1,1),
     -- Mã định danh duy nhất, tự động tăng
 
-    role_id INT NOT NULL,
-    -- Tham chiếu đến bảng roles, vai trò của user
-
     first_name NVARCHAR(255) NOT NULL,
     -- Họ của người dùng
 
@@ -80,19 +77,30 @@ CREATE TABLE users (
     -- Google ID nếu user authenticate via OAuth Google
 
     status VARCHAR(20) NOT NULL
-        CHECK (status IN ('active', 'banned', 'pending')),
+        CHECK (status IN ('active', 'banned')),
     -- Trạng thái: active (hoạt động), banned (cấm), pending (chờ xác thực)
 
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo tài khoản (mặc định là thời chạy lệnh CREATE)
 
-    updated_at DATETIME NULL,
+    updated_at DATETIME NULL
     -- Thời gian cập nhật gần nhất
-
-    CONSTRAINT FK_users_role
-        FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
+CREATE TABLE user_roles (
+    user_id INT NOT NULL,
+    role_id INT NOT NULL,
+
+    created_at DATETIME DEFAULT GETDATE(),
+
+    PRIMARY KEY (user_id, role_id),
+
+    CONSTRAINT FK_user_roles_user
+        FOREIGN KEY (user_id) REFERENCES users(id),
+
+    CONSTRAINT FK_user_roles_role
+        FOREIGN KEY (role_id) REFERENCES roles(id)
+);
 -- =========================
 -- PASSWORD RESET TOKENS
 -- =========================
@@ -170,6 +178,9 @@ CREATE TABLE instructor_requests (
 
     description NVARCHAR(MAX) NULL,
     -- Mô tả kinh nghiệm, lý do muốn trở thành giáo viên
+
+	 rejection_reason NVARCHAR(1000) NULL,
+    -- Lý do từ chối nếu status = rejected
 
     status VARCHAR(20) NOT NULL
         CHECK (status IN ('pending', 'approved', 'rejected', 'blocked')),
@@ -258,6 +269,9 @@ CREATE TABLE courses (
 
     approved_at DATETIME NULL,
     -- Thời gian phê duyệt
+
+    rejection_reason NVARCHAR(1000) NULL,
+    -- Lý do từ chối khóa học (nếu status = rejected)
 
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo khóa học
@@ -791,6 +805,8 @@ CREATE TABLE coupon_usages (
 
     order_id INT NOT NULL,
     discount_amount DECIMAL(10,2) NOT NULL,
+    
+    used_at DATETIME NULL,
   
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo bản ghi
@@ -910,7 +926,6 @@ GO
 -- =========================
 -- Tạo một giáo viên mẫu (role_id = 3 : instructor)
 INSERT INTO users (
-    role_id,
     first_name,
     last_name,
     email,
@@ -919,7 +934,6 @@ INSERT INTO users (
     status
 )
 VALUES (
-    3,
     N'28',
     N'Tech',
     '28tech@gmail.com',
@@ -927,6 +941,7 @@ VALUES (
     '123456',
     'active'
 );
+INSERT INTO user_roles (user_id, role_id) VALUES (SCOPE_IDENTITY(), 3);
 
 -- =========================
 -- CATEGORY
@@ -1566,7 +1581,7 @@ DECLARE @c2l10 INT; INSERT INTO lessons (section_id, title, video_url, duration_
 DECLARE @c2l11 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S4, N'Bài 12 - Tham số', 'videos/Recording 2026-05-28 212131.mp4', 900, 2, 1, 'approved'); SET @c2l11 = SCOPE_IDENTITY();
 DECLARE @c2l12 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S4, N'Bài 13 - Con trỏ', 'videos/Recording 2026-05-28 212131.mp4', 980, 3, 1, 'approved'); SET @c2l12 = SCOPE_IDENTITY();
 
-INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@c2l12, N'Quiz - Con trỏ', 70); DECLARE @c2q12 INT = SCOPE_IDENTITY(); INSERT INTO quiz_questions (quiz_id, question_text, question_type, points, position) VALUES (@c2q12, N'Con trỏ lưu gì?', 'single', 1, 1); DECLARE @c2q121 INT = SCOPE_IDENTITY(); INSERT INTO quiz_answers (question_id, answer_text, is_correct) VALUES (@c2q121, N'Địa chỉ bộ nhớ',1),(@c2q121,N'Giá trị',0),(@c2q121,N'Tên biến',0),(@c2q121,N'Khác',0);
+INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@c2l12, N'Quiz - Con trỏ', 70); DECLARE @c2_l12_quiz INT = SCOPE_IDENTITY(); INSERT INTO quiz_questions (quiz_id, question_text, question_type, points, position) VALUES (@c2_l12_quiz, N'Con trỏ lưu gì?', 'single', 1, 1); DECLARE @c2q121 INT = SCOPE_IDENTITY(); INSERT INTO quiz_answers (question_id, answer_text, is_correct) VALUES (@c2q121, N'Địa chỉ bộ nhớ',1),(@c2q121,N'Giá trị',0),(@c2q121,N'Tên biến',0),(@c2q121,N'Khác',0);
 
 -- lesson material for one of course2 lessons
 INSERT INTO lesson_materials (instructor_id, course_id, lesson_id, file_name, file_url, file_type, created_at)
@@ -1665,7 +1680,7 @@ WHILE @CourseIndex <= 14
             BEGIN
                 SET @SectionTitle = CASE @SectionPos
                                         WHEN 1 THEN N'Giới thiệu'
-                                        WHEN 2 THEN N'Cấu trúc điều khiển'
+                                        WHEN 2 THEN N'Cấu trúc điều kiện'
                                         WHEN 3 THEN N'Mảng và chuỗi'
                                         ELSE N'Hàm và con trỏ'
                     END;
@@ -1745,7 +1760,6 @@ WHILE @CourseIndex <= 14
 -- ADMIN USER
 -- =========================
 INSERT INTO users (
-    role_id,
     first_name,
     last_name,
     email,
@@ -1755,7 +1769,6 @@ INSERT INTO users (
     status
 )
 VALUES (
-    1,
     N'Đặng',
     N'Minh Quân',
     'admin@elearning.com',
@@ -1764,6 +1777,7 @@ VALUES (
     NULL,
     'active'
 );
+INSERT INTO user_roles (user_id, role_id) VALUES (SCOPE_IDENTITY(), 1);
 
 -- ==========================================
 -- INSTRUCTOR SAMPLE DATA
@@ -1771,7 +1785,6 @@ VALUES (
 -------------STEP 1 : register as a Student---------------
 INSERT INTO users
 (
-    role_id,
     first_name,
     last_name,
     email,
@@ -1780,16 +1793,24 @@ INSERT INTO users
     status
 )
 VALUES
-(4,N'Nguyễn Văn',N'An','nguyenvanan@gmail.com','0900000001','12345678','active'),
-(4,N'Trần Minh',N'Bình','tranminhbinh@gmail.com','0900000002','12345678','active'),
-(4,N'Lê Quốc',N'Cường','lequoccuong@gmail.com','0900000003','12345678','active'),
-(4,N'Phạm Đức',N'Dũng','phamducdung@gmail.com','0900000004','12345678','active'),
-(4,N'Hoàng Thu',N'Giang','hoangthugiang@gmail.com','0900000005','12345678','active'),
-(4,N'Vũ Thanh',N'Hải','vuthanhhai@gmail.com','0900000006','12345678','active'),
-(4,N'Đỗ Khánh',N'Huy','dokhanhhuy@gmail.com','0900000007','12345678','active'),
-(4,N'Bùi Anh',N'Khoa','buianhkhoa@gmail.com','0900000008','12345678','active'),
-(4,N'Đặng Quang',N'Long','dangquanglong@gmail.com','0900000009','12345678','active'),
-(4,N'Phan Minh',N'Nam','phanminhnam@gmail.com','0900000010','12345678','active');
+(N'Nguyễn Văn',N'An','nguyenvanan@gmail.com','0900000001','12345678','active'),
+(N'Trần Minh',N'Bình','tranminhbinh@gmail.com','0900000002','12345678','active'),
+(N'Lê Quốc',N'Cường','lequoccuong@gmail.com','0900000003','12345678','active'),
+(N'Phạm Đức',N'Dũng','phamducdung@gmail.com','0900000004','12345678','active'),
+(N'Hoàng Thu',N'Giang','hoangthugiang@gmail.com','0900000005','12345678','active'),
+(N'Vũ Thanh',N'Hải','vuthanhhai@gmail.com','0900000006','12345678','active'),
+(N'Đỗ Khánh',N'Huy','dokhanhhuy@gmail.com','0900000007','12345678','active'),
+(N'Bùi Anh',N'Khoa','buianhkhoa@gmail.com','0900000008','12345678','active'),
+(N'Đặng Quang',N'Long','dangquanglong@gmail.com','0900000009','12345678','active'),
+(N'Phan Minh',N'Nam','phanminhnam@gmail.com','0900000010','12345678','active');
+
+INSERT INTO user_roles (user_id, role_id)
+SELECT id, 4 FROM users WHERE email IN (
+    'nguyenvanan@gmail.com', 'tranminhbinh@gmail.com', 'lequoccuong@gmail.com',
+    'phamducdung@gmail.com', 'hoangthugiang@gmail.com', 'vuthanhhai@gmail.com',
+    'dokhanhhuy@gmail.com', 'buianhkhoa@gmail.com', 'dangquanglong@gmail.com',
+    'phanminhnam@gmail.com'
+);
 
 ---------STEP 2 : Send request to become a instructor and manager approved
 INSERT INTO instructor_requests
@@ -1814,9 +1835,12 @@ VALUES
     (10,'https://blob/cv10.pdf','https://blob/cert10.pdf',N'Giảng viên UI/UX Design','approved',11);
 
 --Manager cấp tiến hành cấp role
+UPDATE user_roles
+SET role_id = 3
+WHERE user_id BETWEEN 1 AND 10 AND role_id != 3;
+
 UPDATE users
-SET role_id = 3,
-    updated_at = GETDATE()
+SET updated_at = GETDATE()
 WHERE id BETWEEN 1 AND 10;
 ----*NOTE : coi như có 1 manager có user id là 11 và người này là người duyệt đơn
 
@@ -1826,7 +1850,6 @@ WHERE id BETWEEN 1 AND 10;
 -- MANAGER USER
 -- =========================
 INSERT INTO users (
-    role_id,
     first_name,
     last_name,
     email,
@@ -1836,7 +1859,6 @@ INSERT INTO users (
     status
 )
 VALUES (
-    2,
     N'Lê',
     N'Thị Mai',
     'manager@elearning.com',
@@ -1845,6 +1867,7 @@ VALUES (
     NULL,
     'active'
 );
+INSERT INTO user_roles (user_id, role_id) VALUES (SCOPE_IDENTITY(), 2);
 
 
 -- Seed test learner user Do Thanh and enroll into course id=1
@@ -1858,8 +1881,9 @@ IF NOT EXISTS (SELECT 1 FROM users WHERE email = 'dothanh2572005@gmail.com')
                 SET @learnerRoleId = SCOPE_IDENTITY();
             END
 
-        INSERT INTO users (role_id, first_name, last_name, email, phone, password_hash, avatar_url, google_id, status)
-        VALUES (@learnerRoleId, N'Do', N'Thanh', 'dothanh2572005@gmail.com', NULL, '123', NULL, NULL, 'active');
+        INSERT INTO users (first_name, last_name, email, phone, password_hash, avatar_url, google_id, status)
+        VALUES (N'Do', N'Thanh', 'dothanh2572005@gmail.com', NULL, '123', NULL, NULL, 'active');
+        INSERT INTO user_roles (user_id, role_id) VALUES (SCOPE_IDENTITY(), @learnerRoleId);
     END
 
 -- Enroll user into course id = 1 if course exists and enrollment not present
@@ -1874,4 +1898,3 @@ IF EXISTS (SELECT 1 FROM courses WHERE id = 1)
             END
     END
 GO
-
