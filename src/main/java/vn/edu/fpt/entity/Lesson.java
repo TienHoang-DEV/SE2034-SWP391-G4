@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -29,7 +30,6 @@ public class Lesson extends BaseEntity {
     @Column(name = "duration_seconds")
     private Integer durationSeconds;
 
-    @Column
     private Integer position;
 
     @Builder.Default

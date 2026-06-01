@@ -2,6 +2,7 @@ package vn.edu.fpt.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.edu.fpt.entity.Lesson;
 import vn.edu.fpt.entity.LessonMaterial;
 import vn.edu.fpt.repository.LessonMaterialRepository;
 
@@ -22,4 +23,8 @@ public class LessonMaterialService {
     public LessonMaterial save(LessonMaterial entity) { return repository.save(entity); }
     public void deleteById(Integer id) { repository.deleteById(id); }
     public boolean existsById(Integer id) { return repository.existsById(id); }
+
+    public Optional<LessonMaterial> findByLessonId(Integer lessonId) {
+        return repository.findFirstByLesson_IdOrderByIdAsc(lessonId);
+    }
 }

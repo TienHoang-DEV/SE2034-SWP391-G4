@@ -1329,6 +1329,17 @@ VALUES
 (@Q6Id, N'Nối chuỗi', 0),
 (@Q6Id, N'Xuất dữ liệu', 0);
 
+INSERT INTO lesson_materials (instructor_id, course_id, lesson_id, file_name, file_url, file_type, created_at)
+VALUES (
+           1,  -- instructor_id (thay bằng ID giảng viên thực tế)
+           1,  -- course_id (khóa học 1)
+           1,  -- lesson_id (bài học 1)
+           '[28Tech] BUOI 1.pdf',  -- file_name
+           '%5B28Tech%5D.%20BUOI%201.pdf',  -- file_url
+           'pdf',  -- file_type
+           GETDATE()  -- created_at
+       );
+
 -- =========================
 -- SAMPLE DATA COMPLETE
 -- =========================

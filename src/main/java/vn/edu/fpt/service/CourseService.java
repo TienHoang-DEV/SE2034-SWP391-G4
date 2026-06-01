@@ -18,7 +18,7 @@ public class CourseService {
     }
 
     public List<Course> findAll() { return repository.findAll(); }
-    public Optional<Course> findById(Integer id) { return repository.findById(id); }
+    public Optional<Course> findById(Integer id) { return repository.findByIdJoinFetch(id); }
     public Course save(Course entity) { return repository.save(entity); }
     public void deleteById(Integer id) { repository.deleteById(id); }
     public boolean existsById(Integer id) { return repository.existsById(id); }
