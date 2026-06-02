@@ -124,7 +124,7 @@
                                                        class="filter-category-link text-decoration-none d-flex justify-content-between align-items-center text-muted" 
                                                        th:data-category-id="${childCat.id}">
                                                         <span th:text="${childCat.name}">HTML</span>
-                                                        <span class="text-muted fs-8" th:text="'(' + ${childCat.courses.size()} + ')'">(0)</span>
+                                                        <span class="text-muted fs-8" th:text="'(' + ${childCat.courseCount} + ')'">(0)</span>
                                                     </a>
                                                 </li>
                                             </ul>

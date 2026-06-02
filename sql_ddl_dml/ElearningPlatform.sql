@@ -1,4 +1,4 @@
-USE master
+﻿USE master
 IF DB_ID('ElearningPlatform') IS NOT NULL
 BEGIN
     ALTER DATABASE ElearningPlatform
@@ -1985,49 +1985,126 @@ DECLARE @Coupon1Id INT = (SELECT id FROM coupons WHERE code = 'WELCOME10');
 GO
 
 -- ============================================================================
--- 5 LEARNERS FULL ACTIVITIES MOCK DATA
+-- 10 LEARNERS FULL ACTIVITIES MOCK DATA (SYNCHRONIZED FROM JAVA)
 -- ============================================================================
 USE ElearningPlatform;
 GO
 
 -- A. Declare cache variables for existing elements
-DECLARE @L1Id INT = (SELECT id FROM lessons WHERE title = N'Bài 1 - Giới thiệu ngôn ngữ C');
-DECLARE @L2Id INT = (SELECT id FROM lessons WHERE title = N'Bài 2 - Kiểu dữ liệu và khai báo biến trong C');
-DECLARE @L3Id INT = (SELECT id FROM lessons WHERE title = N'Bài 3 - Xuất dữ liệu với printf');
-DECLARE @L4Id INT = (SELECT id FROM lessons WHERE title = N'Bài 4 - Nhập dữ liệu với scanf');
+-- Filter by course title to avoid "Subquery returned more than 1 value" when lesson titles are duplicated across courses
+DECLARE @L1Id INT = (SELECT TOP 1 l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 1 - Giới thiệu ngôn ngữ C' AND c.title = N'Lập Trình C Cơ Bản - 28Tech');
+DECLARE @L2Id INT = (SELECT TOP 1 l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 2 - Kiểu dữ liệu và khai báo biến trong C' AND c.title = N'Lập Trình C Cơ Bản - 28Tech');
+DECLARE @L3Id INT = (SELECT TOP 1 l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 3 - Xuất dữ liệu với printf' AND c.title = N'Lập Trình C Cơ Bản - 28Tech');
+DECLARE @L4Id INT = (SELECT TOP 1 l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 4 - Nhập dữ liệu với scanf' AND c.title = N'Lập Trình C Cơ Bản - 28Tech');
 
-DECLARE @Qz2Id INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Kiểu dữ liệu và biến');
-DECLARE @Qz3Id INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Hàm printf');
-DECLARE @Qz4Id INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Hàm scanf');
+DECLARE @Qz2Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Kiểu dữ liệu và biến' AND c.title = N'Lập Trình C Cơ Bản - 28Tech');
+DECLARE @Qz3Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Hàm printf' AND c.title = N'Lập Trình C Cơ Bản - 28Tech');
+DECLARE @Qz4Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Hàm scanf' AND c.title = N'Lập Trình C Cơ Bản - 28Tech');
 
 DECLARE @C1Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Cơ Bản - 28Tech');
-DECLARE @C2Id INT = (SELECT id FROM courses WHERE title = N'Cấu Trúc Dữ Liệu Và Giải Thuật - 28Tech');
-DECLARE @C3Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình Java Web với Spring Boot');
+DECLARE @C2Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Nâng Cao - 28Tech');
+DECLARE @C3Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Thực Hành - 28Tech');
+DECLARE @C4Id INT = (SELECT id FROM courses WHERE title = N'Thuật Toán C với 28Tech');
+DECLARE @C5Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
+DECLARE @C6Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 6 - 28Tech');
+DECLARE @C7Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 7 - 28Tech');
+DECLARE @C8Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 8 - 28Tech');
+DECLARE @C9Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 9 - 28Tech');
+DECLARE @C10Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 10 - 28Tech');
+DECLARE @C11Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 11 - 28Tech');
+DECLARE @C12Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 12 - 28Tech');
+DECLARE @C13Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 13 - 28Tech');
+DECLARE @C14Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 14 - 28Tech');
 
-DECLARE @L5Id INT = (SELECT id FROM lessons WHERE title = N'Bài 1 - Mảng động và Danh sách liên kết');
-DECLARE @L6Id INT = (SELECT id FROM lessons WHERE title = N'Bài 2 - Ngăn xếp (Stack) và Hàng đợi (Queue)');
-DECLARE @L7Id INT = (SELECT id FROM lessons WHERE title = N'Bài 1 - Giới thiệu Spring Framework và Spring Boot');
-DECLARE @L8Id INT = (SELECT id FROM lessons WHERE title = N'Bài 2 - Hướng dẫn cấu hình môi trường Spring Boot');
+-- Lesson IDs for Course 2 (C Nâng cao) Section 1 (Giới thiệu)
+DECLARE @C2_L1 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 1 - Giới thiệu ngôn ngữ C' AND c.title = N'Lập Trình C Nâng Cao - 28Tech');
+DECLARE @C2_L2 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 2 - Kiểu dữ liệu và khai báo biến trong C' AND c.title = N'Lập Trình C Nâng Cao - 28Tech');
+DECLARE @C2_L3 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 3 - Xuất dữ liệu với printf' AND c.title = N'Lập Trình C Nâng Cao - 28Tech');
 
-DECLARE @QzDSAId INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Stack và Queue');
-DECLARE @QzSpringId INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Tổng quan Spring Boot');
+-- Lesson IDs for Course 3 (C Thực hành) Section 1 (Giới thiệu)
+DECLARE @C3_L1 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 1 - Giới thiệu' AND c.title = N'Lập Trình C Thực Hành - 28Tech');
+DECLARE @C3_L2 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 2 - Kiểu dữ liệu' AND c.title = N'Lập Trình C Thực Hành - 28Tech');
+DECLARE @C3_L3 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 3 - printf' AND c.title = N'Lập Trình C Thực Hành - 28Tech');
 
+-- Lesson IDs for Course 4 Section 1 (Giới thiệu)
+DECLARE @C4_L1 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 1' AND c.title = N'Thuật Toán C với 28Tech');
+
+-- Lesson IDs for Course 5 Section 1 (Giới thiệu)
+DECLARE @C5_L1 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 1 - Chuyên đề 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
+DECLARE @C5_L2 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 2 - Chuyên đề 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
+DECLARE @C5_L3 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 3 - Chuyên đề 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
+
+-- Create missing Quizzes for Course 3 if not exists
+IF NOT EXISTS (SELECT 1 FROM quizzes q JOIN lessons l ON q.lesson_id = l.id WHERE q.title = N'Quiz - Kiểu dữ liệu và biến' AND l.id = @C3_L2)
+BEGIN
+    INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@C3_L2, N'Quiz - Kiểu dữ liệu và biến', 70);
+    INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@C3_L3, N'Quiz - Hàm printf', 70);
+    INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@C3_L1, N'Quiz - Hàm scanf', 70);
+END
+
+-- Quizzes for Course 3
+DECLARE @C3_Qz2Id INT = (SELECT q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Kiểu dữ liệu và biến' AND c.title = N'Lập Trình C Thực Hành - 28Tech');
+DECLARE @C3_Qz3Id INT = (SELECT q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Hàm printf' AND c.title = N'Lập Trình C Thực Hành - 28Tech');
+DECLARE @C3_Qz4Id INT = (SELECT q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Hàm scanf' AND c.title = N'Lập Trình C Thực Hành - 28Tech');
+
+-- Create missing Quizzes for Course 4 if not exists
+IF NOT EXISTS (SELECT 1 FROM quizzes q JOIN lessons l ON q.lesson_id = l.id WHERE q.title = N'Quiz - Kiểu dữ liệu và biến' AND l.id = @C4_L1)
+BEGIN
+    INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@C4_L1, N'Quiz - Kiểu dữ liệu và biến', 70);
+    INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@C4_L1, N'Quiz - Hàm printf', 70);
+    INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@C4_L1, N'Quiz - Hàm scanf', 70);
+END
+
+-- Quizzes for Course 4
+DECLARE @C4_Qz2Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Kiểu dữ liệu và biến' AND c.title = N'Thuật Toán C với 28Tech');
+DECLARE @C4_Qz3Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Hàm printf' AND c.title = N'Thuật Toán C với 28Tech');
+DECLARE @C4_Qz4Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Hàm scanf' AND c.title = N'Thuật Toán C với 28Tech');
+
+-- Quizzes for Course 5 (title format from WHILE loop: 'Quiz - Bài X - Khóa Y')
+DECLARE @C5_Qz1Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Bài 1 - Khóa 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
+DECLARE @C5_Qz2Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Bài 2 - Khóa 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
+DECLARE @C5_Qz3Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Bài 3 - Khóa 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
+
+-- Coupons already inserted in previous batch (lines ~1978-1981), just read their IDs
 DECLARE @Cp1Id INT = (SELECT id FROM coupons WHERE code = 'WELCOME10');
+DECLARE @Cp2Id INT = (SELECT id FROM coupons WHERE code = 'DEVSPECIAL');
 
 -- B. INSERT USERS (LEARNERS)
-INSERT INTO users (role_id, first_name, last_name, email, phone, password_hash, avatar_url, google_id, status)
+INSERT INTO users (first_name, last_name, email, phone, password_hash, avatar_url, google_id, status)
 VALUES 
-(4, N'An', N'Nguyễn Văn', 'an.nguyen@elearning.com', '0981112222', 'password123', 'avatars/an_nguyen.jpg', NULL, 'ACTIVE'),
-(4, N'Bình', N'Trần Thị', 'binh.tran@elearning.com', '0982223333', 'password123', 'avatars/binh_tran.jpg', NULL, 'ACTIVE'),
-(4, N'Cường', N'Phạm Văn', 'cuong.pham@elearning.com', '0983334444', 'password123', 'avatars/cuong_pham.jpg', NULL, 'ACTIVE'),
-(4, N'Dung', N'Hoàng Thị', 'dung.hoang@elearning.com', '0984445555', NULL, 'avatars/dung_hoang.jpg', 'google_1029384756', 'ACTIVE'),
-(4, N'Em', N'Đỗ Văn', 'em.do@elearning.com', '0985556666', 'password123', 'avatars/em_do.jpg', NULL, 'ACTIVE');
+(N'Nguyễn Văn', N'An', 'an.nguyen@elearning.com', '0981112222', 'password123', 'avatars/an_nguyen.jpg', NULL, 'ACTIVE'),
+(N'Trần Thị', N'Bình', 'binh.tran@elearning.com', '0982223333', 'password123', 'avatars/binh_tran.jpg', NULL, 'ACTIVE'),
+(N'Phạm Văn', N'Cường', 'cuong.pham@elearning.com', '0983334444', 'password123', 'avatars/cuong_pham.jpg', NULL, 'ACTIVE'),
+(N'Hoàng Thị', N'Dung', 'dung.hoang@elearning.com', '0984445555', NULL, 'avatars/dung_hoang.jpg', 'google_1029384756', 'ACTIVE'),
+(N'Đỗ Văn', N'Em', 'em.do@elearning.com', '0985556666', 'password123', 'avatars/em_do.jpg', NULL, 'ACTIVE'),
+(N'Lê Thu', N'Giang', 'giang.le@elearning.com', '0986667777', 'password123', 'avatars/giang_le.jpg', NULL, 'ACTIVE'),
+(N'Vũ Thanh', N'Hải', 'hai.vu@elearning.com', '0987778888', 'password123', 'avatars/hai_vu.jpg', NULL, 'ACTIVE'),
+(N'Đỗ Khánh', N'Huy', 'huy.do@elearning.com', '0988889999', 'password123', 'avatars/huy_do.jpg', NULL, 'ACTIVE'),
+(N'Bùi Anh', N'Khoa', 'khoa.bui@elearning.com', '0989990000', 'password123', 'avatars/khoa_bui.jpg', NULL, 'ACTIVE'),
+(N'Đặng Quang', N'Long', 'long.dang@elearning.com', '0980001111', 'password123', 'avatars/long_dang.jpg', NULL, 'ACTIVE');
 
 DECLARE @UserAnId INT = (SELECT id FROM users WHERE email = 'an.nguyen@elearning.com');
 DECLARE @UserBinhId INT = (SELECT id FROM users WHERE email = 'binh.tran@elearning.com');
 DECLARE @UserCuongId INT = (SELECT id FROM users WHERE email = 'cuong.pham@elearning.com');
 DECLARE @UserDungId INT = (SELECT id FROM users WHERE email = 'dung.hoang@elearning.com');
 DECLARE @UserEmId INT = (SELECT id FROM users WHERE email = 'em.do@elearning.com');
+DECLARE @UserGiangId INT = (SELECT id FROM users WHERE email = 'giang.le@elearning.com');
+DECLARE @UserHaiId INT = (SELECT id FROM users WHERE email = 'hai.vu@elearning.com');
+DECLARE @UserHuyId INT = (SELECT id FROM users WHERE email = 'huy.do@elearning.com');
+DECLARE @UserKhoaId INT = (SELECT id FROM users WHERE email = 'khoa.bui@elearning.com');
+DECLARE @UserLongId INT = (SELECT id FROM users WHERE email = 'long.dang@elearning.com');
+
+INSERT INTO user_roles (user_id, role_id) VALUES 
+(@UserAnId, 4),
+(@UserBinhId, 4),
+(@UserCuongId, 4),
+(@UserDungId, 4),
+(@UserEmId, 4),
+(@UserGiangId, 4),
+(@UserHaiId, 4),
+(@UserHuyId, 4),
+(@UserKhoaId, 4),
+(@UserLongId, 4);
 
 -- C. INSERT CARTS
 INSERT INTO carts (user_id) VALUES 
@@ -2035,38 +2112,52 @@ INSERT INTO carts (user_id) VALUES
 (@UserBinhId),
 (@UserCuongId),
 (@UserDungId),
-(@UserEmId);
+(@UserEmId),
+(@UserGiangId),
+(@UserHaiId),
+(@UserHuyId),
+(@UserKhoaId),
+(@UserLongId);
 
 DECLARE @CartAnId INT = (SELECT id FROM carts WHERE user_id = @UserAnId);
 DECLARE @CartBinhId INT = (SELECT id FROM carts WHERE user_id = @UserBinhId);
 DECLARE @CartCuongId INT = (SELECT id FROM carts WHERE user_id = @UserCuongId);
 DECLARE @CartDungId INT = (SELECT id FROM carts WHERE user_id = @UserDungId);
 DECLARE @CartEmId INT = (SELECT id FROM carts WHERE user_id = @UserEmId);
+DECLARE @CartGiangId INT = (SELECT id FROM carts WHERE user_id = @UserGiangId);
+DECLARE @CartHaiId INT = (SELECT id FROM carts WHERE user_id = @UserHaiId);
+DECLARE @CartHuyId INT = (SELECT id FROM carts WHERE user_id = @UserHuyId);
+DECLARE @CartKhoaId INT = (SELECT id FROM carts WHERE user_id = @UserKhoaId);
+DECLARE @CartLongId INT = (SELECT id FROM carts WHERE user_id = @UserLongId);
 
--- D. INSERT ACTIVE CART ITEMS (Items left in cart)
--- Binh has Course 3 in cart
+-- D. INSERT ACTIVE CART ITEMS
+-- Binh has Course 3 (C Thực Hành) in cart
 INSERT INTO cart_items (cart_id, course_id) VALUES (@CartBinhId, @C3Id);
--- Dung has Course 2 in cart
+-- Dung has Course 2 (C Nâng Cao) in cart
 INSERT INTO cart_items (cart_id, course_id) VALUES (@CartDungId, @C2Id);
+-- Giang has Course 1 (C Cơ Bản) in cart
+INSERT INTO cart_items (cart_id, course_id) VALUES (@CartGiangId, @C1Id);
+-- Huy has Course 1 and Course 4 in cart
+INSERT INTO cart_items (cart_id, course_id) VALUES 
+(@CartHuyId, @C1Id),
+(@CartHuyId, @C4Id);
 
 -- E. ORDERS, ORDER ITEMS, PAYMENTS & COUPON USAGES
 
--- == LEARNER 1 (Nguyễn Văn An) ==
--- Order 1: Bought Course 1 (price 0) and Course 2 (price 500000.00). Total 500000.00
+-- == LEARNER 0: An (Paid Order for C1 & C2)
 INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
-VALUES (@UserAnId, 500000.00, 0.00, 'PAID', 'MOMO', DATEADD(day, -5, GETDATE()));
+VALUES (@UserAnId, 350000.00, 0.00, 'PAID', 'MOMO', DATEADD(day, -5, GETDATE()));
 DECLARE @OrderAnId INT = SCOPE_IDENTITY();
 
 INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
 VALUES 
 (@OrderAnId, @C1Id, NULL, 0.00, 0.00, 0.00, N'Lập Trình C Cơ Bản - 28Tech', DATEADD(day, -5, GETDATE())),
-(@OrderAnId, @C2Id, NULL, 500000.00, 0.00, 500000.00, N'Cấu Trúc Dữ Liệu Và Giải Thuật - 28Tech', DATEADD(day, -5, GETDATE()));
+(@OrderAnId, @C2Id, NULL, 350000.00, 0.00, 350000.00, N'Lập Trình C Nâng Cao - 28Tech', DATEADD(day, -5, GETDATE()));
 
 INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
-VALUES (@OrderAnId, 'TX_AN_001', 'MOMO', 'MOMO_TX_883749', 500000.00, 'SUCCESS', DATEADD(day, -5, GETDATE()), DATEADD(day, -5, GETDATE()));
+VALUES (@OrderAnId, 'TX_AN_001', 'MOMO', 'GATEWAY_8837', 350000.00, 'SUCCESS', DATEADD(day, -5, GETDATE()), DATEADD(day, -5, GETDATE()));
 
--- == LEARNER 2 (Trần Thị Bình) ==
--- Order 2: Bought Course 1 (price 0). Total 0.00
+-- == LEARNER 1: Binh (Paid Order for C1)
 INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
 VALUES (@UserBinhId, 0.00, 0.00, 'PAID', 'VNPAY', DATEADD(day, -4, GETDATE()));
 DECLARE @OrderBinhId INT = SCOPE_IDENTITY();
@@ -2075,69 +2166,113 @@ INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discoun
 VALUES (@OrderBinhId, @C1Id, NULL, 0.00, 0.00, 0.00, N'Lập Trình C Cơ Bản - 28Tech', DATEADD(day, -4, GETDATE()));
 
 INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
-VALUES (@OrderBinhId, 'TX_BINH_001', 'VNPAY', 'VN_TX_228394', 0.00, 'SUCCESS', DATEADD(day, -4, GETDATE()), DATEADD(day, -4, GETDATE()));
+VALUES (@OrderBinhId, 'TX_BINH_001', 'VNPAY', 'GATEWAY_2283', 0.00, 'SUCCESS', DATEADD(day, -4, GETDATE()), DATEADD(day, -4, GETDATE()));
 
--- == LEARNER 3 (Phạm Văn Cường) ==
--- Order 3: Bought Course 2 (price 500000.00), applied coupon WELCOME10 (10% off -> discount 50000.00). Total 450000.00
+-- == LEARNER 2: Cuong (Paid Order for C2 with WELCOME10 coupon)
 INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
-VALUES (@UserCuongId, 500000.00, 50000.00, 'PAID', 'CARD', DATEADD(day, -3, GETDATE()));
+VALUES (@UserCuongId, 300000.00, 50000.00, 'PAID', 'CARD', DATEADD(day, -3, GETDATE()));
 DECLARE @OrderCuongId INT = SCOPE_IDENTITY();
 
 INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
-VALUES (@OrderCuongId, @C2Id, @Cp1Id, 500000.00, 50000.00, 450000.00, N'Cấu Trúc Dữ Liệu Và Giải Thuật - 28Tech', DATEADD(day, -3, GETDATE()));
+VALUES (@OrderCuongId, @C2Id, @Cp1Id, 350000.00, 50000.00, 300000.00, N'Lập Trình C Nâng Cao - 28Tech', DATEADD(day, -3, GETDATE()));
 
 INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
-VALUES (@OrderCuongId, 'TX_CUONG_001', 'STRIPE', 'ST_TX_994821', 450000.00, 'SUCCESS', DATEADD(day, -3, GETDATE()), DATEADD(day, -3, GETDATE()));
+VALUES (@OrderCuongId, 'TX_CUONG_001', 'CARD', 'GATEWAY_9948', 300000.00, 'SUCCESS', DATEADD(day, -3, GETDATE()), DATEADD(day, -3, GETDATE()));
 
 INSERT INTO coupon_usages (coupon_id, user_id, order_id, discount_amount, created_at)
 VALUES (@Cp1Id, @UserCuongId, @OrderCuongId, 50000.00, DATEADD(day, -3, GETDATE()));
 
--- == LEARNER 4 (Hoàng Thị Dung) ==
--- Order 4: Bought Course 3 (price 1200000.00). Total 1200000.00
+-- == LEARNER 3: Dung (Paid Order for C3)
 INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
-VALUES (@UserDungId, 1200000.00, 0.00, 'PAID', 'MOMO', DATEADD(day, -2, GETDATE()));
+VALUES (@UserDungId, 600000.00, 0.00, 'PAID', 'MOMO', DATEADD(day, -2, GETDATE()));
 DECLARE @OrderDungId INT = SCOPE_IDENTITY();
 
 INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
-VALUES (@OrderDungId, @C3Id, NULL, 1200000.00, 0.00, 1200000.00, N'Lập Trình Java Web với Spring Boot', DATEADD(day, -2, GETDATE()));
+VALUES (@OrderDungId, @C3Id, NULL, 600000.00, 0.00, 600000.00, N'Lập Trình C Thực Hành - 28Tech', DATEADD(day, -2, GETDATE()));
 
 INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
-VALUES (@OrderDungId, 'TX_DUNG_001', 'MOMO', 'MOMO_TX_774910', 1200000.00, 'SUCCESS', DATEADD(day, -2, GETDATE()), DATEADD(day, -2, GETDATE()));
+VALUES (@OrderDungId, 'TX_DUNG_001', 'MOMO', 'GATEWAY_7749', 600000.00, 'SUCCESS', DATEADD(day, -2, GETDATE()), DATEADD(day, -2, GETDATE()));
 
--- == LEARNER 5 (Đỗ Văn Em) ==
--- Order 5: Bought Course 1 (price 0) and Course 3 (price 1200000.00). Total 1200000.00
+-- == LEARNER 4: Em (Paid Order for C1 & C3)
 INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
-VALUES (@UserEmId, 1200000.00, 0.00, 'PAID', 'VNPAY', DATEADD(day, -1, GETDATE()));
+VALUES (@UserEmId, 600000.00, 0.00, 'PAID', 'VNPAY', DATEADD(day, -1, GETDATE()));
 DECLARE @OrderEmId INT = SCOPE_IDENTITY();
 
 INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
 VALUES 
 (@OrderEmId, @C1Id, NULL, 0.00, 0.00, 0.00, N'Lập Trình C Cơ Bản - 28Tech', DATEADD(day, -1, GETDATE())),
-(@OrderEmId, @C3Id, NULL, 1200000.00, 0.00, 1200000.00, N'Lập Trình Java Web với Spring Boot', DATEADD(day, -1, GETDATE()));
+(@OrderEmId, @C3Id, NULL, 600000.00, 0.00, 600000.00, N'Lập Trình C Thực Hành - 28Tech', DATEADD(day, -1, GETDATE()));
 
 INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
-VALUES (@OrderEmId, 'TX_EM_001', 'VNPAY', 'VN_TX_553948', 1200000.00, 'SUCCESS', DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
+VALUES (@OrderEmId, 'TX_EM_001', 'VNPAY', 'GATEWAY_5539', 600000.00, 'SUCCESS', DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
 
+-- == LEARNER 5: Giang (Pending Order for C2)
+INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
+VALUES (@UserGiangId, 350000.00, 0.00, 'PENDING', 'BANK_TRANSFER', DATEADD(day, -1, GETDATE()));
+DECLARE @OrderGiangId INT = SCOPE_IDENTITY();
+
+INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
+VALUES (@OrderGiangId, @C2Id, NULL, 350000.00, 0.00, 350000.00, N'Lập Trình C Nâng Cao - 28Tech', DATEADD(day, -1, GETDATE()));
+
+-- == LEARNER 6: Hai (Paid Order for C4 with DEVSPECIAL coupon)
+INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
+VALUES (@UserHaiId, 750000.00, 100000.00, 'PAID', 'BANK_TRANSFER', DATEADD(day, -1, GETDATE()));
+DECLARE @OrderHaiId INT = SCOPE_IDENTITY();
+
+INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
+VALUES (@OrderHaiId, @C4Id, @Cp2Id, 850000.00, 100000.00, 750000.00, N'Thuật Toán C với 28Tech', DATEADD(day, -1, GETDATE()));
+
+INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
+VALUES (@OrderHaiId, 'TX_HAI_001', 'BANK_TRANSFER', 'GATEWAY_4439', 750000.00, 'SUCCESS', DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
+
+INSERT INTO coupon_usages (coupon_id, user_id, order_id, discount_amount, created_at)
+VALUES (@Cp2Id, @UserHaiId, @OrderHaiId, 100000.00, DATEADD(day, -1, GETDATE()));
+
+-- == LEARNER 8: Khoa (Paid Order for C5 with WELCOME10 coupon)
+INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
+VALUES (@UserKhoaId, 1500000.00, 0.00, 'PAID', 'MOMO', DATEADD(day, -1, GETDATE()));
+DECLARE @OrderKhoaId INT = SCOPE_IDENTITY();
+
+INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
+VALUES (@OrderKhoaId, @C5Id, @Cp1Id, 1500000.00, 0.00, 1500000.00, N'Lập Trình C Chuyên Đề 5 - 28Tech', DATEADD(day, -1, GETDATE()));
+
+INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
+VALUES (@OrderKhoaId, 'TX_KHOA_001', 'MOMO', 'GATEWAY_3329', 1500000.00, 'SUCCESS', DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
+
+INSERT INTO coupon_usages (coupon_id, user_id, order_id, discount_amount, created_at)
+VALUES (@Cp1Id, @UserKhoaId, @OrderKhoaId, 0.00, DATEADD(day, -1, GETDATE()));
+
+-- == LEARNER 9: Long (Paid Order for C1 & C5)
+INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
+VALUES (@UserLongId, 1500000.00, 0.00, 'PAID', 'VNPAY', DATEADD(day, -1, GETDATE()));
+DECLARE @OrderLongId INT = SCOPE_IDENTITY();
+
+INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
+VALUES 
+(@OrderLongId, @C1Id, NULL, 0.00, 0.00, 0.00, N'Lập Trình C Cơ Bản - 28Tech', DATEADD(day, -1, GETDATE())),
+(@OrderLongId, @C5Id, NULL, 1500000.00, 0.00, 1500000.00, N'Lập Trình C Chuyên Đề 5 - 28Tech', DATEADD(day, -1, GETDATE()));
+
+INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
+VALUES (@OrderLongId, 'TX_LONG_001', 'VNPAY', 'GATEWAY_9938', 1500000.00, 'SUCCESS', DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
 
 -- F. ENROLLMENTS & LESSON PROGRESS & QUIZ ATTEMPTS
 
--- == LEARNER 1 (Nguyễn Văn An) ==
+-- == LEARNER 0 (Nguyễn Văn An) ==
 -- Enrolled Course 1 (100% progress) and Course 2 (50% progress)
-INSERT INTO enrollments (user_id, course_id, progress_percent, enrolled_at, completed_at)
+INSERT INTO enrollments (user_id, course_id, progress_percent, created_at, completed_at)
 VALUES 
 (@UserAnId, @C1Id, 100.00, DATEADD(day, -5, GETDATE()), DATEADD(day, -3, GETDATE())),
 (@UserAnId, @C2Id, 50.00, DATEADD(day, -5, GETDATE()), NULL);
 
-DECLARE @EnrollAnC1 INT = (SELECT id FROM enrollments WHERE user_id = @UserAnId AND course_id = @C1Id);
 DECLARE @EnrollAnC2 INT = (SELECT id FROM enrollments WHERE user_id = @UserAnId AND course_id = @C2Id);
 
 -- Course 1 Lesson Progress (4/4 lessons)
 INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
 VALUES 
-(@EnrollAnC1, @L1Id, 1, DATEADD(day, -5, GETDATE())),
-(@EnrollAnC1, @L2Id, 1, DATEADD(day, -4, GETDATE())),
-(@EnrollAnC1, @L3Id, 1, DATEADD(day, -4, GETDATE())),
-(@EnrollAnC1, @L4Id, 1, DATEADD(day, -3, GETDATE()));
+((SELECT id FROM enrollments WHERE user_id = @UserAnId AND course_id = @C1Id), @L1Id, 1, DATEADD(day, -5, GETDATE())),
+((SELECT id FROM enrollments WHERE user_id = @UserAnId AND course_id = @C1Id), @L2Id, 1, DATEADD(day, -4, GETDATE())),
+((SELECT id FROM enrollments WHERE user_id = @UserAnId AND course_id = @C1Id), @L3Id, 1, DATEADD(day, -4, GETDATE())),
+((SELECT id FROM enrollments WHERE user_id = @UserAnId AND course_id = @C1Id), @L4Id, 1, DATEADD(day, -3, GETDATE()));
 
 -- Course 1 Quiz Attempts
 INSERT INTO quiz_attempts (user_id, quiz_id, score, is_passed, started_at, submitted_at)
@@ -2146,14 +2281,13 @@ VALUES
 (@UserAnId, @Qz3Id, 100.00, 1, DATEADD(day, -4, GETDATE()), DATEADD(day, -4, GETDATE())),
 (@UserAnId, @Qz4Id, 100.00, 1, DATEADD(day, -3, GETDATE()), DATEADD(day, -3, GETDATE()));
 
--- Course 2 Lesson Progress (1/2 lessons)
+-- Course 2 Lesson Progress (1/12 lessons)
 INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
-VALUES (@EnrollAnC2, @L5Id, 1, DATEADD(day, -2, GETDATE()));
+VALUES (@EnrollAnC2, @C2_L1, 1, DATEADD(day, -2, GETDATE()));
 
-
--- == LEARNER 2 (Trần Thị Bình) ==
+-- == LEARNER 1 (Trần Thị Bình) ==
 -- Enrolled Course 1 (50% progress)
-INSERT INTO enrollments (user_id, course_id, progress_percent, enrolled_at, completed_at)
+INSERT INTO enrollments (user_id, course_id, progress_percent, created_at, completed_at)
 VALUES (@UserBinhId, @C1Id, 50.00, DATEADD(day, -4, GETDATE()), NULL);
 
 DECLARE @EnrollBinhC1 INT = (SELECT id FROM enrollments WHERE user_id = @UserBinhId AND course_id = @C1Id);
@@ -2168,34 +2302,35 @@ VALUES
 INSERT INTO quiz_attempts (user_id, quiz_id, score, is_passed, started_at, submitted_at)
 VALUES (@UserBinhId, @Qz2Id, 75.00, 1, DATEADD(day, -3, GETDATE()), DATEADD(day, -3, GETDATE()));
 
-
--- == LEARNER 3 (Phạm Văn Cường) ==
+-- == LEARNER 2 (Phạm Văn Cường) ==
 -- Enrolled Course 2 (0% progress)
-INSERT INTO enrollments (user_id, course_id, progress_percent, enrolled_at, completed_at)
+INSERT INTO enrollments (user_id, course_id, progress_percent, created_at, completed_at)
 VALUES (@UserCuongId, @C2Id, 0.00, DATEADD(day, -3, GETDATE()), NULL);
-
 
 -- == LEARNER 4 (Hoàng Thị Dung) ==
 -- Enrolled Course 3 (100% progress)
-INSERT INTO enrollments (user_id, course_id, progress_percent, enrolled_at, completed_at)
+INSERT INTO enrollments (user_id, course_id, progress_percent, created_at, completed_at)
 VALUES (@UserDungId, @C3Id, 100.00, DATEADD(day, -2, GETDATE()), DATEADD(day, -1, GETDATE()));
 
 DECLARE @EnrollDungC3 INT = (SELECT id FROM enrollments WHERE user_id = @UserDungId AND course_id = @C3Id);
 
--- Course 3 Lesson Progress (2/2 lessons)
+-- Course 3 Lesson Progress (3/3 lessons completed)
 INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
 VALUES 
-(@EnrollDungC3, @L7Id, 1, DATEADD(day, -2, GETDATE())),
-(@EnrollDungC3, @L8Id, 1, DATEADD(day, -1, GETDATE()));
+(@EnrollDungC3, @C3_L1, 1, DATEADD(day, -2, GETDATE())),
+(@EnrollDungC3, @C3_L2, 1, DATEADD(day, -1, GETDATE())),
+(@EnrollDungC3, @C3_L3, 1, DATEADD(day, -1, GETDATE()));
 
--- Course 3 Quiz Attempt
+-- Course 3 Quiz Attempts
 INSERT INTO quiz_attempts (user_id, quiz_id, score, is_passed, started_at, submitted_at)
-VALUES (@UserDungId, @QzSpringId, 100.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
+VALUES 
+(@UserDungId, @C3_Qz2Id, 100.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())),
+(@UserDungId, @C3_Qz3Id, 100.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
 
 
 -- == LEARNER 5 (Đỗ Văn Em) ==
 -- Enrolled Course 1 (75% progress) and Course 3 (50% progress)
-INSERT INTO enrollments (user_id, course_id, progress_percent, enrolled_at, completed_at)
+INSERT INTO enrollments (user_id, course_id, progress_percent, created_at, completed_at)
 VALUES 
 (@UserEmId, @C1Id, 75.00, DATEADD(day, -1, GETDATE()), NULL),
 (@UserEmId, @C3Id, 50.00, DATEADD(day, -1, GETDATE()), NULL);
@@ -2217,504 +2352,148 @@ VALUES
 (@UserEmId, @Qz3Id, 50.00, 0, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())), -- Failed attempt
 (@UserEmId, @Qz3Id, 80.00, 1, DATEADD(minute, 30, DATEADD(day, -1, GETDATE())), DATEADD(minute, 35, DATEADD(day, -1, GETDATE()))); -- Passed attempt
 
--- Course 3 Lesson Progress (1/2 lessons)
+-- Course 3 Lesson Progress (1 lesson completed)
 INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
-VALUES (@EnrollEmC3, @L7Id, 1, DATEADD(day, -1, GETDATE()));
+VALUES (@EnrollEmC3, @C3_L1, 1, DATEADD(day, -1, GETDATE()));
 
 
--- G. FEEDBACKS / REVIEWS
+-- == LEARNER 6 (Vũ Thanh Hải) ==
+-- Enrolled Course 4 (25% progress)
+INSERT INTO enrollments (user_id, course_id, progress_percent, created_at, completed_at)
+VALUES (@UserHaiId, @C4Id, 25.00, DATEADD(day, -1, GETDATE()), NULL);
 
-INSERT INTO feedbacks (user_id, course_id, rating, comment, status, created_at)
+DECLARE @EnrollHaiC4 INT = (SELECT id FROM enrollments WHERE user_id = @UserHaiId AND course_id = @C4Id);
+
+-- Course 4 Lesson Progress (1 lesson completed)
+INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
+VALUES (@EnrollHaiC4, @C4_L1, 1, DATEADD(day, -1, GETDATE()));
+
+-- Course 4 Quiz Attempt (Failed)
+INSERT INTO quiz_attempts (user_id, quiz_id, score, is_passed, started_at, submitted_at)
+VALUES (@UserHaiId, @C4_Qz2Id, 60.00, 0, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
+
+
+-- == LEARNER 8 (Bùi Anh Khoa) ==
+-- Enrolled Course 5 (100% progress)
+INSERT INTO enrollments (user_id, course_id, progress_percent, created_at, completed_at)
+VALUES (@UserKhoaId, @C5Id, 100.00, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
+
+DECLARE @EnrollKhoaC5 INT = (SELECT id FROM enrollments WHERE user_id = @UserKhoaId AND course_id = @C5Id);
+
+-- Course 5 Lesson Progress (3 lessons completed)
+INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
 VALUES 
-(@UserAnId, @C1Id, 5, N'Khóa học C cơ bản vô cùng chất lượng, giảng viên giải thích cực kỳ tỉ mỉ và dễ nhớ!', 'VISIBLE', DATEADD(day, -3, GETDATE())),
-(@UserBinhId, @C1Id, 4, N'Bài giảng chuẩn bị rất công phu, giao diện học tập trực quan. Tuy nhiên, một số bài tập tự luyện hơi khó so với kiến thức bài học.', 'VISIBLE', DATEADD(day, -3, GETDATE())),
-(@UserCuongId, @C2Id, 5, N'Tài liệu PDF đi kèm rất xịn, bài tập trắc nghiệm có giải thích chi tiết đáp án giúp củng cố kiến thức tốt.', 'VISIBLE', DATEADD(day, -2, GETDATE())),
-(@UserDungId, @C3Id, 5, N'Spring Boot thực chiến rất dễ hiểu. Hướng dẫn cài đặt cấu hình cực kỳ chi tiết cho những ai mới học Java Web!', 'VISIBLE', DATEADD(day, -1, GETDATE())),
-(@UserEmId, @C1Id, 3, N'Khóa học ở mức khá tốt, phần giảng lý thuyết trực quan nhưng hệ thống quiz bài 3 thi thoảng bị chậm phản hồi.', 'VISIBLE', DATEADD(day, -1, GETDATE()));
+(@EnrollKhoaC5, @C5_L1, 1, DATEADD(day, -1, GETDATE())),
+(@EnrollKhoaC5, @C5_L2, 1, DATEADD(day, -1, GETDATE())),
+(@EnrollKhoaC5, @C5_L3, 1, DATEADD(day, -1, GETDATE()));
 
-GO
-
--- ============================================================================
--- INSERT NEW CATEGORIES AND SUB-CATEGORIES
--- ============================================================================
-
--- Lập trình Front-End sub-categories (đã được chèn ở trên với ID = 1)
-DECLARE @ParentFE INT = 1;
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'HTML', N'Khóa học thiết kế giao diện với HTML', @ParentFE, 'ACTIVE');
-DECLARE @CatHTML INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'CSS', N'Khóa học định dạng giao diện với CSS', @ParentFE, 'ACTIVE');
-DECLARE @CatCSS INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'React', N'Khóa học thư viện ReactJS', @ParentFE, 'ACTIVE');
-DECLARE @CatReact INT = SCOPE_IDENTITY();
-
--- Lập trình Back-End & sub-categories
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Lập trình Back-End', N'Khóa học về Lập trình Back-End', NULL, 'ACTIVE');
-DECLARE @ParentBE INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Node.js', N'Khóa học lập trình Back-End với Node.js', @ParentBE, 'ACTIVE');
-DECLARE @CatNode INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Python', N'Khóa học ngôn ngữ lập trình Python', @ParentBE, 'ACTIVE');
-DECLARE @CatPython INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Java', N'Khóa học ngôn ngữ lập trình Java', @ParentBE, 'ACTIVE');
-DECLARE @CatJava INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'PHP', N'Khóa học ngôn ngữ lập trình PHP', @ParentBE, 'ACTIVE');
-DECLARE @CatPHP INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'.NET', N'Khóa học lập trình với .NET Framework / .NET Core', @ParentBE, 'ACTIVE');
-DECLARE @CatNET INT = SCOPE_IDENTITY();
-
--- Lập trình iOS & sub-categories
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Lập trình iOS', N'Khóa học lập trình ứng dụng iOS', NULL, 'ACTIVE');
-DECLARE @ParentIOS INT = SCOPE_IDENTITY();
-
--- Insert Children iOS
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Swift', N'Khóa học ngôn ngữ lập trình Swift', @ParentIOS, 'ACTIVE');
-DECLARE @CatSwift INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'SwiftUI', N'Khóa học UI Framework SwiftUI cho iOS', @ParentIOS, 'ACTIVE');
-DECLARE @CatSwiftUI INT = SCOPE_IDENTITY();
-
--- Update course category IDs to distribute them
-UPDATE courses SET category_id = @CatHTML WHERE id = 1;
-UPDATE courses SET category_id = @CatCSS WHERE id = 2;
-UPDATE courses SET category_id = @CatReact WHERE id = 3;
-UPDATE courses SET category_id = @CatNode WHERE id = 4;
-UPDATE courses SET category_id = @CatPython WHERE id = 5;
-UPDATE courses SET category_id = @CatJava WHERE id = 6;
-UPDATE courses SET category_id = @CatPHP WHERE id = 7;
-UPDATE courses SET category_id = @CatNET WHERE id = 8;
-UPDATE courses SET category_id = @CatSwift WHERE id = 9;
-UPDATE courses SET category_id = @CatSwiftUI WHERE id = 10;
-UPDATE courses SET category_id = @CatHTML WHERE id = 11;
-UPDATE courses SET category_id = @CatCSS WHERE id = 12;
-UPDATE courses SET category_id = @CatReact WHERE id = 13;
-UPDATE courses SET category_id = @CatNode WHERE id = 14;
-
-GO
-
-
--- ============================================================================
--- ADDITIONAL COURSES, SECTIONS, LESSONS, QUIZZES, & COUPONS
--- ============================================================================
-USE ElearningPlatform;
-GO
-
--- 1. Insert more courses
-INSERT INTO courses (instructor_id, category_id, title, description, thumbnail_url, price, level, status, approved_by, approved_at)
+-- Course 5 Quiz Attempts
+INSERT INTO quiz_attempts (user_id, quiz_id, score, is_passed, started_at, submitted_at)
 VALUES 
-(1, 1, N'Cấu Trúc Dữ Liệu Và Giải Thuật - 28Tech', N'Khóa học cung cấp kiến thức nền tảng về Cấu trúc dữ liệu và Giải thuật sử dụng C/C++.', 'course-thumbnails/dsa-28tech.jpg', 500000.00, 'INTERMEDIATE', 'PUBLISHED', 3, GETDATE()),
-(1, 1, N'Lập Trình Java Web với Spring Boot', N'Khóa học Java Web toàn diện từ Zero đến Hero với Spring Boot, Spring Security, JPA, và Azure.', 'course-thumbnails/spring-boot.jpg', 1200000.00, 'ADVANCED', 'PUBLISHED', 3, GETDATE());
+(@UserKhoaId, @C5_Qz1Id, 90.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())),
+(@UserKhoaId, @C5_Qz2Id, 90.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())),
+(@UserKhoaId, @C5_Qz3Id, 90.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
 
-DECLARE @Course2Id INT = (SELECT id FROM courses WHERE title = N'Cấu Trúc Dữ Liệu Và Giải Thuật - 28Tech');
-DECLARE @Course3Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình Java Web với Spring Boot');
 
--- 2. Insert sections for Course 2 & 3
-INSERT INTO course_sections (course_id, title, position)
+-- == LEARNER 9 (Đặng Quang Long) ==
+-- Enrolled Course 1 (100% progress) and Course 5 (100% progress)
+INSERT INTO enrollments (user_id, course_id, progress_percent, created_at, completed_at)
 VALUES 
-(@Course2Id, N'Chương 1: Các cấu trúc dữ liệu cơ bản', 1),
-(@Course3Id, N'Chương 1: Khởi đầu với Spring Boot', 1);
+(@UserLongId, @C1Id, 100.00, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())),
+(@UserLongId, @C5Id, 100.00, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
 
-DECLARE @Section2Id INT = (SELECT id FROM course_sections WHERE course_id = @Course2Id AND title = N'Chương 1: Các cấu trúc dữ liệu cơ bản');
-DECLARE @Section3Id INT = (SELECT id FROM course_sections WHERE course_id = @Course3Id AND title = N'Chương 1: Khởi đầu với Spring Boot');
-
--- 3. Insert lessons for Course 2 & 3
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status)
-VALUES 
-(@Section2Id, N'Bài 1 - Mảng động và Danh sách liên kết', 'videos/dsa_array_linkedlist.mp4', 800, 1, 1, 'APPROVED'),
-(@Section2Id, N'Bài 2 - Ngăn xếp (Stack) và Hàng đợi (Queue)', 'videos/dsa_stack_queue.mp4', 900, 2, 1, 'APPROVED'),
-(@Section3Id, N'Bài 1 - Giới thiệu Spring Framework và Spring Boot', 'videos/spring_intro.mp4', 1000, 1, 1, 'APPROVED'),
-(@Section3Id, N'Bài 2 - Hướng dẫn cấu hình môi trường Spring Boot', 'videos/spring_setup.mp4', 1200, 2, 1, 'APPROVED');
-
-DECLARE @Lesson5Id INT = (SELECT id FROM lessons WHERE title = N'Bài 1 - Mảng động và Danh sách liên kết');
-DECLARE @Lesson6Id INT = (SELECT id FROM lessons WHERE title = N'Bài 2 - Ngăn xếp (Stack) và Hàng đợi (Queue)');
-DECLARE @Lesson7Id INT = (SELECT id FROM lessons WHERE title = N'Bài 1 - Giới thiệu Spring Framework và Spring Boot');
-DECLARE @Lesson8Id INT = (SELECT id FROM lessons WHERE title = N'Bài 2 - Hướng dẫn cấu hình môi trường Spring Boot');
-
--- 4. Insert quizzes for Course 2 & 3
-INSERT INTO quizzes (lesson_id, title, pass_score)
-VALUES 
-(@Lesson6Id, N'Quiz - Stack và Queue', 70),
-(@Lesson8Id, N'Quiz - Tổng quan Spring Boot', 70);
-
-DECLARE @QuizDSAId INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Stack và Queue');
-DECLARE @QuizSpringId INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Tổng quan Spring Boot');
-
--- 5. Insert quiz questions & answers
--- Quiz DSA Question
-INSERT INTO quiz_questions (quiz_id, question_text, question_type, points, position)
-VALUES (@QuizDSAId, N'Cấu trúc dữ liệu Ngăn xếp (Stack) hoạt động theo nguyên lý nào?', 'SINGLE', 1, 1);
-DECLARE @QDSAQ1Id INT = SCOPE_IDENTITY();
-
-INSERT INTO quiz_answers (question_id, answer_text, is_correct)
-VALUES 
-(@QDSAQ1Id, N'LIFO (Last In First Out)', 1),
-(@QDSAQ1Id, N'FIFO (First In First Out)', 0),
-(@QDSAQ1Id, N'LILO (Last In Last Out)', 0),
-(@QDSAQ1Id, N'Ngẫu nhiên', 0);
-
--- Quiz Spring Boot Question
-INSERT INTO quiz_questions (quiz_id, question_text, question_type, points, position)
-VALUES (@QuizSpringId, N'Spring Boot giúp đơn giản hóa việc gì trong phát triển ứng dụng Java?', 'SINGLE', 1, 1);
-DECLARE @QSpringQ1Id INT = SCOPE_IDENTITY();
-
-INSERT INTO quiz_answers (question_id, answer_text, is_correct)
-VALUES 
-(@QSpringQ1Id, N'Cấu hình và triển khai ứng dụng (Auto-configuration)', 1),
-(@QSpringQ1Id, N'Viết cú pháp ngôn ngữ Java', 0),
-(@QSpringQ1Id, N'Thiết kế giao diện người dùng HTML/CSS', 0),
-(@QSpringQ1Id, N'Quản lý hệ điều hành máy chủ', 0);
-
--- 6. Insert Coupons
-INSERT INTO coupons (instructor_id, code, discount_type, discount_value, usage_limit, used_count, expired_at, status)
-VALUES 
-(1, 'WELCOME10', 'PERCENT', 10.00, 100, 1, DATEADD(month, 6, GETDATE()), 'ACTIVE'),
-(1, 'DEVSPECIAL', 'FIXED', 100000.00, 50, 0, DATEADD(month, 3, GETDATE()), 'ACTIVE');
-
-DECLARE @Coupon1Id INT = (SELECT id FROM coupons WHERE code = 'WELCOME10');
-
-GO
-
--- ============================================================================
--- 5 LEARNERS FULL ACTIVITIES MOCK DATA
--- ============================================================================
-USE ElearningPlatform;
-GO
-
--- A. Declare cache variables for existing elements
-DECLARE @L1Id INT = (SELECT id FROM lessons WHERE title = N'Bài 1 - Giới thiệu ngôn ngữ C');
-DECLARE @L2Id INT = (SELECT id FROM lessons WHERE title = N'Bài 2 - Kiểu dữ liệu và khai báo biến trong C');
-DECLARE @L3Id INT = (SELECT id FROM lessons WHERE title = N'Bài 3 - Xuất dữ liệu với printf');
-DECLARE @L4Id INT = (SELECT id FROM lessons WHERE title = N'Bài 4 - Nhập dữ liệu với scanf');
-
-DECLARE @Qz2Id INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Kiểu dữ liệu và biến');
-DECLARE @Qz3Id INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Hàm printf');
-DECLARE @Qz4Id INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Hàm scanf');
-
-DECLARE @C1Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Cơ Bản - 28Tech');
-DECLARE @C2Id INT = (SELECT id FROM courses WHERE title = N'Cấu Trúc Dữ Liệu Và Giải Thuật - 28Tech');
-DECLARE @C3Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình Java Web với Spring Boot');
-
-DECLARE @L5Id INT = (SELECT id FROM lessons WHERE title = N'Bài 1 - Mảng động và Danh sách liên kết');
-DECLARE @L6Id INT = (SELECT id FROM lessons WHERE title = N'Bài 2 - Ngăn xếp (Stack) và Hàng đợi (Queue)');
-DECLARE @L7Id INT = (SELECT id FROM lessons WHERE title = N'Bài 1 - Giới thiệu Spring Framework và Spring Boot');
-DECLARE @L8Id INT = (SELECT id FROM lessons WHERE title = N'Bài 2 - Hướng dẫn cấu hình môi trường Spring Boot');
-
-DECLARE @QzDSAId INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Stack và Queue');
-DECLARE @QzSpringId INT = (SELECT id FROM quizzes WHERE title = N'Quiz - Tổng quan Spring Boot');
-
-DECLARE @Cp1Id INT = (SELECT id FROM coupons WHERE code = 'WELCOME10');
-
--- B. INSERT USERS (LEARNERS)
-INSERT INTO users (role_id, first_name, last_name, email, phone, password_hash, avatar_url, google_id, status)
-VALUES 
-(4, N'An', N'Nguyễn Văn', 'an.nguyen@elearning.com', '0981112222', 'password123', 'avatars/an_nguyen.jpg', NULL, 'ACTIVE'),
-(4, N'Bình', N'Trần Thị', 'binh.tran@elearning.com', '0982223333', 'password123', 'avatars/binh_tran.jpg', NULL, 'ACTIVE'),
-(4, N'Cường', N'Phạm Văn', 'cuong.pham@elearning.com', '0983334444', 'password123', 'avatars/cuong_pham.jpg', NULL, 'ACTIVE'),
-(4, N'Dung', N'Hoàng Thị', 'dung.hoang@elearning.com', '0984445555', NULL, 'avatars/dung_hoang.jpg', 'google_1029384756', 'ACTIVE'),
-(4, N'Em', N'Đỗ Văn', 'em.do@elearning.com', '0985556666', 'password123', 'avatars/em_do.jpg', NULL, 'ACTIVE');
-
-DECLARE @UserAnId INT = (SELECT id FROM users WHERE email = 'an.nguyen@elearning.com');
-DECLARE @UserBinhId INT = (SELECT id FROM users WHERE email = 'binh.tran@elearning.com');
-DECLARE @UserCuongId INT = (SELECT id FROM users WHERE email = 'cuong.pham@elearning.com');
-DECLARE @UserDungId INT = (SELECT id FROM users WHERE email = 'dung.hoang@elearning.com');
-DECLARE @UserEmId INT = (SELECT id FROM users WHERE email = 'em.do@elearning.com');
-
--- C. INSERT CARTS
-INSERT INTO carts (user_id) VALUES 
-(@UserAnId),
-(@UserBinhId),
-(@UserCuongId),
-(@UserDungId),
-(@UserEmId);
-
-DECLARE @CartAnId INT = (SELECT id FROM carts WHERE user_id = @UserAnId);
-DECLARE @CartBinhId INT = (SELECT id FROM carts WHERE user_id = @UserBinhId);
-DECLARE @CartCuongId INT = (SELECT id FROM carts WHERE user_id = @UserCuongId);
-DECLARE @CartDungId INT = (SELECT id FROM carts WHERE user_id = @UserDungId);
-DECLARE @CartEmId INT = (SELECT id FROM carts WHERE user_id = @UserEmId);
-
--- D. INSERT ACTIVE CART ITEMS (Items left in cart)
--- Binh has Course 3 in cart
-INSERT INTO cart_items (cart_id, course_id) VALUES (@CartBinhId, @C3Id);
--- Dung has Course 2 in cart
-INSERT INTO cart_items (cart_id, course_id) VALUES (@CartDungId, @C2Id);
-
--- E. ORDERS, ORDER ITEMS, PAYMENTS & COUPON USAGES
-
--- == LEARNER 1 (Nguyễn Văn An) ==
--- Order 1: Bought Course 1 (price 0) and Course 2 (price 500000.00). Total 500000.00
-INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
-VALUES (@UserAnId, 500000.00, 0.00, 'PAID', 'MOMO', DATEADD(day, -5, GETDATE()));
-DECLARE @OrderAnId INT = SCOPE_IDENTITY();
-
-INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
-VALUES 
-(@OrderAnId, @C1Id, NULL, 0.00, 0.00, 0.00, N'Lập Trình C Cơ Bản - 28Tech', DATEADD(day, -5, GETDATE())),
-(@OrderAnId, @C2Id, NULL, 500000.00, 0.00, 500000.00, N'Cấu Trúc Dữ Liệu Và Giải Thuật - 28Tech', DATEADD(day, -5, GETDATE()));
-
-INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
-VALUES (@OrderAnId, 'TX_AN_001', 'MOMO', 'MOMO_TX_883749', 500000.00, 'SUCCESS', DATEADD(day, -5, GETDATE()), DATEADD(day, -5, GETDATE()));
-
--- == LEARNER 2 (Trần Thị Bình) ==
--- Order 2: Bought Course 1 (price 0). Total 0.00
-INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
-VALUES (@UserBinhId, 0.00, 0.00, 'PAID', 'VNPAY', DATEADD(day, -4, GETDATE()));
-DECLARE @OrderBinhId INT = SCOPE_IDENTITY();
-
-INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
-VALUES (@OrderBinhId, @C1Id, NULL, 0.00, 0.00, 0.00, N'Lập Trình C Cơ Bản - 28Tech', DATEADD(day, -4, GETDATE()));
-
-INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
-VALUES (@OrderBinhId, 'TX_BINH_001', 'VNPAY', 'VN_TX_228394', 0.00, 'SUCCESS', DATEADD(day, -4, GETDATE()), DATEADD(day, -4, GETDATE()));
-
--- == LEARNER 3 (Phạm Văn Cường) ==
--- Order 3: Bought Course 2 (price 500000.00), applied coupon WELCOME10 (10% off -> discount 50000.00). Total 450000.00
-INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
-VALUES (@UserCuongId, 500000.00, 50000.00, 'PAID', 'CARD', DATEADD(day, -3, GETDATE()));
-DECLARE @OrderCuongId INT = SCOPE_IDENTITY();
-
-INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
-VALUES (@OrderCuongId, @C2Id, @Cp1Id, 500000.00, 50000.00, 450000.00, N'Cấu Trúc Dữ Liệu Và Giải Thuật - 28Tech', DATEADD(day, -3, GETDATE()));
-
-INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
-VALUES (@OrderCuongId, 'TX_CUONG_001', 'STRIPE', 'ST_TX_994821', 450000.00, 'SUCCESS', DATEADD(day, -3, GETDATE()), DATEADD(day, -3, GETDATE()));
-
-INSERT INTO coupon_usages (coupon_id, user_id, order_id, discount_amount, created_at)
-VALUES (@Cp1Id, @UserCuongId, @OrderCuongId, 50000.00, DATEADD(day, -3, GETDATE()));
-
--- == LEARNER 4 (Hoàng Thị Dung) ==
--- Order 4: Bought Course 3 (price 1200000.00). Total 1200000.00
-INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
-VALUES (@UserDungId, 1200000.00, 0.00, 'PAID', 'MOMO', DATEADD(day, -2, GETDATE()));
-DECLARE @OrderDungId INT = SCOPE_IDENTITY();
-
-INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
-VALUES (@OrderDungId, @C3Id, NULL, 1200000.00, 0.00, 1200000.00, N'Lập Trình Java Web với Spring Boot', DATEADD(day, -2, GETDATE()));
-
-INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
-VALUES (@OrderDungId, 'TX_DUNG_001', 'MOMO', 'MOMO_TX_774910', 1200000.00, 'SUCCESS', DATEADD(day, -2, GETDATE()), DATEADD(day, -2, GETDATE()));
-
--- == LEARNER 5 (Đỗ Văn Em) ==
--- Order 5: Bought Course 1 (price 0) and Course 3 (price 1200000.00). Total 1200000.00
-INSERT INTO orders (user_id, total_amount, discount_amount, status, payment_method, created_at)
-VALUES (@UserEmId, 1200000.00, 0.00, 'PAID', 'VNPAY', DATEADD(day, -1, GETDATE()));
-DECLARE @OrderEmId INT = SCOPE_IDENTITY();
-
-INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
-VALUES 
-(@OrderEmId, @C1Id, NULL, 0.00, 0.00, 0.00, N'Lập Trình C Cơ Bản - 28Tech', DATEADD(day, -1, GETDATE())),
-(@OrderEmId, @C3Id, NULL, 1200000.00, 0.00, 1200000.00, N'Lập Trình Java Web với Spring Boot', DATEADD(day, -1, GETDATE()));
-
-INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
-VALUES (@OrderEmId, 'TX_EM_001', 'VNPAY', 'VN_TX_553948', 1200000.00, 'SUCCESS', DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
-
-
--- F. ENROLLMENTS & LESSON PROGRESS & QUIZ ATTEMPTS
-
--- == LEARNER 1 (Nguyễn Văn An) ==
--- Enrolled Course 1 (100% progress) and Course 2 (50% progress)
-INSERT INTO enrollments (user_id, course_id, progress_percent, enrolled_at, completed_at)
-VALUES 
-(@UserAnId, @C1Id, 100.00, DATEADD(day, -5, GETDATE()), DATEADD(day, -3, GETDATE())),
-(@UserAnId, @C2Id, 50.00, DATEADD(day, -5, GETDATE()), NULL);
-
-DECLARE @EnrollAnC1 INT = (SELECT id FROM enrollments WHERE user_id = @UserAnId AND course_id = @C1Id);
-DECLARE @EnrollAnC2 INT = (SELECT id FROM enrollments WHERE user_id = @UserAnId AND course_id = @C2Id);
+DECLARE @EnrollLongC1 INT = (SELECT id FROM enrollments WHERE user_id = @UserLongId AND course_id = @C1Id);
+DECLARE @EnrollLongC5 INT = (SELECT id FROM enrollments WHERE user_id = @UserLongId AND course_id = @C5Id);
 
 -- Course 1 Lesson Progress (4/4 lessons)
 INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
 VALUES 
-(@EnrollAnC1, @L1Id, 1, DATEADD(day, -5, GETDATE())),
-(@EnrollAnC1, @L2Id, 1, DATEADD(day, -4, GETDATE())),
-(@EnrollAnC1, @L3Id, 1, DATEADD(day, -4, GETDATE())),
-(@EnrollAnC1, @L4Id, 1, DATEADD(day, -3, GETDATE()));
+(@EnrollLongC1, @L1Id, 1, DATEADD(day, -1, GETDATE())),
+(@EnrollLongC1, @L2Id, 1, DATEADD(day, -1, GETDATE())),
+(@EnrollLongC1, @L3Id, 1, DATEADD(day, -1, GETDATE())),
+(@EnrollLongC1, @L4Id, 1, DATEADD(day, -1, GETDATE()));
 
--- Course 1 Quiz Attempts
+-- Course 5 Lesson Progress (3/3 lessons)
+INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
+VALUES 
+(@EnrollLongC5, @C5_L1, 1, DATEADD(day, -1, GETDATE())),
+(@EnrollLongC5, @C5_L2, 1, DATEADD(day, -1, GETDATE())),
+(@EnrollLongC5, @C5_L3, 1, DATEADD(day, -1, GETDATE()));
+
+-- Quiz Attempts (Course 1 and Course 5)
 INSERT INTO quiz_attempts (user_id, quiz_id, score, is_passed, started_at, submitted_at)
 VALUES 
-(@UserAnId, @Qz2Id, 100.00, 1, DATEADD(day, -4, GETDATE()), DATEADD(day, -4, GETDATE())),
-(@UserAnId, @Qz3Id, 100.00, 1, DATEADD(day, -4, GETDATE()), DATEADD(day, -4, GETDATE())),
-(@UserAnId, @Qz4Id, 100.00, 1, DATEADD(day, -3, GETDATE()), DATEADD(day, -3, GETDATE()));
-
--- Course 2 Lesson Progress (1/2 lessons)
-INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
-VALUES (@EnrollAnC2, @L5Id, 1, DATEADD(day, -2, GETDATE()));
-
-
--- == LEARNER 2 (Trần Thị Bình) ==
--- Enrolled Course 1 (50% progress)
-INSERT INTO enrollments (user_id, course_id, progress_percent, enrolled_at, completed_at)
-VALUES (@UserBinhId, @C1Id, 50.00, DATEADD(day, -4, GETDATE()), NULL);
-
-DECLARE @EnrollBinhC1 INT = (SELECT id FROM enrollments WHERE user_id = @UserBinhId AND course_id = @C1Id);
-
--- Course 1 Lesson Progress (2/4 lessons)
-INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
-VALUES 
-(@EnrollBinhC1, @L1Id, 1, DATEADD(day, -4, GETDATE())),
-(@EnrollBinhC1, @L2Id, 1, DATEADD(day, -3, GETDATE()));
-
--- Course 1 Quiz Attempts
-INSERT INTO quiz_attempts (user_id, quiz_id, score, is_passed, started_at, submitted_at)
-VALUES (@UserBinhId, @Qz2Id, 75.00, 1, DATEADD(day, -3, GETDATE()), DATEADD(day, -3, GETDATE()));
-
-
--- == LEARNER 3 (Phạm Văn Cường) ==
--- Enrolled Course 2 (0% progress)
-INSERT INTO enrollments (user_id, course_id, progress_percent, enrolled_at, completed_at)
-VALUES (@UserCuongId, @C2Id, 0.00, DATEADD(day, -3, GETDATE()), NULL);
-
-
--- == LEARNER 4 (Hoàng Thị Dung) ==
--- Enrolled Course 3 (100% progress)
-INSERT INTO enrollments (user_id, course_id, progress_percent, enrolled_at, completed_at)
-VALUES (@UserDungId, @C3Id, 100.00, DATEADD(day, -2, GETDATE()), DATEADD(day, -1, GETDATE()));
-
-DECLARE @EnrollDungC3 INT = (SELECT id FROM enrollments WHERE user_id = @UserDungId AND course_id = @C3Id);
-
--- Course 3 Lesson Progress (2/2 lessons)
-INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
-VALUES 
-(@EnrollDungC3, @L7Id, 1, DATEADD(day, -2, GETDATE())),
-(@EnrollDungC3, @L8Id, 1, DATEADD(day, -1, GETDATE()));
-
--- Course 3 Quiz Attempt
-INSERT INTO quiz_attempts (user_id, quiz_id, score, is_passed, started_at, submitted_at)
-VALUES (@UserDungId, @QzSpringId, 100.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
-
-
--- == LEARNER 5 (Đỗ Văn Em) ==
--- Enrolled Course 1 (75% progress) and Course 3 (50% progress)
-INSERT INTO enrollments (user_id, course_id, progress_percent, enrolled_at, completed_at)
-VALUES 
-(@UserEmId, @C1Id, 75.00, DATEADD(day, -1, GETDATE()), NULL),
-(@UserEmId, @C3Id, 50.00, DATEADD(day, -1, GETDATE()), NULL);
-
-DECLARE @EnrollEmC1 INT = (SELECT id FROM enrollments WHERE user_id = @UserEmId AND course_id = @C1Id);
-DECLARE @EnrollEmC3 INT = (SELECT id FROM enrollments WHERE user_id = @UserEmId AND course_id = @C3Id);
-
--- Course 1 Lesson Progress (3/4 lessons)
-INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
-VALUES 
-(@EnrollEmC1, @L1Id, 1, DATEADD(day, -1, GETDATE())),
-(@EnrollEmC1, @L2Id, 1, DATEADD(day, -1, GETDATE())),
-(@EnrollEmC1, @L3Id, 1, DATEADD(day, -1, GETDATE()));
-
--- Course 1 Quiz Attempts
-INSERT INTO quiz_attempts (user_id, quiz_id, score, is_passed, started_at, submitted_at)
-VALUES 
-(@UserEmId, @Qz2Id, 85.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())),
-(@UserEmId, @Qz3Id, 50.00, 0, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())), -- Failed attempt
-(@UserEmId, @Qz3Id, 80.00, 1, DATEADD(minute, 30, DATEADD(day, -1, GETDATE())), DATEADD(minute, 35, DATEADD(day, -1, GETDATE()))); -- Passed attempt
-
--- Course 3 Lesson Progress (1/2 lessons)
-INSERT INTO lesson_progress (enrollment_id, lesson_id, is_completed, last_accessed)
-VALUES (@EnrollEmC3, @L7Id, 1, DATEADD(day, -1, GETDATE()));
+(@UserLongId, @Qz2Id, 100.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())),
+(@UserLongId, @Qz3Id, 100.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())),
+(@UserLongId, @Qz4Id, 100.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())),
+(@UserLongId, @C5_Qz1Id, 100.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())),
+(@UserLongId, @C5_Qz2Id, 100.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE())),
+(@UserLongId, @C5_Qz3Id, 100.00, 1, DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
 
 
 -- G. FEEDBACKS / REVIEWS
-
 INSERT INTO feedbacks (user_id, course_id, rating, comment, status, created_at)
 VALUES 
+-- Course 1 Feedbacks (Avg = 3.3)
 (@UserAnId, @C1Id, 5, N'Khóa học C cơ bản vô cùng chất lượng, giảng viên giải thích cực kỳ tỉ mỉ và dễ nhớ!', 'VISIBLE', DATEADD(day, -3, GETDATE())),
-(@UserBinhId, @C1Id, 4, N'Bài giảng chuẩn bị rất công phu, giao diện học tập trực quan. Tuy nhiên, một số bài tập tự luyện hơi khó so với kiến thức bài học.', 'VISIBLE', DATEADD(day, -3, GETDATE())),
-(@UserCuongId, @C2Id, 5, N'Tài liệu PDF đi kèm rất xịn, bài tập trắc nghiệm có giải thích chi tiết đáp án giúp củng cố kiến thức tốt.', 'VISIBLE', DATEADD(day, -2, GETDATE())),
-(@UserDungId, @C3Id, 5, N'Spring Boot thực chiến rất dễ hiểu. Hướng dẫn cài đặt cấu hình cực kỳ chi tiết cho những ai mới học Java Web!', 'VISIBLE', DATEADD(day, -1, GETDATE())),
-(@UserEmId, @C1Id, 3, N'Khóa học ở mức khá tốt, phần giảng lý thuyết trực quan nhưng hệ thống quiz bài 3 thi thoảng bị chậm phản hồi.', 'VISIBLE', DATEADD(day, -1, GETDATE()));
+(@UserBinhId, @C1Id, 4, N'Bài giảng chuẩn bị rất công phu, giao diện học tập trực quan. Tuy nhiên, một số bài tập tự luyện hơi khó.', 'VISIBLE', DATEADD(day, -3, GETDATE())),
+(@UserLongId, @C1Id, 1, N'Chất lượng âm thanh video bài 2 và bài 3 mờ nhạt và rất khó nghe, mong admin sớm cải thiện.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 2 Feedbacks (Avg = 4.7)
+(@UserCuongId, @C2Id, 5, N'Tài liệu PDF đi kèm rất xịn, bài tập trắc nghiệm có giải thích chi tiết đáp án.', 'VISIBLE', DATEADD(day, -2, GETDATE())),
+(@UserAnId, @C2Id, 5, N'Khóa học nâng cao siêu hay, kiến thức sâu sắc.', 'VISIBLE', DATEADD(day, -2, GETDATE())),
+(@UserBinhId, @C2Id, 4, N'Khá tốt nhưng cần thêm bài tập thực hành.', 'VISIBLE', DATEADD(day, -2, GETDATE())),
+
+-- Course 3 Feedbacks (Avg = 4.3)
+(@UserDungId, @C3Id, 5, N'Lập trình C thực hành rất thực tế, nhiều bài tập hay.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserBinhId, @C3Id, 4, N'Bài tập đa dạng, rất bám sát thực tế đi làm.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserCuongId, @C3Id, 4, N'Giao diện bài thực hành chạy mượt mà.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 4 Feedbacks (Avg = 3.3)
+(@UserHaiId, @C4Id, 4, N'Nội dung cấu trúc dữ liệu và giải thuật chi tiết.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserCuongId, @C4Id, 3, N'Thuật toán C hơi phức tạp so với trình độ của tôi, bài giảng đi nhanh quá.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserAnId, @C4Id, 3, N'Nội dung tạm ổn.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 5 Feedbacks (Avg = 3.7)
+(@UserKhoaId, @C5Id, 5, N'Khóa học chuyên đề rất hữu ích, giúp tôi hiểu sâu về mảng và con trỏ!', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserDungId, @C5Id, 4, N'Học rất ổn.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserAnId, @C5Id, 2, N'Hơi khó so với người mới bắt đầu.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 6 Feedbacks (Avg = 3.7)
+(@UserAnId, @C6Id, 4, N'Khá tốt!', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserBinhId, @C6Id, 4, N'Bài giảng rõ ràng.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserCuongId, @C6Id, 3, N'Được.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 7 Feedbacks
+(@UserBinhId, @C7Id, 1, N'Quá tệ!', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 8 Feedbacks (Avg = 2.7)
+(@UserCuongId, @C8Id, 3, N'Bình thường.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserDungId, @C8Id, 3, N'Hơi khó hiểu.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserEmId, @C8Id, 2, N'Chưa thực sự chi tiết.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 9 Feedbacks
+(@UserDungId, @C9Id, 4, N'Rất hay.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 10 Feedbacks (Avg = 4.7)
+(@UserEmId, @C10Id, 5, N'Tuyệt vời.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserGiangId, @C10Id, 5, N'Khá hay.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserHaiId, @C10Id, 4, N'Nội dung phong phú.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 11 Feedbacks
+(@UserGiangId, @C11Id, 2, N'Hơi sơ sài.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 12 Feedbacks (Avg = 3.7)
+(@UserHaiId, @C12Id, 4, N'Được.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserHuyId, @C12Id, 4, N'Bổ ích.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserKhoaId, @C12Id, 3, N'Tạm được.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 13 Feedbacks
+(@UserHuyId, @C13Id, 4, N'Tốt.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+
+-- Course 14 Feedbacks (Avg = 4.3)
+(@UserKhoaId, @C14Id, 5, N'Cực tốt.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserLongId, @C14Id, 4, N'Chất lượng.', 'VISIBLE', DATEADD(day, -1, GETDATE())),
+(@UserAnId, @C14Id, 4, N'Học xong làm được ngay.', 'VISIBLE', DATEADD(day, -1, GETDATE()));
 
 GO
-
--- ============================================================================
--- INSERT NEW CATEGORIES AND SUB-CATEGORIES
--- ============================================================================
-
--- Lập trình Front-End sub-categories (đã được chèn ở trên với ID = 1)
-DECLARE @ParentFE INT = 1;
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'HTML', N'Khóa học thiết kế giao diện với HTML', @ParentFE, 'ACTIVE');
-DECLARE @CatHTML INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'CSS', N'Khóa học định dạng giao diện với CSS', @ParentFE, 'ACTIVE');
-DECLARE @CatCSS INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'React', N'Khóa học thư viện ReactJS', @ParentFE, 'ACTIVE');
-DECLARE @CatReact INT = SCOPE_IDENTITY();
-
--- Lập trình Back-End & sub-categories
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Lập trình Back-End', N'Khóa học về Lập trình Back-End', NULL, 'ACTIVE');
-DECLARE @ParentBE INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Node.js', N'Khóa học lập trình Back-End với Node.js', @ParentBE, 'ACTIVE');
-DECLARE @CatNode INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Python', N'Khóa học ngôn ngữ lập trình Python', @ParentBE, 'ACTIVE');
-DECLARE @CatPython INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Java', N'Khóa học ngôn ngữ lập trình Java', @ParentBE, 'ACTIVE');
-DECLARE @CatJava INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'PHP', N'Khóa học ngôn ngữ lập trình PHP', @ParentBE, 'ACTIVE');
-DECLARE @CatPHP INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'.NET', N'Khóa học lập trình với .NET Framework / .NET Core', @ParentBE, 'ACTIVE');
-DECLARE @CatNET INT = SCOPE_IDENTITY();
-
--- Lập trình iOS & sub-categories
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Lập trình iOS', N'Khóa học lập trình ứng dụng iOS', NULL, 'ACTIVE');
-DECLARE @ParentIOS INT = SCOPE_IDENTITY();
-
--- Insert Children iOS
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'Swift', N'Khóa học ngôn ngữ lập trình Swift', @ParentIOS, 'ACTIVE');
-DECLARE @CatSwift INT = SCOPE_IDENTITY();
-
-INSERT INTO categories (name, description, parent_id, status) 
-VALUES (N'SwiftUI', N'Khóa học UI Framework SwiftUI cho iOS', @ParentIOS, 'ACTIVE');
-DECLARE @CatSwiftUI INT = SCOPE_IDENTITY();
-
--- Update course category IDs to distribute them
-UPDATE courses SET category_id = @CatHTML WHERE id = 1;
-UPDATE courses SET category_id = @CatCSS WHERE id = 2;
-UPDATE courses SET category_id = @CatReact WHERE id = 3;
-UPDATE courses SET category_id = @CatNode WHERE id = 4;
-UPDATE courses SET category_id = @CatPython WHERE id = 5;
-UPDATE courses SET category_id = @CatJava WHERE id = 6;
-UPDATE courses SET category_id = @CatPHP WHERE id = 7;
-UPDATE courses SET category_id = @CatNET WHERE id = 8;
-UPDATE courses SET category_id = @CatSwift WHERE id = 9;
-UPDATE courses SET category_id = @CatSwiftUI WHERE id = 10;
-UPDATE courses SET category_id = @CatHTML WHERE id = 11;
-UPDATE courses SET category_id = @CatCSS WHERE id = 12;
-UPDATE courses SET category_id = @CatReact WHERE id = 13;
-UPDATE courses SET category_id = @CatNode WHERE id = 14;
-
-GO
-

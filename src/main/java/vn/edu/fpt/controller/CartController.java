@@ -14,6 +14,8 @@ import vn.edu.fpt.repository.UserRepository;
 import vn.edu.fpt.repository.EnrollmentRepository;
 import vn.edu.fpt.service.CartItemService;
 import vn.edu.fpt.service.CartService;
+import vn.edu.fpt.mapper.DtoMapper;
+import vn.edu.fpt.dto.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,34 +68,15 @@ public class CartController {
         User user = getMockUser();
         Cart cart = cartService.getOrCreateCartForUser(user);
         
-        // Khởi tạo các item trong giỏ hàng để tránh LazyInitializationException
-        org.hibernate.Hibernate.initialize(cart.getItems());
-        
-        // Khởi tạo course, instructor và các lazy collection cần thiết cho view
-        if (cart.getItems() != null) {
-            for (CartItem item : cart.getItems()) {
-                org.hibernate.Hibernate.initialize(item.getCourse());
-                if (item.getCourse() != null) {
-                    org.hibernate.Hibernate.initialize(item.getCourse().getInstructor());
-                    org.hibernate.Hibernate.initialize(item.getCourse().getCategory());
-                    org.hibernate.Hibernate.initialize(item.getCourse().getFeedbacks());
-                    org.hibernate.Hibernate.initialize(item.getCourse().getSections());
-                    if (item.getCourse().getSections() != null) {
-                        for (vn.edu.fpt.entity.CourseSection section : item.getCourse().getSections()) {
-                            org.hibernate.Hibernate.initialize(section.getLessons());
-                        }
-                    }
-                }
-            }
-        }
+        CartDto cartDto = DtoMapper.INSTANCE.toCartDto(cart);
 
-        // Nhóm các CartItem theo Giảng viên của khóa học
-        Map<User, List<CartItem>> itemsByInstructor = cart.getItems().stream()
+        // Nhóm các CartItemDto theo Giảng viên của khóa học
+        Map<UserDto, List<CartItemDto>> itemsByInstructor = cartDto.getItems().stream()
                 .collect(Collectors.groupingBy(item -> item.getCourse().getInstructor()));
         
         int cartSize = cartItemService.countItemsInCart(cart);
         
-        model.addAttribute("cart", cart);
+        model.addAttribute("cart", cartDto);
         model.addAttribute("itemsByInstructor", itemsByInstructor);
         model.addAttribute("cartSize", cartSize);
         
