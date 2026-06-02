@@ -1,6 +1,7 @@
 package vn.edu.fpt.dto;
 
 import lombok.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -13,5 +14,5 @@ public class LessonMaterialDto {
     private String fileUrl;
     private String fileType;
     private Long fileSize;
-    private java.time.LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 }

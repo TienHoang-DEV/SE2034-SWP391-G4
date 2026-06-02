@@ -1,5 +1,6 @@
 package vn.edu.fpt.controller;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +21,8 @@ import vn.edu.fpt.dto.*;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import vn.edu.fpt.entity.LessonMaterial;
 
 @Controller
 public class ListLessonCourseController {
@@ -34,7 +36,7 @@ public class ListLessonCourseController {
     @Autowired
     AzureBlobService azureBlobService;
 
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     @GetMapping("/course/{courseId}")
     public String listSection(@PathVariable Integer courseId) {
         Course course = courseService.findById(courseId)
@@ -55,7 +57,7 @@ public class ListLessonCourseController {
         return String.format("redirect:/course/%d/section/%d/lesson/%d", courseId, courseSection.getId(), firstLessonId);
     }
 
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     @GetMapping("/course/{courseId}/section/{sectionId}/lesson/{lessonId}")
     public String viewLesson(Model model, @PathVariable Integer courseId, @PathVariable Integer sectionId, @PathVariable Integer lessonId) {
         Course course = courseService.findById(courseId)
@@ -66,9 +68,10 @@ public class ListLessonCourseController {
 
         CourseDto courseDto = DtoMapper.INSTANCE.toCourseDto(course);
         LessonDto lessonDto = DtoMapper.INSTANCE.toLessonDto(lesson);
-        List<LessonMaterialDto> materialDtos = lesson.getMaterials().stream()
-                .map(DtoMapper.INSTANCE::toLessonMaterialDto)
-                .collect(Collectors.toList());
+        List<LessonMaterialDto> materialDtos = new ArrayList<>();
+        for (LessonMaterial m : lesson.getMaterials()) {
+            materialDtos.add(DtoMapper.INSTANCE.toLessonMaterialDto(m));
+        }
 
         model.addAttribute("course", courseDto);
         model.addAttribute("courseSections", courseDto.getSections());
