@@ -2717,6 +2717,4 @@ UPDATE courses SET category_id = @CatReact WHERE id = 13;
 UPDATE courses SET category_id = @CatNode WHERE id = 14;
 
 GO
-=======
-GO
->>>>>>> main
+

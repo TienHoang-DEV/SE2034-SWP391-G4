@@ -58,15 +58,14 @@ public class ListLessonCourseController {
         Lesson lesson = lessonService.findByIdWithMaterials(lessonId)
                 .orElseThrow(() -> new CourseNotFoundException("Bài học không tìm thấy"));
 
-        Set<CourseSection> sections = course.getSections();
         model.addAttribute("course", course);
-        model.addAttribute("courseSections", sections);
+        model.addAttribute("courseSections", course.getSections());
         model.addAttribute("lesson", lesson);
         model.addAttribute("materials", lesson.getMaterials());
 
         String thumbnailUrl = course.getThumbnailUrl();
         if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
-            model.addAttribute("posterUrl", System.getProperty("AZURE_STORAGE_BASE_URL") + "/" + System.getProperty("AZURE_STORAGE_CONTAINER_COURSE_THUMBNAILS") + "/" + thumbnailUrl);
+            model.addAttribute("posterUrl", AppConstants.AZURE_STORAGE_BASE_URL + "/" + AppConstants.AZURE_STORAGE_CONTAINER_COURSE_THUMBNAILS + "/" + thumbnailUrl);
         }
 
         return "learning/learning";
@@ -76,10 +75,7 @@ public class ListLessonCourseController {
     @ResponseBody
     public String lessonView(@PathVariable("lessonId") Integer lessonId) {
         Lesson lesson = lessonService.findById(lessonId).orElse(null);
-        if (lesson == null) {
-            return null;
-        }
+        if (lesson == null) return null;
         return azureBlobService.generateSasUrl(AppConstants.AZURE_STORAGE_CONTAINER_VIDEOS, lesson.getVideoUrl());
     }
-
 }

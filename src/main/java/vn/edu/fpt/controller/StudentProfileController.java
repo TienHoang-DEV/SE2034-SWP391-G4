@@ -58,30 +58,28 @@ public class StudentProfileController {
 
     @GetMapping("/")
     public String showHomePage(Model model) {
-        // Chỉ đơn giản trả về giao diện trang chủ đã đăng nhập
         return "home/home_logged_in";
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @GetMapping("/student/profile")
     public String showStudentProfile(Model model) {
         User user = getSessionUser();
         
-        // Tính toán các thống kê của học viên từ DB
-        int enrollmentsCount = user.getEnrollments().size();
+        org.hibernate.Hibernate.initialize(user.getEnrollments());
         
-        // Đếm số chứng chỉ (khóa học đã học xong 100%)
+        int enrollmentsCount = user.getEnrollments().size();
         long certificatesCount = user.getEnrollments().stream()
                 .filter(e -> e.getProgressPercent() != null && e.getProgressPercent().doubleValue() >= 100)
                 .count();
                 
-        // Tính toán giờ học giả lập: mỗi khóa học đã đăng ký đóng góp 2-8 giờ tùy tiến độ
         int totalHours = 0;
         for (Enrollment en : user.getEnrollments()) {
             double pct = en.getProgressPercent() != null ? en.getProgressPercent().doubleValue() : 0.0;
             totalHours += (int) (pct * 8.0 / 100.0);
         }
         if (totalHours == 0 && enrollmentsCount > 0) {
-            totalHours = 2; // tối thiểu 2 giờ nếu đã đăng ký học
+            totalHours = 2;
         }
 
         model.addAttribute("currentUser", user);
@@ -92,10 +90,25 @@ public class StudentProfileController {
         return "student_profile/student_profile";
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @GetMapping("/student/my-learning")
     public String showMyLearning(Model model) {
         User user = getSessionUser();
         List<Enrollment> enrollments = enrollmentRepository.findByUser(user);
+        
+        for (Enrollment en : enrollments) {
+            org.hibernate.Hibernate.initialize(en.getCourse());
+            if (en.getCourse() != null) {
+                org.hibernate.Hibernate.initialize(en.getCourse().getInstructor());
+                org.hibernate.Hibernate.initialize(en.getCourse().getCategory());
+                org.hibernate.Hibernate.initialize(en.getCourse().getSections());
+                if (en.getCourse().getSections() != null) {
+                    for (vn.edu.fpt.entity.CourseSection section : en.getCourse().getSections()) {
+                        org.hibernate.Hibernate.initialize(section.getLessons());
+                    }
+                }
+            }
+        }
         
         model.addAttribute("currentUser", user);
         model.addAttribute("enrollments", enrollments);
@@ -104,10 +117,23 @@ public class StudentProfileController {
         return "my_learning/my_learning";
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @GetMapping("/student/purchase-history")
     public String showPurchaseHistory(Model model) {
         User user = getSessionUser();
         List<Order> orders = orderRepository.findByUser(user);
+        
+        for (Order order : orders) {
+            org.hibernate.Hibernate.initialize(order.getItems());
+            if (order.getItems() != null) {
+                for (vn.edu.fpt.entity.OrderItem item : order.getItems()) {
+                    org.hibernate.Hibernate.initialize(item.getCourse());
+                    if (item.getCourse() != null) {
+                        org.hibernate.Hibernate.initialize(item.getCourse().getInstructor());
+                    }
+                }
+            }
+        }
         
         model.addAttribute("currentUser", user);
         model.addAttribute("orders", orders);
@@ -115,19 +141,35 @@ public class StudentProfileController {
         return "purchase_history/purchase_history";
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @GetMapping("/student/recommendations")
     public String showRecommendations(Model model) {
         User user = getSessionUser();
         
-        // Lấy danh sách ID các khóa học đã đăng ký
+        org.hibernate.Hibernate.initialize(user.getEnrollments());
+        
         Set<Integer> enrolledCourseIds = user.getEnrollments().stream()
-                .map(e -> e.getCourse().getId())
+                .map(e -> {
+                    org.hibernate.Hibernate.initialize(e.getCourse());
+                    return e.getCourse().getId();
+                })
                 .collect(Collectors.toSet());
                 
-        // Lấy các khóa học chưa đăng ký để đề xuất
         List<Course> recommendedCourses = courseRepository.findAll().stream()
                 .filter(c -> !enrolledCourseIds.contains(c.getId()))
                 .collect(Collectors.toList());
+                
+        for (Course course : recommendedCourses) {
+            org.hibernate.Hibernate.initialize(course.getInstructor());
+            org.hibernate.Hibernate.initialize(course.getCategory());
+            org.hibernate.Hibernate.initialize(course.getFeedbacks());
+            org.hibernate.Hibernate.initialize(course.getSections());
+            if (course.getSections() != null) {
+                for (vn.edu.fpt.entity.CourseSection section : course.getSections()) {
+                    org.hibernate.Hibernate.initialize(section.getLessons());
+                }
+            }
+        }
                 
         model.addAttribute("currentUser", user);
         model.addAttribute("recommendedCourses", recommendedCourses);
