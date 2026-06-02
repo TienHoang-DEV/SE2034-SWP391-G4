@@ -29,6 +29,7 @@ public class InstructorRequest extends BaseEntity {
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
     private InstructorRequestStatus status;
 
