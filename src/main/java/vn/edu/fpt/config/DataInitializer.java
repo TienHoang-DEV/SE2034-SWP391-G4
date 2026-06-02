@@ -86,40 +86,40 @@ public class DataInitializer implements CommandLineRunner {
                     .email("28tech@gmail.com")
                     .phone("0909999999")
                     .passwordHash("123456")
-                    .status("active")
+                    .status("ACTIVE")
                     .build());
         }
 
         Category frontEndCategory = categoryRepository.save(Category.builder()
                 .name("Lập trình Front-End")
                 .description("Khóa học về Lập trình Front-End")
-                .status("active")
+                .status("ACTIVE")
                 .build());
 
         Category backEndCategory = categoryRepository.save(Category.builder()
                 .name("Lập trình Back-End")
                 .description("Khóa học về Lập trình Back-End")
-                .status("active")
+                .status("ACTIVE")
                 .build());
 
         Category iosCategory = categoryRepository.save(Category.builder()
                 .name("Lập trình iOS")
                 .description("Khóa học lập trình ứng dụng iOS")
-                .status("active")
+                .status("ACTIVE")
                 .build());
 
-        Category htmlCat = categoryRepository.save(Category.builder().name("HTML").description("Khóa học thiết kế giao diện với HTML").parent(frontEndCategory).status("active").build());
-        Category cssCat = categoryRepository.save(Category.builder().name("CSS").description("Khóa học định dạng giao diện với CSS").parent(frontEndCategory).status("active").build());
-        Category reactCat = categoryRepository.save(Category.builder().name("React").description("Khóa học thư viện ReactJS").parent(frontEndCategory).status("active").build());
+        Category htmlCat = categoryRepository.save(Category.builder().name("HTML").description("Khóa học thiết kế giao diện với HTML").parent(frontEndCategory).status("ACTIVE").build());
+        Category cssCat = categoryRepository.save(Category.builder().name("CSS").description("Khóa học định dạng giao diện với CSS").parent(frontEndCategory).status("ACTIVE").build());
+        Category reactCat = categoryRepository.save(Category.builder().name("React").description("Khóa học thư viện ReactJS").parent(frontEndCategory).status("ACTIVE").build());
 
-        Category nodeCat = categoryRepository.save(Category.builder().name("Node.js").description("Khóa học lập trình Back-End với Node.js").parent(backEndCategory).status("active").build());
-        Category pythonCat = categoryRepository.save(Category.builder().name("Python").description("Khóa học ngôn ngữ lập trình Python").parent(backEndCategory).status("active").build());
-        Category javaCat = categoryRepository.save(Category.builder().name("Java").description("Khóa học ngôn ngữ lập trình Java").parent(backEndCategory).status("active").build());
-        Category phpCat = categoryRepository.save(Category.builder().name("PHP").description("Khóa học ngôn ngữ lập trình PHP").parent(backEndCategory).status("active").build());
-        Category netCat = categoryRepository.save(Category.builder().name(".NET").description("Khóa học lập trình với .NET Framework / .NET Core").parent(backEndCategory).status("active").build());
+        Category nodeCat = categoryRepository.save(Category.builder().name("Node.js").description("Khóa học lập trình Back-End với Node.js").parent(backEndCategory).status("ACTIVE").build());
+        Category pythonCat = categoryRepository.save(Category.builder().name("Python").description("Khóa học ngôn ngữ lập trình Python").parent(backEndCategory).status("ACTIVE").build());
+        Category javaCat = categoryRepository.save(Category.builder().name("Java").description("Khóa học ngôn ngữ lập trình Java").parent(backEndCategory).status("ACTIVE").build());
+        Category phpCat = categoryRepository.save(Category.builder().name("PHP").description("Khóa học ngôn ngữ lập trình PHP").parent(backEndCategory).status("ACTIVE").build());
+        Category netCat = categoryRepository.save(Category.builder().name(".NET").description("Khóa học lập trình với .NET Framework / .NET Core").parent(backEndCategory).status("ACTIVE").build());
 
-        Category swiftCat = categoryRepository.save(Category.builder().name("Swift").description("Khóa học ngôn ngữ lập trình Swift").parent(iosCategory).status("active").build());
-        Category swiftuiCat = categoryRepository.save(Category.builder().name("SwiftUI").description("Khóa học UI Framework SwiftUI cho iOS").parent(iosCategory).status("active").build());
+        Category swiftCat = categoryRepository.save(Category.builder().name("Swift").description("Khóa học ngôn ngữ lập trình Swift").parent(iosCategory).status("ACTIVE").build());
+        Category swiftuiCat = categoryRepository.save(Category.builder().name("SwiftUI").description("Khóa học UI Framework SwiftUI cho iOS").parent(iosCategory).status("ACTIVE").build());
 
         Course course = courseRepository.save(Course.builder()
                 .instructor(instructor)
@@ -128,8 +128,8 @@ public class DataInitializer implements CommandLineRunner {
                 .description("Khóa học lập trình C cơ bản")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
                 .price(BigDecimal.ZERO)
-                .level("beginner")
-                .status("published")
+                .level("BEGINNER")
+                .status("PUBLISHED")
                 .build());
 
         // Create 3 more courses similar to the first one
@@ -140,8 +140,8 @@ public class DataInitializer implements CommandLineRunner {
                 .description("Khóa học nâng cao lập trình C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
                 .price(new BigDecimal("350000.00"))
-                .level("intermediate")
-                .status("published")
+                .level("INTERMEDIATE")
+                .status("PUBLISHED")
                 .build());
 
         Course course3 = courseRepository.save(Course.builder()
@@ -151,8 +151,8 @@ public class DataInitializer implements CommandLineRunner {
                 .description("Bài tập thực hành và project nhỏ với C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
                 .price(new BigDecimal("600000.00"))
-                .level("beginner")
-                .status("published")
+                .level("BEGINNER")
+                .status("PUBLISHED")
                 .build());
 
         Course course4 = courseRepository.save(Course.builder()
@@ -162,8 +162,8 @@ public class DataInitializer implements CommandLineRunner {
                 .description("Giải thuật và cấu trúc dữ liệu cơ bản bằng C")
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
                 .price(new BigDecimal("850000.00"))
-                .level("advanced")
-                .status("published")
+                .level("ADVANCED")
+                .status("PUBLISHED")
                 .build());
 
         CourseSection section = courseSectionRepository.save(CourseSection.builder()
@@ -179,7 +179,7 @@ public class DataInitializer implements CommandLineRunner {
                 .durationSeconds(600)
                 .position(1)
                 .published(true)
-                .moderationStatus("approved")
+                .moderationStatus("APPROVED")
                 .build());
 
         Lesson lesson2 = lessonRepository.save(Lesson.builder()
@@ -189,7 +189,7 @@ public class DataInitializer implements CommandLineRunner {
                 .durationSeconds(900)
                 .position(2)
                 .published(true)
-                .moderationStatus("approved")
+                .moderationStatus("APPROVED")
                 .build());
 
         Lesson lesson3 = lessonRepository.save(Lesson.builder()
@@ -199,7 +199,7 @@ public class DataInitializer implements CommandLineRunner {
                 .durationSeconds(850)
                 .position(3)
                 .published(true)
-                .moderationStatus("approved")
+                .moderationStatus("APPROVED")
                 .build());
 
         Lesson lesson4 = lessonRepository.save(Lesson.builder()
@@ -209,7 +209,7 @@ public class DataInitializer implements CommandLineRunner {
                 .durationSeconds(920)
                 .position(4)
                 .published(true)
-                .moderationStatus("approved")
+                .moderationStatus("APPROVED")
                 .build());
 
         seedQuizForLesson2(lesson2);
@@ -312,16 +312,16 @@ public class DataInitializer implements CommandLineRunner {
 
         // Seed 10 more courses (course 5 -> course 14)
         String[][] extraCourseConfigs = {
-                {"Lập Trình C Chuyên Đề 5 - 28Tech", "Khóa học chuyên đề C số 5", "beginner", "1500000.00"},
-                {"Lập Trình C Chuyên Đề 6 - 28Tech", "Khóa học chuyên đề C số 6", "intermediate", "0.00"},
-                {"Lập Trình C Chuyên Đề 7 - 28Tech", "Khóa học chuyên đề C số 7", "advanced", "250000.00"},
-                {"Lập Trình C Chuyên Đề 8 - 28Tech", "Khóa học chuyên đề C số 8", "beginner", "550000.00"},
-                {"Lập Trình C Chuyên Đề 9 - 28Tech", "Khóa học chuyên đề C số 9", "intermediate", "900000.00"},
-                {"Lập Trình C Chuyên Đề 10 - 28Tech", "Khóa học chuyên đề C số 10", "advanced", "1100000.00"},
-                {"Lập Trình C Chuyên Đề 11 - 28Tech", "Khóa học chuyên đề C số 11", "beginner", "0.00"},
-                {"Lập Trình C Chuyên Đề 12 - 28Tech", "Khóa học chuyên đề C số 12", "intermediate", "450000.00"},
-                {"Lập Trình C Chuyên Đề 13 - 28Tech", "Khóa học chuyên đề C số 13", "advanced", "650000.00"},
-                {"Lập Trình C Chuyên Đề 14 - 28Tech", "Khóa học chuyên đề C số 14", "intermediate", "950000.00"}
+                {"Lập Trình C Chuyên Đề 5 - 28Tech", "Khóa học chuyên đề C số 5", "BEGINNER", "1500000.00"},
+                {"Lập Trình C Chuyên Đề 6 - 28Tech", "Khóa học chuyên đề C số 6", "INTERMEDIATE", "0.00"},
+                {"Lập Trình C Chuyên Đề 7 - 28Tech", "Khóa học chuyên đề C số 7", "ADVANCED", "250000.00"},
+                {"Lập Trình C Chuyên Đề 8 - 28Tech", "Khóa học chuyên đề C số 8", "BEGINNER", "550000.00"},
+                {"Lập Trình C Chuyên Đề 9 - 28Tech", "Khóa học chuyên đề C số 9", "INTERMEDIATE", "900000.00"},
+                {"Lập Trình C Chuyên Đề 10 - 28Tech", "Khóa học chuyên đề C số 10", "ADVANCED", "1100000.00"},
+                {"Lập Trình C Chuyên Đề 11 - 28Tech", "Khóa học chuyên đề C số 11", "BEGINNER", "0.00"},
+                {"Lập Trình C Chuyên Đề 12 - 28Tech", "Khóa học chuyên đề C số 12", "INTERMEDIATE", "450000.00"},
+                {"Lập Trình C Chuyên Đề 13 - 28Tech", "Khóa học chuyên đề C số 13", "ADVANCED", "650000.00"},
+                {"Lập Trình C Chuyên Đề 14 - 28Tech", "Khóa học chuyên đề C số 14", "INTERMEDIATE", "950000.00"}
         };
         
         List<Category> childCategories = List.of(
@@ -344,7 +344,7 @@ public class DataInitializer implements CommandLineRunner {
                     .email("dothanh2572005@gmail.com")
                     .phone(null)
                     .passwordHash("123")
-                    .status("active")
+                    .status("ACTIVE")
                     .build());
         }
 
@@ -373,11 +373,11 @@ public class DataInitializer implements CommandLineRunner {
             welcome10 = couponRepository.save(Coupon.builder()
                     .instructor(instructor)
                     .code("WELCOME10")
-                    .discountType("percent")
+                    .discountType("PERCENT")
                     .discountValue(new BigDecimal("10.00"))
                     .usageLimit(100)
                     .usedCount(0)
-                    .status("active")
+                    .status("ACTIVE")
                     .expiredAt(LocalDateTime.now().plusMonths(6))
                     .build());
         }
@@ -387,11 +387,11 @@ public class DataInitializer implements CommandLineRunner {
             devspecial = couponRepository.save(Coupon.builder()
                     .instructor(instructor)
                     .code("DEVSPECIAL")
-                    .discountType("fixed")
+                    .discountType("FIXED")
                     .discountValue(new BigDecimal("100000.00"))
                     .usageLimit(50)
                     .usedCount(0)
-                    .status("active")
+                    .status("ACTIVE")
                     .expiredAt(LocalDateTime.now().plusMonths(3))
                     .build());
         }
@@ -438,7 +438,7 @@ public class DataInitializer implements CommandLineRunner {
                         .email(info[2])
                         .phone(info[3])
                         .passwordHash("123456")
-                        .status("active")
+                        .status("ACTIVE")
                         .build());
             }
             users[i] = u;
@@ -467,31 +467,31 @@ public class DataInitializer implements CommandLineRunner {
 
         // 5. Create Orders, OrderItems, Payments, CouponUsages
         // == Learner 0: An (Paid Order for C1 & C2)
-        createMockOrder(users[0], List.of(c1, c2), null, BigDecimal.ZERO, "paid", "MOMO", "success");
+        createMockOrder(users[0], List.of(c1, c2), null, BigDecimal.ZERO, "PAID", "MOMO", "success");
 
         // == Learner 1: Binh (Paid Order for C1)
-        createMockOrder(users[1], List.of(c1), null, BigDecimal.ZERO, "paid", "VNPAY", "success");
+        createMockOrder(users[1], List.of(c1), null, BigDecimal.ZERO, "PAID", "VNPAY", "success");
 
         // == Learner 2: Cuong (Paid Order for C2 with WELCOME10 coupon)
-        createMockOrder(users[2], List.of(c2), welcome10, new BigDecimal("50000.00"), "paid", "CARD", "success");
+        createMockOrder(users[2], List.of(c2), welcome10, new BigDecimal("50000.00"), "PAID", "CARD", "success");
 
         // == Learner 3: Dung (Paid Order for C3)
-        createMockOrder(users[3], List.of(c3), null, BigDecimal.ZERO, "paid", "MOMO", "success");
+        createMockOrder(users[3], List.of(c3), null, BigDecimal.ZERO, "PAID", "MOMO", "success");
 
         // == Learner 4: Em (Paid Order for C1 & C3)
-        createMockOrder(users[4], List.of(c1, c3), null, BigDecimal.ZERO, "paid", "VNPAY", "success");
+        createMockOrder(users[4], List.of(c1, c3), null, BigDecimal.ZERO, "PAID", "VNPAY", "success");
 
         // == Learner 5: Giang (Pending Order for C2)
-        createMockOrder(users[5], List.of(c2), null, BigDecimal.ZERO, "pending", "BANK_TRANSFER", "pending");
+        createMockOrder(users[5], List.of(c2), null, BigDecimal.ZERO, "PENDING", "BANK_TRANSFER", "PENDING");
 
         // == Learner 6: Hai (Paid Order for C4 with DEVSPECIAL coupon)
-        createMockOrder(users[6], List.of(c4), devspecial, new BigDecimal("100000.00"), "paid", "BANK_TRANSFER", "success");
+        createMockOrder(users[6], List.of(c4), devspecial, new BigDecimal("100000.00"), "PAID", "BANK_TRANSFER", "success");
 
         // == Learner 8: Khoa (Paid Order for C5 with WELCOME10 coupon)
-        createMockOrder(users[8], List.of(c5), welcome10, new BigDecimal("0.00"), "paid", "MOMO", "success"); // C5 is 0 VND
+        createMockOrder(users[8], List.of(c5), welcome10, new BigDecimal("0.00"), "PAID", "MOMO", "success"); // C5 is 0 VND
 
         // == Learner 9: Long (Paid Order for C1 & C5)
-        createMockOrder(users[9], List.of(c1, c5), null, BigDecimal.ZERO, "paid", "VNPAY", "success");
+        createMockOrder(users[9], List.of(c1, c5), null, BigDecimal.ZERO, "PAID", "VNPAY", "success");
 
 
         // 6. Create Enrollments, Lesson Progress, Quiz Attempts
@@ -627,14 +627,14 @@ public class DataInitializer implements CommandLineRunner {
                     .build());
         }
 
-        if ("success".equals(paymentStatus)) {
+        if ("SUCCESS".equals(paymentStatus)) {
             paymentRepository.save(Payment.builder()
                     .order(order)
                     .transactionCode("TX_" + user.getLastName().toUpperCase() + "_" + (System.currentTimeMillis() % 10000))
                     .gateway(method)
                     .gatewayTxId("GATEWAY_" + (System.currentTimeMillis() % 10000))
                     .amount(total)
-                    .status("success")
+                    .status("SUCCESS")
                     .paidAt(LocalDateTime.now())
                     .build());
 
@@ -719,7 +719,7 @@ public class DataInitializer implements CommandLineRunner {
                     .course(course)
                     .rating(rating)
                     .comment(comment)
-                    .status("visible")
+                    .status("VISIBLE")
                     .build());
         }
     }
@@ -736,7 +736,7 @@ public class DataInitializer implements CommandLineRunner {
         QuizQuestion q1 = QuizQuestion.builder()
                 .quiz(quiz)
                 .questionText("Kiểu dữ liệu nào dùng để lưu số nguyên trong C?")
-                .questionType("single")
+                .questionType("SINGLE")
                 .points(1)
                 .position(1)
                 .build();
@@ -749,7 +749,7 @@ public class DataInitializer implements CommandLineRunner {
         QuizQuestion q2 = QuizQuestion.builder()
                 .quiz(quiz)
                 .questionText("Từ khóa nào dùng để khai báo biến số thực?")
-                .questionType("single")
+                .questionType("SINGLE")
                 .points(1)
                 .position(2)
                 .build();
@@ -771,7 +771,7 @@ public class DataInitializer implements CommandLineRunner {
         QuizQuestion q1 = QuizQuestion.builder()
                 .quiz(quiz)
                 .questionText("Hàm nào dùng để xuất dữ liệu ra màn hình?")
-                .questionType("single")
+                .questionType("SINGLE")
                 .points(1)
                 .position(1)
                 .build();
@@ -784,7 +784,7 @@ public class DataInitializer implements CommandLineRunner {
         QuizQuestion q2 = QuizQuestion.builder()
                 .quiz(quiz)
                 .questionText("%d trong printf dùng để in kiểu dữ liệu nào?")
-                .questionType("single")
+                .questionType("SINGLE")
                 .points(1)
                 .position(2)
                 .build();
@@ -822,7 +822,7 @@ public class DataInitializer implements CommandLineRunner {
                 .durationSeconds(durationSeconds)
                 .position(position)
                 .published(true)
-                .moderationStatus("approved")
+                .moderationStatus("APPROVED")
                 .build());
     }
 
@@ -843,7 +843,7 @@ public class DataInitializer implements CommandLineRunner {
         QuizQuestion q1 = quizQuestionRepository.save(QuizQuestion.builder()
                 .quiz(quiz)
                 .questionText(q1Text)
-                .questionType("single")
+                .questionType("SINGLE")
                 .points(1)
                 .position(1)
                 .build());
@@ -855,7 +855,7 @@ public class DataInitializer implements CommandLineRunner {
         QuizQuestion q2 = quizQuestionRepository.save(QuizQuestion.builder()
                 .quiz(quiz)
                 .questionText(q2Text)
-                .questionType("single")
+                .questionType("SINGLE")
                 .points(1)
                 .position(2)
                 .build());
@@ -925,7 +925,7 @@ public class DataInitializer implements CommandLineRunner {
                 .thumbnailUrl("2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg")
                 .price(price)
                 .level(level)
-                .status("published")
+                .status("PUBLISHED")
                 .build());
         seedCourseContent(newCourse, instructor);
     }
