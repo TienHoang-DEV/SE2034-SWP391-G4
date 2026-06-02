@@ -16,7 +16,7 @@ public class QuizViewController {
 
     @GetMapping("/quiz/lesson/{lessonId}")
     public String viewQuiz(@PathVariable("lessonId") Integer lessonId, Model model) {
-        Lesson lesson = lessonService.findById(lessonId).orElse(null);
+        Lesson lesson = lessonService.findByIdWithQuizzes(lessonId).orElse(null);
         model.addAttribute("lesson", lesson);
         return "quiz/lesson-quiz";
     }

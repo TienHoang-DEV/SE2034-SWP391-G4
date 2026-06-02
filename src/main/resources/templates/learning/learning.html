@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -37,7 +37,7 @@
                     aria-label="Toggle sidebar">
                 <i data-lucide="menu" style="width: 22px; height: 22px;"></i>
             </button>
-            <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="../home/home_logged_in.html">
+            <a class="navbar-brand d-flex align-items-center gap-2 m-0" th:href="@{/}">
                 <div class="logo-icon-box d-flex align-items-center justify-content-center bg-primary text-white"
                      style="width: 32px; height: 32px; border-radius: 8px;">
                     <i data-lucide="zap" style="width: 18px; height: 18px; fill: currentColor;"></i>
@@ -57,28 +57,32 @@
             <div class="dropdown">
                 <button class="btn p-0 border-0 dropdown-toggle no-caret" type="button" id="profileDropdown"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                    <img th:src="@{/images/avatar.png}" alt="User Avatar"
+                    <img th:src="${session.user != null && session.user.email == '28tech@gmail.com' ? '/images/avatar.png' : '/images/student2.png'}" alt="User Avatar"
                          class="user-avatar rounded-circle border border-primary"
                          style="width: 34px; height: 34px; object-fit: cover;">
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2 p-2"
                     aria-labelledby="profileDropdown" style="width: 220px; border-radius: var(--radius-lg);">
-                    <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted"
-                           href="../student_profile/student_profile.html"><i data-lucide="user" style="width:16px;"></i>
-                        Thông tin của tôi</a></li>
-                    <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted"
-                           href="../my_learning/my_learning.html"><i data-lucide="graduation-cap"
-                                                                     style="width:16px;"></i> Việc học của tôi</a></li>
-                    <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted"
-                           href="../recommendations/recommendations.html"><i data-lucide="sparkles"
-                                                                             style="width:16px;"></i> Khóa học đề
-                        xuất</a></li>
-                    <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted"
-                           href="../purchase_history/purchase_history.html"><i data-lucide="history"
-                                                                               style="width:16px;"></i> Lịch sử mua hàng</a>
+                    <li class="px-3 py-2 border-bottom mb-1" th:if="${session.user != null}">
+                        <p class="user-name fw-semibold m-0 fs-7 text-dark" th:text="${session.user.lastName + ' ' + session.user.firstName}">Tên Học Viên</p>
+                        <p class="user-email text-muted m-0 fs-8 text-truncate" th:text="${session.user.email}">email@example.com</p>
                     </li>
                     <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted"
-                           th:href="@{/}"><i data-lucide="search" style="width:16px;"></i> Tìm kiếm khóa học</a></li>
+                           th:href="@{/student/profile}"><i data-lucide="user" style="width:16px;"></i>
+                        Thông tin của tôi</a></li>
+                    <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted"
+                           th:href="@{/student/my-learning}"><i data-lucide="graduation-cap"
+                                                                     style="width:16px;"></i> Việc học của tôi</a></li>
+                    <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted"
+                           th:href="@{/student/recommendations}"><i data-lucide="sparkles"
+                                                                              style="width:16px;"></i> Khóa học đề
+                        xuất</a></li>
+                    <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted"
+                           th:href="@{/student/purchase-history}"><i data-lucide="history"
+                                                                                style="width:16px;"></i> Lịch sử mua hàng</a>
+                    </li>
+                    <li><a class="dropdown-item d-flex align-items-center gap-3 rounded py-2 fs-7 text-muted"
+                           th:href="@{/courses}"><i data-lucide="search" style="width:16px;"></i> Tìm kiếm khóa học</a></li>
                     <li>
                         <hr class="dropdown-divider my-2">
                     </li>
@@ -102,7 +106,7 @@
             <div class="video-player-container position-relative overflow-hidden bg-dark">
                 <video
                         id="lesson-video"
-                        th:data-lesson-id="${lesson.getId()}"
+                        th:data-lesson-id="${lesson.id}"
                         class="w-100"
                         style="height: 700px; object-fit: cover;"
                         controls
@@ -204,7 +208,7 @@
 
                 <!-- Tab Panel 3: Lesson Document (Hidden by default) -->
                 <div class="tab-panel-item d-none" id="panel-document">
-                    <div th:each="material : ${lesson.getMaterials()}">
+                    <div th:each="material : ${materials}">
                         <div class="lesson-document-viewer">
                             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
                                 <div>
@@ -259,7 +263,7 @@
                                 <div class="lesson-document-stat">
                                     <span class="lesson-document-stat-label">Upload lúc</span>
                                     <span class="lesson-document-stat-value"
-                                          th:text="${material.createdAt != null ? #temporals.format(material.createdAt, 'dd/MM/yyyy HH:mm') : '—'}">—</span>
+                                          th:text="${material.createdAt != null ? material.createdAt : '—'}">—</span>
                                 </div>
                             </div>
                             <div class="lesson-document-frame-shell border rounded-3 overflow-hidden bg-light">
@@ -268,7 +272,7 @@
                                         class="lesson-document-frame"
                                         title="Tài liệu bài học"
                                         loading="lazy"
-                                        th:attr="data-document-endpoint=@{/temp/material/lesson/{lessonId}/url(lessonId=${lesson.id})}, data-file-name=${material != null ? material.fileName : ''}, data-file-type=${material != null ? material.fileType : ''}, data-file-size=${material != null ? material.fileSize : ''}, data-created-at=${material != null and material.createdAt != null ? #temporals.format(material.createdAt, 'dd/MM/yyyy HH:mm') : ''}"
+                                        th:attr="data-document-endpoint=@{/temp/material/lesson/{lessonId}/url(lessonId=${lesson.id})}, data-file-name=${material != null ? material.fileName : ''}, data-file-type=${material != null ? material.fileType : ''}, data-file-size=${material != null ? material.fileSize : ''}, data-created-at=${material != null and material.createdAt != null ? material.createdAt : ''}"
                                         allowfullscreen>
                                 </iframe>
                             </div>
@@ -281,7 +285,7 @@
                         </div>
                     </div>
                     <div class="lesson-document-stats lesson-document-stats-empty mb-3"
-                         th:if="${lesson.getMaterials() == null || lesson.getMaterials().isEmpty()}">
+                         th:if="${materials == null || materials.isEmpty()}">
                         <div class="lesson-document-stat lesson-document-stat-empty">
                             Chưa có tài liệu nào được gắn với bài học này.
                         </div>
@@ -328,7 +332,7 @@
                                         <div class="flex-grow-1">
                                             <a th:href="@{/course/{courseId}/section/{sectionId}/lesson/{lessonId}(courseId=${course.id},sectionId=${section.id},lessonId=${secLesson.id})}"
                                                class="fs-7 text-muted-dark d-block fw-semibold leading-snug text-decoration-none lesson-link" th:text="${secLesson.title}">Lesson title</a>
-                                            <span class="d-flex align-items-center gap-1 text-muted fs-8 mt-1"><i data-lucide="clock" style="width:12px;"></i> <span th:text="${secLesson.durationSeconds != null ? T(java.lang.String).format('%d:%02d', secLesson.durationSeconds / 60, secLesson.durationSeconds mod 60) : '—'}">—</span></span>
+                                            <span class="d-flex align-items-center gap-1 text-muted fs-8 mt-1"><i data-lucide="clock" style="width:12px;"></i> <span th:text="${secLesson.durationSeconds != null ? T(java.lang.String).format('%d:%02d', secLesson.durationSeconds / 60, secLesson.durationSeconds % 60) : '—'}">—</span></span>
                                         </div>
                                     </div>
 

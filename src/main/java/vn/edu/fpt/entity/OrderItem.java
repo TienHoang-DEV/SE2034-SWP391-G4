@@ -37,7 +37,7 @@ public class OrderItem extends BaseEntity {
     @Column(name = "final_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal finalPrice;
 
-    @Column(name = "course_title_snapshot", length = 255)
+    @Column(name = "course_title_snapshot", columnDefinition = "NVARCHAR(255)")
     private String courseTitleSnapshot;
 }
 

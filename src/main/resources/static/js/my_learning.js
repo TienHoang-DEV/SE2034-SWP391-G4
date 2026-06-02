@@ -12,12 +12,20 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initializeCourseCardClicks() {
-    const courseCards = document.querySelectorAll(".course-card-wrapper .course-card");
-    courseCards.forEach(card => {
-        card.style.cursor = "pointer";
-        card.addEventListener("click", () => {
-            window.location.href = "learning.html";
-        });
+    const wrappers = document.querySelectorAll(".course-card-wrapper");
+    wrappers.forEach(wrapper => {
+        const card = wrapper.querySelector(".course-card");
+        const courseId = wrapper.getAttribute("data-course-id");
+        if (card && courseId) {
+            card.style.cursor = "pointer";
+            card.addEventListener("click", (e) => {
+                // If user clicks a link inside the card, don't trigger wrapper click
+                if (e.target.closest("a") || e.target.closest("button")) {
+                    return;
+                }
+                window.location.href = `/course/${courseId}`;
+            });
+        }
     });
 }
 
@@ -28,7 +36,7 @@ function initializeSearchRedirect() {
             if (e.key === 'Enter') {
                 const query = searchInput.value.trim();
                 if (query) {
-                    window.location.href = `courses.html?search=${encodeURIComponent(query)}`;
+                    window.location.href = `/courses?search=${encodeURIComponent(query)}`;
                 }
             }
         });
@@ -123,9 +131,9 @@ function initializePagination() {
 function initializeExploreCard() {
     const exploreCard = document.querySelector(".explore-card");
     if (exploreCard) {
-        exploreCard.addEventListener("click", () => {
-            // Redirect to course listing / discovery page
-            window.location.href = "home_logged_in.html#discover";
+        exploreCard.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.location.href = "/courses";
         });
     }
 }
