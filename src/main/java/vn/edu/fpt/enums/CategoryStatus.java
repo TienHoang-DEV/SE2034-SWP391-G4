@@ -10,4 +10,5 @@ public enum CategoryStatus {
         for (CategoryStatus s : values()) if (s.value.equals(value)) return s;
         throw new IllegalArgumentException("Unknown CategoryStatus: " + value);
     }
+
 }
