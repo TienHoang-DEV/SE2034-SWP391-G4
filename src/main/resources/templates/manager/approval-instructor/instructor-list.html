@@ -64,18 +64,14 @@
                             class="search-input">
                         <select name="status" class="search-input search-select" onchange="this.form.submit()">
                             <option value="" th:selected="${status == null or status == ''}">Tất cả trạng thái</option>
-                            <option value="pending"
-                                th:selected="${status != null and #strings.toLowerCase(status) == 'pending'}">Đang chờ
-                                duyệt</option>
-                            <option value="approved"
-                                th:selected="${status != null and #strings.toLowerCase(status) == 'approved'}">Đã duyệt
-                            </option>
-                            <option value="rejected"
-                                th:selected="${status != null and #strings.toLowerCase(status) == 'rejected'}">Từ chối
-                            </option>
-                            <option value="blocked"
-                                th:selected="${status != null and #strings.toLowerCase(status) == 'blocked'}">Bị chặn
-                            </option>
+                            <option value="PENDING"
+                                th:selected="${status == 'PENDING'}">Đang chờ duyệt</option>
+                            <option value="APPROVED"
+                                th:selected="${status == 'APPROVED'}">Đã duyệt</option>
+                            <option value="REJECTED"
+                                th:selected="${status == 'REJECTED'}">Từ chối</option>
+                            <option value="BLOCKED"
+                                th:selected="${status == 'BLOCKED'}">Bị chặn</option>
                         </select>
                         <button type="submit" style="display: none;">Search</button>
                     </div>
@@ -95,19 +91,18 @@
                             <tr th:each="request : ${requestPage.content}">
                                 <td>
                                     <div class="user-info">
-                                        <span class="user-name"
-                                            th:text="${request.user.firstName + ' ' + request.user.lastName}">Nguyễn Văn
-                                            A</span>
+                                        <span class="user-name" th:text="${request.fullName}">Nguyễn Văn A</span>
                                     </div>
                                 </td>
-                                <td th:text="${request.user.email}">nguyenvana@example.com</td>
+                                <td th:text="${request.email}">nguyenvana@example.com</td>
                                 <td
                                     th:text="${request.createdAt != null ? #temporals.format(request.createdAt, 'dd/MM/yyyy') : ''}">
                                     5/24/2026</td>
                                 <td>
-                                    <span
-                                        th:class="${'badge badge-' + (request.status.value == 'pending' ? 'warning' : (request.status.value == 'approved' ? 'success' : (request.status.value == 'rejected' ? 'danger' : (request.status.value == 'blocked' ? 'dark' : 'secondary'))))}"
-                                        th:text="${request.status.displayName}">Đang chờ duyệt</span>
+                                    <span th:class="${'badge badge-' + (request.status.name() == 'PENDING' ? 'warning' : request.status.name() == 'APPROVED' ? 'success' : request.status.name() == 'REJECTED' ? 'danger' : 'dark')}"
+                                          th:text="${request.status.name() == 'PENDING' ? 'Đang chờ duyệt' : request.status.name() == 'APPROVED' ? 'Đã duyệt' : request.status.name() == 'REJECTED' ? 'Từ chối' : 'Bị chặn'}">
+                                        Đang chờ duyệt
+                                    </span>
                                 </td>
                                 <td>
                                     <div class="actions">

@@ -69,26 +69,24 @@
                     <div class="detail-card">
                         <!-- Profile Header -->
                         <div class="profile-section">
-                            <img th:src="${request.user.avatarUrl != null ? request.user.avatarUrl : '/images/default-avatar.png'}"
+                            <img th:src="${request.avatarUrl != null ? request.avatarUrl : '/images/default-avatar.png'}"
                                 alt="Avatar" class="profile-avatar-large">
                             <div class="profile-details">
-                                <div class="profile-name-lg"
-                                    th:text="${request.user.firstName + ' ' + request.user.lastName}">Tiến sĩ Eleanor
-                                    Vance</div>
+                                <div class="profile-name-lg" th:text="${request.fullName}">Tiến sĩ Eleanor Vance</div>
                                 <div class="profile-title-sub"
-                                    th:text="${request.user.bio != null ? request.user.bio : 'Ứng viên Giảng viên'}">
+                                    th:text="${request.bio != null ? request.bio : 'Ứng viên Giảng viên'}">
                                     Chuyên gia Khoa học Dữ liệu cấp cao tại TechCorp</div>
 
                                 <div class="profile-meta-info">
                                     <span class="meta-item"><i class="ph ph-envelope"></i> <span
-                                            th:text="${request.user.email}">eleanor@example.com</span></span>
+                                            th:text="${request.email}">eleanor@example.com</span></span>
                                     <span class="meta-item"><i class="ph ph-calendar"></i> <span
                                             th:text="${request.createdAt != null ? #temporals.format(request.createdAt, 'dd/MM/yyyy') : ''}">01/06/2026</span></span>
                                 </div>
 
-                                <span
-                                    th:class="${'badge badge-' + (request.status.value == 'pending' ? 'warning' : (request.status.value == 'approved' ? 'success' : (request.status.value == 'rejected' ? 'danger' : (request.status.value == 'blocked' ? 'dark' : 'secondary'))))}"
-                                    th:text="${request.status.displayName}" style="margin-top: 5px;">PENDING</span>
+                                <span th:class="${'badge badge-' + (request.status.name() == 'PENDING' ? 'warning' : request.status.name() == 'APPROVED' ? 'success' : request.status.name() == 'REJECTED' ? 'danger' : 'dark')}"
+                                    th:text="${request.status.name() == 'PENDING' ? 'Đang chờ duyệt' : request.status.name() == 'APPROVED' ? 'Đã duyệt' : request.status.name() == 'REJECTED' ? 'Từ chối' : 'Bị chặn'}"
+                                    style="margin-top: 5px;">PENDING</span>
                             </div>
                         </div>
 
@@ -166,28 +164,28 @@
                             <input type="hidden" name="id" th:value="${request.id}" />
 
                             <div class="status-radio-group">
-                                <!-- Option: Phê duyệt (Always visible for decision making) -->
+                                <!-- Option: Phê duyệt -->
                                 <label class="status-radio-label approved-label">
-                                    <input type="radio" name="status" value="approved"
-                                        th:checked="${request.status.value == 'approved'}" required />
+                                    <input type="radio" name="status" value="APPROVED"
+                                        th:checked="${request.status.name() == 'APPROVED'}" required />
                                     <i class="ph ph-check-circle status-icon"></i>
                                     <span>Phê duyệt</span>
                                 </label>
 
-                                <!-- Option: Từ chối (Hidden if already approved or blocked) -->
+                                <!-- Option: Từ chối (ẩn nếu đã APPROVED hoặc BLOCKED) -->
                                 <label class="status-radio-label rejected-label"
-                                    th:style="${request.status.value == 'approved' or request.status.value == 'blocked' ? 'display: none !important;' : ''}">
-                                    <input type="radio" name="status" value="rejected"
-                                        th:checked="${request.status.value == 'rejected'}" required />
+                                    th:style="${request.status.name() == 'APPROVED' or request.status.name() == 'BLOCKED' ? 'display: none !important;' : ''}">
+                                    <input type="radio" name="status" value="REJECTED"
+                                        th:checked="${request.status.name() == 'REJECTED'}" required />
                                     <i class="ph ph-x-circle status-icon"></i>
                                     <span>Từ chối</span>
                                 </label>
 
-                                <!-- Option: Chặn tài khoản (Hidden if already rejected) -->
+                                <!-- Option: Chặn tài khoản (ẩn nếu đã REJECTED) -->
                                 <label class="status-radio-label blocked-label"
-                                    th:style="${request.status.value == 'rejected' ? 'display: none !important;' : ''}">
-                                    <input type="radio" name="status" value="blocked"
-                                        th:checked="${request.status.value == 'blocked'}" required />
+                                    th:style="${request.status.name() == 'REJECTED' ? 'display: none !important;' : ''}">
+                                    <input type="radio" name="status" value="BLOCKED"
+                                        th:checked="${request.status.name() == 'BLOCKED'}" required />
                                     <i class="ph ph-prohibit status-icon"></i>
                                     <span>Chặn tài khoản</span>
                                 </label>
