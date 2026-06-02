@@ -984,7 +984,7 @@ VALUES (
     9, -- Java (ID = 9)
     N'Lập Trình C Cơ Bản - 28Tech',
     N'Khóa học lập trình C cơ bản',
-    'course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg',
+    '2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg',
     0.00,
     'BEGINNER',
     'PUBLISHED'
@@ -1019,7 +1019,7 @@ INSERT INTO lessons (
 VALUES (
     1,
     N'Bài 1 - Giới thiệu ngôn ngữ C',
-    'videos/Recording 2026-05-28 212131.mp4',
+    'Recording%202026-05-28%20212131.mp4',
     600,
     1,
     1,
@@ -1046,7 +1046,7 @@ VALUES (
     1,
     N'Bài 2 - Kiểu dữ liệu và khai báo biến trong C',
 
-    'videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2002.%20Ki%E1%BB%83u%20d%E1%BB%AF%20li%E1%BB%87u%20v%C3%A0%20c%C3%A1ch%20khai%20b%C3%A1o%20bi%E1%BA%BFn%20trong%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C-C++.mp4',
+    'Recording%202026-05-28%20212131.mp4',
 
     900,
     2,
@@ -1156,7 +1156,7 @@ VALUES (
     1,
     N'Bài 3 - Xuất dữ liệu với printf',
 
-    'videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2003.%20C%C3%A1ch%20xu%E1%BA%A5t%20d%E1%BB%AF%20li%E1%BB%87u%20ra%20m%C3%A0n%20h%C3%ICnh%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20H%C3%A0m%20printf%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C.mp4',
+    'Recording%202026-05-28%20212131.mp4',
 
     850,
     3,
@@ -1264,7 +1264,7 @@ VALUES (
     1,
     N'Bài 4 - Nhập dữ liệu với scanf',
 
-    'videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2004.%20C%C3%A1ch%20nh%E1%BA%ADp%20d%E1%BB%AF%20li%E1%BB%87u%20t%E1%BB%AB%20b%C3%A0n%20ph%C3%ADm%20trong%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C.mp4',
+    'Recording%202026-05-28%20212131.mp4',
 
     920,
     4,
@@ -1364,7 +1364,7 @@ VALUES (1, N'Câu lệnh điều kiện và vòng lặp', 2);
 SET @Section2Id = SCOPE_IDENTITY();
 
 INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status)
-VALUES (@Section2Id, N'Bài 5 - Câu lệnh if else', 'videos/Recording 2026-05-28 212131.mp4', 780, 1, 1, 'APPROVED');
+VALUES (@Section2Id, N'Bài 5 - Câu lệnh if else', 'Recording%202026-05-28%20212131.mp4', 780, 1, 1, 'APPROVED');
 DECLARE @Lesson5Id INT = SCOPE_IDENTITY();
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@Lesson5Id, N'Quiz - Câu lệnh if else', 70);
 DECLARE @Quiz5Id INT = SCOPE_IDENTITY();
@@ -1378,7 +1378,7 @@ INSERT INTO quiz_answers (question_id, answer_text, is_correct)
 VALUES (@Q52Id, N'Boolean', 1), (@Q52Id, N'String', 0), (@Q52Id, N'Char', 0), (@Q52Id, N'Float', 0);
 
 INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status)
-VALUES (@Section2Id, N'Bài 6 - Câu lệnh switch case', 'videos/Recording 2026-05-28 212131.mp4', 840, 2, 1, 'APPROVED');
+VALUES (@Section2Id, N'Bài 6 - Câu lệnh switch case', 'Recording%202026-05-28%20212131.mp4', 840, 2, 1, 'APPROVED');
 DECLARE @Lesson6Id INT = SCOPE_IDENTITY();
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@Lesson6Id, N'Quiz - Câu lệnh switch case', 70);
 DECLARE @Quiz6Id INT = SCOPE_IDENTITY();
@@ -1392,7 +1392,7 @@ INSERT INTO quiz_answers (question_id, answer_text, is_correct)
 VALUES (@Q62Id, N'break', 1), (@Q62Id, N'continue', 0), (@Q62Id, N'return', 0), (@Q62Id, N'exit', 0);
 
 INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status)
-VALUES (@Section2Id, N'Bài 7 - Vòng lặp for và while', 'videos/Recording 2026-05-28 212131.mp4', 900, 3, 1, 'APPROVED');
+VALUES (@Section2Id, N'Bài 7 - Vòng lặp for và while', 'Recording%202026-05-28%20212131.mp4', 900, 3, 1, 'APPROVED');
 DECLARE @Lesson7Id INT = SCOPE_IDENTITY();
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@Lesson7Id, N'Quiz - Vòng lặp for và while', 70);
 DECLARE @Quiz7Id INT = SCOPE_IDENTITY();
@@ -1411,7 +1411,7 @@ VALUES (1, N'Mảng và chuỗi', 3);
 SET @Section3Id = SCOPE_IDENTITY();
 
 INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status)
-VALUES (@Section3Id, N'Bài 8 - Khai báo và truy cập mảng', 'videos/Recording 2026-05-28 212131.mp4', 870, 1, 1, 'APPROVED');
+VALUES (@Section3Id, N'Bài 8 - Khai báo và truy cập mảng', 'Recording%202026-05-28%20212131.mp4', 870, 1, 1, 'APPROVED');
 DECLARE @Lesson8Id INT = SCOPE_IDENTITY();
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@Lesson8Id, N'Quiz - Mảng trong C', 70);
 DECLARE @Quiz8Id INT = SCOPE_IDENTITY();
@@ -1425,7 +1425,7 @@ INSERT INTO quiz_answers (question_id, answer_text, is_correct)
 VALUES (@Q82Id, N'Lưu các phần tử cùng kiểu dữ liệu', 1), (@Q82Id, N'Lưu mọi kiểu dữ liệu', 0), (@Q82Id, N'Không có kích thước', 0), (@Q82Id, N'Chỉ lưu chuỗi', 0);
 
 INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status)
-VALUES (@Section3Id, N'Bài 9 - Duyệt mảng với vòng lặp', 'videos/Recording 2026-05-28 212131.mp4', 930, 2, 1, 'APPROVED');
+VALUES (@Section3Id, N'Bài 9 - Duyệt mảng với vòng lặp', 'Recording%202026-05-28%20212131.mp4', 930, 2, 1, 'APPROVED');
 DECLARE @Lesson9Id INT = SCOPE_IDENTITY();
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@Lesson9Id, N'Quiz - Duyệt mảng', 70);
 DECLARE @Quiz9Id INT = SCOPE_IDENTITY();
@@ -1439,7 +1439,7 @@ INSERT INTO quiz_answers (question_id, answer_text, is_correct)
 VALUES (@Q92Id, N'Khi khai báo', 1), (@Q92Id, N'Khi chạy chương trình', 0), (@Q92Id, N'Khi in ra', 0), (@Q92Id, N'Khi kết thúc', 0);
 
 INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status)
-VALUES (@Section3Id, N'Bài 10 - Xử lý chuỗi trong C', 'videos/Recording 2026-05-28 212131.mp4', 960, 3, 1, 'APPROVED');
+VALUES (@Section3Id, N'Bài 10 - Xử lý chuỗi trong C', 'Recording%202026-05-28%20212131.mp4', 960, 3, 1, 'APPROVED');
 DECLARE @Lesson10Id INT = SCOPE_IDENTITY();
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@Lesson10Id, N'Quiz - Xử lý chuỗi', 70);
 DECLARE @Quiz10Id INT = SCOPE_IDENTITY();
@@ -1458,7 +1458,7 @@ VALUES (1, N'Hàm và con trỏ', 4);
 SET @Section4Id = SCOPE_IDENTITY();
 
 INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status)
-VALUES (@Section4Id, N'Bài 11 - Hàm trong C', 'videos/Recording 2026-05-28 212131.mp4', 840, 1, 1, 'APPROVED');
+VALUES (@Section4Id, N'Bài 11 - Hàm trong C', 'Recording%202026-05-28%20212131.mp4', 840, 1, 1, 'APPROVED');
 DECLARE @Lesson11Id INT = SCOPE_IDENTITY();
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@Lesson11Id, N'Quiz - Hàm trong C', 70);
 DECLARE @Quiz11Id INT = SCOPE_IDENTITY();
@@ -1472,7 +1472,7 @@ INSERT INTO quiz_answers (question_id, answer_text, is_correct)
 VALUES (@Q112Id, N'int', 1), (@Q112Id, N'void', 0), (@Q112Id, N'char', 0), (@Q112Id, N'float', 0);
 
 INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status)
-VALUES (@Section4Id, N'Bài 12 - Tham số và giá trị trả về', 'videos/Recording 2026-05-28 212131.mp4', 900, 2, 1, 'APPROVED');
+VALUES (@Section4Id, N'Bài 12 - Tham số và giá trị trả về', 'Recording%202026-05-28%20212131.mp4', 900, 2, 1, 'APPROVED');
 DECLARE @Lesson12Id INT = SCOPE_IDENTITY();
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@Lesson12Id, N'Quiz - Tham số và giá trị trả về', 70);
 DECLARE @Quiz12Id INT = SCOPE_IDENTITY();
@@ -1486,7 +1486,7 @@ INSERT INTO quiz_answers (question_id, answer_text, is_correct)
 VALUES (@Q122Id, N'Kiểu dữ liệu trả về', 1), (@Q122Id, N'Tên hàm', 0), (@Q122Id, N'Số tham số', 0), (@Q122Id, N'Tên biến cục bộ', 0);
 
 INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status)
-VALUES (@Section4Id, N'Bài 13 - Con trỏ cơ bản', 'videos/Recording 2026-05-28 212131.mp4', 980, 3, 1, 'APPROVED');
+VALUES (@Section4Id, N'Bài 13 - Con trỏ cơ bản', 'Recording%202026-05-28%20212131.mp4', 980, 3, 1, 'APPROVED');
 DECLARE @Lesson13Id INT = SCOPE_IDENTITY();
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@Lesson13Id, N'Quiz - Con trỏ cơ bản', 70);
 DECLARE @Quiz13Id INT = SCOPE_IDENTITY();
@@ -1503,15 +1503,20 @@ VALUES (@Q132Id, N'&', 1), (@Q132Id, N'*', 0), (@Q132Id, N'%', 0), (@Q132Id, N'#
 -- LESSON MATERIALS
 -- =========================
 INSERT INTO lesson_materials (instructor_id, course_id, lesson_id, file_name, file_url, file_type, created_at)
-VALUES (
-           1,  -- instructor_id (thay bằng ID giảng viên thực tế)
-           1,  -- course_id (khóa học 1)
-           1,  -- lesson_id (bài học 1)
-           '[28Tech] BUOI 1.pdf',  -- file_name
-           '%5B28Tech%5D.%20BUOI%201.pdf',  -- file_url
-           'pdf',  -- file_type
-           GETDATE()  -- created_at
-       );
+VALUES
+       (1, 1, 1,  '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 2,  '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 3,  '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 4,  '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 5,  '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 6,  '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 7,  '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 8,  '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 9,  '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 10, '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 11, '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 12, '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE()),
+       (1, 1, 13, '[28Tech] BUOI 1.pdf', '%5B28Tech%5D.%20BUOI%201.pdf', 'pdf', GETDATE());
 
 -- =========================
 -- SAMPLE DATA COMPLETE
@@ -1525,14 +1530,14 @@ GO
 -- COURSE 2
 DECLARE @Course2Id INT;
 INSERT INTO courses (instructor_id, category_id, title, description, thumbnail_url, price, level, status)
-VALUES (1, 9, N'Lập Trình C Nâng Cao - 28Tech', N'Khóa học nâng cao lập trình C', 'course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg', 350000.00, 'INTERMEDIATE', 'PUBLISHED');
+VALUES (1, 9, N'Lập Trình C Nâng Cao - 28Tech', N'Khóa học nâng cao lập trình C', '2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg', 350000.00, 'INTERMEDIATE', 'PUBLISHED');
 SET @Course2Id = SCOPE_IDENTITY();
 
 -- Sections and lessons for Course 2
 DECLARE @C2S1 INT; INSERT INTO course_sections (course_id, title, position) VALUES (@Course2Id, N'Giới thiệu', 1); SET @C2S1 = SCOPE_IDENTITY();
-DECLARE @C2L1 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S1, N'Bài 1 - Giới thiệu ngôn ngữ C', 'videos/Recording 2026-05-28 212131.mp4', 600, 1, 1, 'APPROVED'); SET @C2L1 = SCOPE_IDENTITY();
-DECLARE @C2L2 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S1, N'Bài 2 - Kiểu dữ liệu và khai báo biến trong C', 'videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2002.%20Ki%E1%BB%83u%20d%E1%BB%AF%20li%E1%BB%87u%20v%C3%A0%20c%C3%A1ch%20khai%20b%C3%A1o%20bi%E1%BA%BFn%20trong%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C-C++.mp4', 900, 2, 1, 'APPROVED'); SET @C2L2 = SCOPE_IDENTITY();
-DECLARE @C2L3 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S1, N'Bài 3 - Xuất dữ liệu với printf', 'videos/L%E1%BA%ADp%20tr%C3%ACnh%20C%20-%2003.%20C%C3%A1ch%20xu%E1%BA%A5t%20d%E1%BB%AF%20li%E1%BB%87u%20ra%20m%C3%A0n%20h%C3%ACnh%20l%E1%BA%ADp%20tr%C3%ACnh%20C%20-%20H%C3%A0m%20printf%20-%20T%E1%BB%B1%20h%E1%BB%8Dc%20l%E1%BA%ADp%20tr%C3%ACnh%20C.mp4', 850, 3, 1, 'APPROVED'); SET @C2L3 = SCOPE_IDENTITY();
+DECLARE @C2L1 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S1, N'Bài 1 - Giới thiệu ngôn ngữ C', 'Recording%202026-05-28%20212131.mp4', 600, 1, 1, 'APPROVED'); SET @C2L1 = SCOPE_IDENTITY();
+DECLARE @C2L2 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S1, N'Bài 2 - Kiểu dữ liệu và khai báo biến trong C', 'Recording%202026-05-28%20212131.mp4', 900, 2, 1, 'APPROVED'); SET @C2L2 = SCOPE_IDENTITY();
+DECLARE @C2L3 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S1, N'Bài 3 - Xuất dữ liệu với printf', 'Recording%202026-05-28%20212131.mp4', 850, 3, 1, 'APPROVED'); SET @C2L3 = SCOPE_IDENTITY();
 
 -- Seed quizzes for C2 lessons s1
 -- For brevity, add one quiz with two simple questions per lesson
@@ -1559,9 +1564,9 @@ DECLARE @C2S4 INT; INSERT INTO course_sections (course_id, title, position) VALU
 
 -- For each of these sections, insert 3 lessons and a quiz (use same video file)
 -- Section 2 lessons
-DECLARE @c2l4 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S2, N'Bài 5 - Câu lệnh if else', 'videos/Recording 2026-05-28 212131.mp4', 780, 1, 1, 'APPROVED'); SET @c2l4 = SCOPE_IDENTITY();
-DECLARE @c2l5 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S2, N'Bài 6 - Câu lệnh switch case', 'videos/Recording 2026-05-28 212131.mp4', 840, 2, 1, 'APPROVED'); SET @c2l5 = SCOPE_IDENTITY();
-DECLARE @c2l6 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S2, N'Bài 7 - Vòng lặp for và while', 'videos/Recording 2026-05-28 212131.mp4', 900, 3, 1, 'APPROVED'); SET @c2l6 = SCOPE_IDENTITY();
+DECLARE @c2l4 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S2, N'Bài 5 - Câu lệnh if else', 'Recording%202026-05-28%20212131.mp4', 780, 1, 1, 'APPROVED'); SET @c2l4 = SCOPE_IDENTITY();
+DECLARE @c2l5 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S2, N'Bài 6 - Câu lệnh switch case', 'Recording%202026-05-28%20212131.mp4', 840, 2, 1, 'APPROVED'); SET @c2l5 = SCOPE_IDENTITY();
+DECLARE @c2l6 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S2, N'Bài 7 - Vòng lặp for và while', 'Recording%202026-05-28%20212131.mp4', 900, 3, 1, 'APPROVED'); SET @c2l6 = SCOPE_IDENTITY();
 
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@c2l4, N'Quiz - If else', 70); DECLARE @c2q4 INT = SCOPE_IDENTITY();
 INSERT INTO quiz_questions (quiz_id, question_text, question_type, points, position) VALUES (@c2q4, N'If else để làm gì?', 'SINGLE', 1, 1); DECLARE @c2q41 INT = SCOPE_IDENTITY(); INSERT INTO quiz_answers (question_id, answer_text, is_correct) VALUES (@c2q41, N'Rẽ nhánh',1),(@c2q41,N'Lặp',0),(@c2q41,N'Khai báo',0),(@c2q41,N'Khác',0);
@@ -1573,9 +1578,9 @@ INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@c2l6, N'Quiz - Vòng
 INSERT INTO quiz_questions (quiz_id, question_text, question_type, points, position) VALUES (@c2q6, N'Vòng lặp for dùng khi?', 'SINGLE', 1, 1); DECLARE @c2q61 INT = SCOPE_IDENTITY(); INSERT INTO quiz_answers (question_id, answer_text, is_correct) VALUES (@c2q61, N'Biết trước số lần lặp',1),(@c2q61,N'Không biết trước',0),(@c2q61,N'Khai báo',0),(@c2q61,N'Khác',0);
 
 -- Section 3 lessons (array/string)
-DECLARE @c2l7 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S3, N'Bài 8 - Khai báo mảng', 'videos/Recording 2026-05-28 212131.mp4', 870, 1, 1, 'APPROVED'); SET @c2l7 = SCOPE_IDENTITY();
-DECLARE @c2l8 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S3, N'Bài 9 - Duyệt mảng', 'videos/Recording 2026-05-28 212131.mp4', 930, 2, 1, 'APPROVED'); SET @c2l8 = SCOPE_IDENTITY();
-DECLARE @c2l9 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S3, N'Bài 10 - Chuỗi', 'videos/Recording 2026-05-28 212131.mp4', 960, 3, 1, 'APPROVED'); SET @c2l9 = SCOPE_IDENTITY();
+DECLARE @c2l7 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S3, N'Bài 8 - Khai báo mảng', 'Recording%202026-05-28%20212131.mp4', 870, 1, 1, 'APPROVED'); SET @c2l7 = SCOPE_IDENTITY();
+DECLARE @c2l8 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S3, N'Bài 9 - Duyệt mảng', 'Recording%202026-05-28%20212131.mp4', 930, 2, 1, 'APPROVED'); SET @c2l8 = SCOPE_IDENTITY();
+DECLARE @c2l9 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S3, N'Bài 10 - Chuỗi', 'Recording%202026-05-28%20212131.mp4', 960, 3, 1, 'APPROVED'); SET @c2l9 = SCOPE_IDENTITY();
 
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@c2l7, N'Quiz - Mảng', 70); DECLARE @c2q7 INT = SCOPE_IDENTITY(); INSERT INTO quiz_questions (quiz_id, question_text, question_type, points, position) VALUES (@c2q7, N'Chỉ số bắt đầu của mảng?', 'SINGLE', 1, 1); DECLARE @c2q71 INT = SCOPE_IDENTITY(); INSERT INTO quiz_answers (question_id, answer_text, is_correct) VALUES (@c2q71, N'0',1),(@c2q71,N'1',0),(@c2q71,N'-1',0),(@c2q71,N'Khác',0);
 
@@ -1584,9 +1589,9 @@ INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@c2l8, N'Quiz - Duy�
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@c2l9, N'Quiz - Chuỗi', 70); DECLARE @c2q9 INT = SCOPE_IDENTITY(); INSERT INTO quiz_questions (quiz_id, question_text, question_type, points, position) VALUES (@c2q9, N'Chuỗi kết thúc bằng gì?', 'SINGLE', 1, 1); DECLARE @c2q91 INT = SCOPE_IDENTITY(); INSERT INTO quiz_answers (question_id, answer_text, is_correct) VALUES (@c2q91, N'\0',1),(@c2q91,N'\n',0),(@c2q91,N'space',0),(@c2q91,N'Khác',0);
 
 -- Section 4 lessons (functions/pointers)
-DECLARE @c2l10 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S4, N'Bài 11 - Hàm', 'videos/Recording 2026-05-28 212131.mp4', 840, 1, 1, 'APPROVED'); SET @c2l10 = SCOPE_IDENTITY();
-DECLARE @c2l11 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S4, N'Bài 12 - Tham số', 'videos/Recording 2026-05-28 212131.mp4', 900, 2, 1, 'APPROVED'); SET @c2l11 = SCOPE_IDENTITY();
-DECLARE @c2l12 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S4, N'Bài 13 - Con trỏ', 'videos/Recording 2026-05-28 212131.mp4', 980, 3, 1, 'APPROVED'); SET @c2l12 = SCOPE_IDENTITY();
+DECLARE @c2l10 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S4, N'Bài 11 - Hàm', 'Recording%202026-05-28%20212131.mp4', 840, 1, 1, 'APPROVED'); SET @c2l10 = SCOPE_IDENTITY();
+DECLARE @c2l11 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S4, N'Bài 12 - Tham số', 'Recording%202026-05-28%20212131.mp4', 900, 2, 1, 'APPROVED'); SET @c2l11 = SCOPE_IDENTITY();
+DECLARE @c2l12 INT; INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C2S4, N'Bài 13 - Con trỏ', 'Recording%202026-05-28%20212131.mp4', 980, 3, 1, 'APPROVED'); SET @c2l12 = SCOPE_IDENTITY();
 
 INSERT INTO quizzes (lesson_id, title, pass_score) VALUES (@c2l12, N'Quiz - Con trỏ', 70); DECLARE @c2_l12_quiz INT = SCOPE_IDENTITY(); INSERT INTO quiz_questions (quiz_id, question_text, question_type, points, position) VALUES (@c2_l12_quiz, N'Con trỏ lưu gì?', 'SINGLE', 1, 1); DECLARE @c2q121 INT = SCOPE_IDENTITY(); INSERT INTO quiz_answers (question_id, answer_text, is_correct) VALUES (@c2q121, N'Địa chỉ bộ nhớ',1),(@c2q121,N'Giá trị',0),(@c2q121,N'Tên biến',0),(@c2q121,N'Khác',0);
 
@@ -1597,52 +1602,52 @@ VALUES (1, @Course2Id, @c2l12, N'[28Tech] COURSE2_LESSON13.pdf', '%5BCOURSE2%5D.
 -- COURSE 3 (mirror structure)
 DECLARE @Course3Id INT;
 INSERT INTO courses (instructor_id, category_id, title, description, thumbnail_url, price, level, status)
-VALUES (1, 9, N'Lập Trình C Thực Hành - 28Tech', N'Bài tập thực hành và project nhỏ với C', 'course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg', 600000.00, 'BEGINNER', 'PUBLISHED');
+VALUES (1, 9, N'Lập Trình C Thực Hành - 28Tech', N'Bài tập thực hành và project nhỏ với C', '2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg', 600000.00, 'BEGINNER', 'PUBLISHED');
 SET @Course3Id = SCOPE_IDENTITY();
 
 -- Use same pattern: create 4 sections with 3 lessons each; to save space, reuse Recording video for all lessons
 DECLARE @C3S1 INT; INSERT INTO course_sections (course_id, title, position) VALUES (@Course3Id, N'Giới thiệu',1); SET @C3S1 = SCOPE_IDENTITY();
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S1, N'Bài 1 - Giới thiệu', 'videos/Recording 2026-05-28 212131.mp4',600,1,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S1, N'Bài 2 - Kiểu dữ liệu', 'videos/Recording 2026-05-28 212131.mp4',900,2,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S1, N'Bài 3 - printf', 'videos/Recording 2026-05-28 212131.mp4',850,3,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S1, N'Bài 1 - Giới thiệu', 'Recording%202026-05-28%20212131.mp4',600,1,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S1, N'Bài 2 - Kiểu dữ liệu', 'Recording%202026-05-28%20212131.mp4',900,2,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S1, N'Bài 3 - printf', 'Recording%202026-05-28%20212131.mp4',850,3,1,'APPROVED');
 DECLARE @C3S2 INT; INSERT INTO course_sections (course_id, title, position) VALUES (@Course3Id, N'Cấu trúc điều khiển',2); SET @C3S2 = SCOPE_IDENTITY();
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S2, N'Bài 4', 'videos/Recording 2026-05-28 212131.mp4',780,1,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S2, N'Bài 5', 'videos/Recording 2026-05-28 212131.mp4',840,2,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S2, N'Bài 6', 'videos/Recording 2026-05-28 212131.mp4',900,3,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S2, N'Bài 4', 'Recording%202026-05-28%20212131.mp4',780,1,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S2, N'Bài 5', 'Recording%202026-05-28%20212131.mp4',840,2,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S2, N'Bài 6', 'Recording%202026-05-28%20212131.mp4',900,3,1,'APPROVED');
 DECLARE @C3S3 INT; INSERT INTO course_sections (course_id, title, position) VALUES (@Course3Id, N'Mảng và chuỗi',3); SET @C3S3 = SCOPE_IDENTITY();
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S3, N'Bài 7', 'videos/Recording 2026-05-28 212131.mp4',870,1,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S3, N'Bài 8', 'videos/Recording 2026-05-28 212131.mp4',930,2,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S3, N'Bài 9', 'videos/Recording 2026-05-28 212131.mp4',960,3,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S3, N'Bài 7', 'Recording%202026-05-28%20212131.mp4',870,1,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S3, N'Bài 8', 'Recording%202026-05-28%20212131.mp4',930,2,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S3, N'Bài 9', 'Recording%202026-05-28%20212131.mp4',960,3,1,'APPROVED');
 DECLARE @C3S4 INT; INSERT INTO course_sections (course_id, title, position) VALUES (@Course3Id, N'Hàm và con trỏ',4); SET @C3S4 = SCOPE_IDENTITY();
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S4, N'Bài 10', 'videos/Recording 2026-05-28 212131.mp4',840,1,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S4, N'Bài 11', 'videos/Recording 2026-05-28 212131.mp4',900,2,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S4, N'Bài 12', 'videos/Recording 2026-05-28 212131.mp4',980,3,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S4, N'Bài 10', 'Recording%202026-05-28%20212131.mp4',840,1,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S4, N'Bài 11', 'Recording%202026-05-28%20212131.mp4',900,2,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C3S4, N'Bài 12', 'Recording%202026-05-28%20212131.mp4',980,3,1,'APPROVED');
 
 INSERT INTO lesson_materials (instructor_id, course_id, lesson_id, file_name, file_url, file_type, created_at) VALUES (1, @Course3Id, (SELECT TOP 1 id FROM lessons WHERE section_id = @C3S4 ORDER BY position DESC), N'[28Tech] COURSE3_LESSON.pdf', '%5BCOURSE3%5D.%20LESSON.pdf', 'pdf', GETDATE());
 
 -- COURSE 4 (mirror structure)
 DECLARE @Course4Id INT;
 INSERT INTO courses (instructor_id, category_id, title, description, thumbnail_url, price, level, status)
-VALUES (1,1,N'Thuật Toán C với 28Tech', N'Giải thuật và cấu trúc dữ liệu cơ bản bằng C','course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg',0,'ADVANCED','PUBLISHED');
+VALUES (1,1,N'Thuật Toán C với 28Tech', N'Giải thuật và cấu trúc dữ liệu cơ bản bằng C','2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg',0,'ADVANCED','PUBLISHED');
 SET @Course4Id = SCOPE_IDENTITY();
 
 -- create four sections and three lessons each using same recording
 DECLARE @C4S1 INT; INSERT INTO course_sections (course_id, title, position) VALUES (@Course4Id, N'Giới thiệu',1); SET @C4S1 = SCOPE_IDENTITY();
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S1, N'Bài 1', 'videos/Recording 2026-05-28 212131.mp4',600,1,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S1, N'Bài 2', 'videos/Recording 2026-05-28 212131.mp4',900,2,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S1, N'Bài 3', 'videos/Recording 2026-05-28 212131.mp4',850,3,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S1, N'Bài 1', 'Recording%202026-05-28%20212131.mp4',600,1,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S1, N'Bài 2', 'Recording%202026-05-28%20212131.mp4',900,2,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S1, N'Bài 3', 'Recording%202026-05-28%20212131.mp4',850,3,1,'APPROVED');
 DECLARE @C4S2 INT; INSERT INTO course_sections (course_id, title, position) VALUES (@Course4Id, N'Cơ sở giải thuật',2); SET @C4S2 = SCOPE_IDENTITY();
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S2, N'Bài 4', 'videos/Recording 2026-05-28 212131.mp4',780,1,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S2, N'Bài 5', 'videos/Recording 2026-05-28 212131.mp4',840,2,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S2, N'Bài 6', 'videos/Recording 2026-05-28 212131.mp4',900,3,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S2, N'Bài 4', 'Recording%202026-05-28%20212131.mp4',780,1,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S2, N'Bài 5', 'Recording%202026-05-28%20212131.mp4',840,2,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S2, N'Bài 6', 'Recording%202026-05-28%20212131.mp4',900,3,1,'APPROVED');
 DECLARE @C4S3 INT; INSERT INTO course_sections (course_id, title, position) VALUES (@Course4Id, N'Cấu trúc dữ liệu',3); SET @C4S3 = SCOPE_IDENTITY();
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S3, N'Bài 7', 'videos/Recording 2026-05-28 212131.mp4',870,1,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S3, N'Bài 8', 'videos/Recording 2026-05-28 212131.mp4',930,2,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S3, N'Bài 9', 'videos/Recording 2026-05-28 212131.mp4',960,3,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S3, N'Bài 7', 'Recording%202026-05-28%20212131.mp4',870,1,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S3, N'Bài 8', 'Recording%202026-05-28%20212131.mp4',930,2,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S3, N'Bài 9', 'Recording%202026-05-28%20212131.mp4',960,3,1,'APPROVED');
 DECLARE @C4S4 INT; INSERT INTO course_sections (course_id, title, position) VALUES (@Course4Id, N'Hàm và tối ưu',4); SET @C4S4 = SCOPE_IDENTITY();
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S4, N'Bài 10', 'videos/Recording 2026-05-28 212131.mp4',840,1,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S4, N'Bài 11', 'videos/Recording 2026-05-28 212131.mp4',900,2,1,'APPROVED');
-INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S4, N'Bài 12', 'videos/Recording 2026-05-28 212131.mp4',980,3,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S4, N'Bài 10', 'Recording%202026-05-28%20212131.mp4',840,1,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S4, N'Bài 11', 'Recording%202026-05-28%20212131.mp4',900,2,1,'APPROVED');
+INSERT INTO lessons (section_id, title, video_url, duration_seconds, position, is_published, moderation_status) VALUES (@C4S4, N'Bài 12', 'Recording%202026-05-28%20212131.mp4',980,3,1,'APPROVED');
 
 INSERT INTO lesson_materials (instructor_id, course_id, lesson_id, file_name, file_url, file_type, created_at) VALUES (1, @Course4Id, (SELECT TOP 1 id FROM lessons WHERE section_id = @C4S4 ORDER BY position DESC), N'[28Tech] COURSE4_LESSON.pdf', '%5BCOURSE4%5D.%20LESSON.pdf', 'pdf', GETDATE());
 
@@ -1742,7 +1747,7 @@ WHILE @CourseIndex <= 14
                    @CatId,
                    @Title,
                    CONCAT(N'Khóa học chuyên đề số ', @CourseIndex),
-                   'course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg',
+                   '2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg',
                    @Price,
                    CASE
                        WHEN @CourseIndex % 3 = 2 THEN 'BEGINNER'
@@ -1776,7 +1781,7 @@ WHILE @CourseIndex <= 14
                         VALUES (
                                    @SectionId,
                                    CONCAT(N'Bài ', @LessonGlobalPos, N' - Chuyên đề ', @CourseIndex),
-                                   'videos/Recording 2026-05-28 212131.mp4',
+                                   'Recording%202026-05-28%20212131.mp4',
                                    600 + (@LessonGlobalPos * 35),
                                    @LessonPos,
                                    1,
@@ -1985,8 +1990,8 @@ GO
 -- 1. Insert more courses
 INSERT INTO courses (instructor_id, category_id, title, description, thumbnail_url, price, level, status, approved_by, approved_at)
 VALUES 
-(1, 1, N'Cấu Trúc Dữ Liệu Và Giải Thuật - 28Tech', N'Khóa học cung cấp kiến thức nền tảng về Cấu trúc dữ liệu và Giải thuật sử dụng C/C++.', 'course-thumbnails/dsa-28tech.jpg', 500000.00, 'INTERMEDIATE', 'PUBLISHED', 3, GETDATE()),
-(1, 1, N'Lập Trình Java Web với Spring Boot', N'Khóa học Java Web toàn diện từ Zero đến Hero với Spring Boot, Spring Security, JPA, và Azure.', 'course-thumbnails/spring-boot.jpg', 1200000.00, 'ADVANCED', 'PUBLISHED', 3, GETDATE());
+(1, 1, N'Cấu Trúc Dữ Liệu Và Giải Thuật - 28Tech', N'Khóa học cung cấp kiến thức nền tảng về Cấu trúc dữ liệu và Giải thuật sử dụng C/C++.', 'dsa-28tech.jpg', 500000.00, 'INTERMEDIATE', 'PUBLISHED', 3, GETDATE()),
+(1, 1, N'Lập Trình Java Web với Spring Boot', N'Khóa học Java Web toàn diện từ Zero đến Hero với Spring Boot, Spring Security, JPA, và Azure.', 'spring-boot.jpg', 1200000.00, 'ADVANCED', 'PUBLISHED', 3, GETDATE());
 
 DECLARE @Course2Id INT = (SELECT id FROM courses WHERE title = N'Cấu Trúc Dữ Liệu Và Giải Thuật - 28Tech');
 DECLARE @Course3Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình Java Web với Spring Boot');
