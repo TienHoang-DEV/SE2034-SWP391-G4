@@ -81,7 +81,7 @@ CREATE TABLE users (
 
     status VARCHAR(20) NOT NULL
         CHECK (status IN ('ACTIVE', 'BANNED')),
-    -- Trạng thái: active (hoạt động), banned (cấm), pending (chờ xác thực)
+    -- Trạng thái: active (hoạt động), banned (cấm)
 
     created_at DATETIME DEFAULT GETDATE(),
     -- Thời gian tạo tài khoản (mặc định là thời chạy lệnh CREATE)
