@@ -48,7 +48,7 @@ public class CourseController {
         return userRepository.findByEmail("28tech@gmail.com")
                 .orElseGet(() -> userRepository.findAll().stream().findFirst()
                         .orElseThrow(
-                                () -> new IllegalStateException("Không tìm thấy người dùng nào trong DB để giả lập.")));
+                                () -> new IllegalStateException("Không tìm thấy người dùng nào trong cơ sở dữ liệu để giả lập. Vui lòng import lại file sql_ddl_dml/ElearningPlatform.sql vào SQL Server của bạn!")));
     }
 
     @org.springframework.transaction.annotation.Transactional
@@ -67,7 +67,7 @@ public class CourseController {
             courses = courseRepository.findAll();
         }
 
-        List<Category> parentCategories = categoryRepository.findByParentIsNullAndStatus("active");
+        List<Category> parentCategories = categoryRepository.findByParentIsNullAndStatus("ACTIVE");
 
         List<CategoryDto> categoryDtos = parentCategories.stream()
                 .map(DtoMapper.INSTANCE::toCategoryDto)

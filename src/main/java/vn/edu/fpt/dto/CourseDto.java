@@ -25,9 +25,32 @@ public class CourseDto {
     private double averageRating;
     private int ratingCount;
     private int totalLessonsCount;
+    private int enrollmentsCount;
     private String firstLessonVideoUrl;
     private Integer firstLessonId;
     private String thumbnailPath;
     private java.time.LocalDateTime createdAt;
     private java.time.LocalDateTime updatedAt;
+
+    public int getStarCount(int star) {
+        if (feedbacks == null) {
+            return 0;
+        }
+        int count = 0;
+        for (FeedbackDto fb : feedbacks) {
+            if (fb.getRating() != null && fb.getRating() == star) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public double getStarPercentage(int star) {
+        int total = ratingCount;
+        if (total == 0) {
+            return 0.0;
+        }
+        double pct = (double) getStarCount(star) * 100.0 / total;
+        return Math.round(pct * 10.0) / 10.0;
+    }
 }

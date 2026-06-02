@@ -54,7 +54,7 @@ public class StudentProfileController {
         }
         return userRepository.findByEmail("28tech@gmail.com")
                 .orElseGet(() -> userRepository.findAll().stream().findFirst()
-                        .orElseThrow(() -> new IllegalStateException("Không tìm thấy người dùng nào trong DB để giả lập.")));
+                        .orElseThrow(() -> new IllegalStateException("Không tìm thấy người dùng nào trong cơ sở dữ liệu để giả lập. Vui lòng import lại file sql_ddl_dml/ElearningPlatform.sql vào SQL Server của bạn!")));
     }
 
     @GetMapping("/")
@@ -128,6 +128,7 @@ public class StudentProfileController {
         User user = getSessionUser();
         
         Set<Integer> enrolledCourseIds = user.getEnrollments().stream()
+                .filter(e -> e.getCourse() != null)
                 .map(e -> e.getCourse().getId())
                 .collect(Collectors.toSet());
                 

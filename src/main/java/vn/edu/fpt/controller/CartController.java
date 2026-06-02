@@ -59,7 +59,7 @@ public class CartController {
         }
         return userRepository.findByEmail("28tech@gmail.com")
                 .orElseGet(() -> userRepository.findAll().stream().findFirst()
-                        .orElseThrow(() -> new IllegalStateException("Không tìm thấy người dùng nào trong DB để giả lập.")));
+                        .orElseThrow(() -> new IllegalStateException("Không tìm thấy người dùng nào trong cơ sở dữ liệu để giả lập. Vui lòng import lại file sql_ddl_dml/ElearningPlatform.sql vào SQL Server của bạn!")));
     }
 
     @org.springframework.transaction.annotation.Transactional
@@ -72,6 +72,7 @@ public class CartController {
 
         // Nhóm các CartItemDto theo Giảng viên của khóa học
         Map<UserDto, List<CartItemDto>> itemsByInstructor = cartDto.getItems().stream()
+                .filter(item -> item.getCourse() != null && item.getCourse().getInstructor() != null)
                 .collect(Collectors.groupingBy(item -> item.getCourse().getInstructor()));
         
         int cartSize = cartItemService.countItemsInCart(cart);

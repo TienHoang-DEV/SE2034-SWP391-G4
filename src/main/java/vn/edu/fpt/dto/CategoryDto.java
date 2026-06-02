@@ -11,6 +11,7 @@ import java.util.Set;
 public class CategoryDto {
     private Integer id;
     private String name;
+    private String description;
     private String status;
     private Set<CategoryDto> children;
     private Integer courseCount;

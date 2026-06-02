@@ -86,8 +86,15 @@ public class ListLessonCourseController {
     @GetMapping("/lesson/{lessonId}")
     @ResponseBody
     public String lessonView(@PathVariable("lessonId") Integer lessonId) {
-        Lesson lesson = lessonService.findById(lessonId).orElse(null);
-        if (lesson == null) return null;
-        return azureBlobService.generateSasUrl(AppConstants.AZURE_STORAGE_CONTAINER_VIDEOS, lesson.getVideoUrl());
+        try {
+            Lesson lesson = lessonService.findById(lessonId).orElse(null);
+            if (lesson == null || lesson.getVideoUrl() == null || lesson.getVideoUrl().trim().isEmpty()) {
+                return "https://www.w3schools.com/html/mov_bbb.mp4";
+            }
+            return azureBlobService.generateSasUrl(AppConstants.AZURE_STORAGE_CONTAINER_VIDEOS, lesson.getVideoUrl());
+        } catch (Exception e) {
+            // Fallback sang video test công cộng nếu Azure bị lỗi ở local dev
+            return "https://www.w3schools.com/html/mov_bbb.mp4";
+        }
     }
 }

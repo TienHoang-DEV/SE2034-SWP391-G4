@@ -951,18 +951,20 @@ INSERT INTO user_roles (user_id, role_id) VALUES (SCOPE_IDENTITY(), 3);
 -- =========================
 -- CATEGORY
 -- =========================
-INSERT INTO categories (
-    name,
-    description,
-    parent_id,
-    status
-)
-VALUES (
-    N'Lập trình Front-End',
-    N'Khóa học về Lập trình Front-End',
-    NULL,
-    'ACTIVE'
-);
+-- Đăng ký các danh mục cha trước (parent_id = NULL)
+INSERT INTO categories (name, description, parent_id, status) VALUES (N'Lập trình Front-End', N'Các khóa học lập trình Front-End', NULL, 'ACTIVE'); -- ID = 1
+INSERT INTO categories (name, description, parent_id, status) VALUES (N'Lập trình Back-End', N'Các khóa học lập trình Back-End', NULL, 'ACTIVE'); -- ID = 2
+INSERT INTO categories (name, description, parent_id, status) VALUES (N'Lập trình iOS', N'Các khóa học lập trình iOS', NULL, 'ACTIVE'); -- ID = 3
+
+-- Đăng ký các danh mục con (parent_id trỏ về ID cha tương ứng)
+INSERT INTO categories (name, description, parent_id, status) VALUES (N'HTML', N'HTML5 cơ bản và nâng cao', 1, 'ACTIVE'); -- ID = 4
+INSERT INTO categories (name, description, parent_id, status) VALUES (N'CSS', N'CSS3, Flexbox, Grid, Responsive', 1, 'ACTIVE'); -- ID = 5
+INSERT INTO categories (name, description, parent_id, status) VALUES (N'React', N'ReactJS Component, Hooks, Redux', 1, 'ACTIVE'); -- ID = 6
+INSERT INTO categories (name, description, parent_id, status) VALUES (N'Node.js', N'Backend với Express, Node.js', 2, 'ACTIVE'); -- ID = 7
+INSERT INTO categories (name, description, parent_id, status) VALUES (N'Python', N'Lập trình Python từ cơ bản đến nâng cao', 2, 'ACTIVE'); -- ID = 8
+INSERT INTO categories (name, description, parent_id, status) VALUES (N'Java', N'Lập trình Java core và nâng cao', 2, 'ACTIVE'); -- ID = 9
+INSERT INTO categories (name, description, parent_id, status) VALUES (N'Swift', N'Ngôn ngữ lập trình Swift', 3, 'ACTIVE'); -- ID = 10
+INSERT INTO categories (name, description, parent_id, status) VALUES (N'SwiftUI', N'Thiết kế giao diện SwiftUI', 3, 'ACTIVE'); -- ID = 11
 
 -- =========================
 -- COURSE
@@ -979,11 +981,11 @@ INSERT INTO courses (
 )
 VALUES (
     1,
-    1,
+    9, -- Java (ID = 9)
     N'Lập Trình C Cơ Bản - 28Tech',
     N'Khóa học lập trình C cơ bản',
     'course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg',
-    0,
+    0.00,
     'BEGINNER',
     'PUBLISHED'
 );
@@ -1523,7 +1525,7 @@ GO
 -- COURSE 2
 DECLARE @Course2Id INT;
 INSERT INTO courses (instructor_id, category_id, title, description, thumbnail_url, price, level, status)
-VALUES (1, 1, N'Lập Trình C Nâng Cao - 28Tech', N'Khóa học nâng cao lập trình C', 'course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg', 0, 'INTERMEDIATE', 'PUBLISHED');
+VALUES (1, 9, N'Lập Trình C Nâng Cao - 28Tech', N'Khóa học nâng cao lập trình C', 'course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg', 350000.00, 'INTERMEDIATE', 'PUBLISHED');
 SET @Course2Id = SCOPE_IDENTITY();
 
 -- Sections and lessons for Course 2
@@ -1595,7 +1597,7 @@ VALUES (1, @Course2Id, @c2l12, N'[28Tech] COURSE2_LESSON13.pdf', '%5BCOURSE2%5D.
 -- COURSE 3 (mirror structure)
 DECLARE @Course3Id INT;
 INSERT INTO courses (instructor_id, category_id, title, description, thumbnail_url, price, level, status)
-VALUES (1,1,N'Lập Trình C Thực Hành - 28Tech', N'Bài tập thực hành và project nhỏ với C','course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg',0,'BEGINNER','PUBLISHED');
+VALUES (1, 9, N'Lập Trình C Thực Hành - 28Tech', N'Bài tập thực hành và project nhỏ với C', 'course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg', 600000.00, 'BEGINNER', 'PUBLISHED');
 SET @Course3Id = SCOPE_IDENTITY();
 
 -- Use same pattern: create 4 sections with 3 lessons each; to save space, reuse Recording video for all lessons
@@ -1660,17 +1662,88 @@ DECLARE @QuizId INT;
 DECLARE @QuestionId1 INT;
 DECLARE @QuestionId2 INT;
 DECLARE @LastLessonId INT;
+DECLARE @Title NVARCHAR(255);
+DECLARE @CatId INT;
+DECLARE @Price DECIMAL(18,2);
 
 WHILE @CourseIndex <= 14
     BEGIN
+        -- Xác định Category & Title dựa trên @CourseIndex
+        IF @CourseIndex = 5
+        BEGIN
+            SET @Title = N'Lập Trình Python Cơ Bản và Nâng Cao';
+            SET @CatId = 8; -- Python (con của Lập trình Back-End)
+        END
+        ELSE IF @CourseIndex = 6
+        BEGIN
+            SET @Title = N'Xây Dựng Giao Diện Web Với HTML5';
+            SET @CatId = 4; -- HTML (con của Lập trình Front-End)
+        END
+        ELSE IF @CourseIndex = 7
+        BEGIN
+            SET @Title = N'Làm Chủ CSS Grid Và Flexbox Responsive';
+            SET @CatId = 5; -- CSS (con của Lập trình Front-End)
+        END
+        ELSE IF @CourseIndex = 8
+        BEGIN
+            SET @Title = N'Lập Trình Frontend Hiện Đại Với ReactJS';
+            SET @CatId = 6; -- React (con của Lập trình Front-End)
+        END
+        ELSE IF @CourseIndex = 9
+        BEGIN
+            SET @Title = N'Xây Dựng RESTful API Với Node.js';
+            SET @CatId = 7; -- Node.js (con của Lập trình Back-End)
+        END
+        ELSE IF @CourseIndex = 10
+        BEGIN
+            SET @Title = N'Lập Trình Ứng Dụng iOS Với Ngôn Ngữ Swift';
+            SET @CatId = 10; -- Swift (con của Lập trình iOS)
+        END
+        ELSE IF @CourseIndex = 11
+        BEGIN
+            SET @Title = N'Thiết Kế Giao Diện iOS Bằng SwiftUI';
+            SET @CatId = 11; -- SwiftUI (con của Lập trình iOS)
+        END
+        ELSE IF @CourseIndex = 12
+        BEGIN
+            SET @Title = N'Lập Trình Hướng Đối Tượng Java Core';
+            SET @CatId = 9; -- Java (con của Lập trình Back-End)
+        END
+        ELSE IF @CourseIndex = 13
+        BEGIN
+            SET @Title = N'Phát Triển Ứng Dụng Web Với Java Spring Boot';
+            SET @CatId = 9; -- Java (con của Lập trình Back-End)
+        END
+        ELSE
+        BEGIN
+            SET @Title = CONCAT(N'Lập Trình C Chuyên Đề ', @CourseIndex, N' - 28Tech');
+            SET @CatId = 8; -- Python (con của Lập trình Back-End)
+        END
+
+        -- Xác định Price
+        IF @CourseIndex = 5
+        BEGIN
+            SET @Price = 1500000.00;
+        END
+        ELSE
+        BEGIN
+            SET @Price = CASE (@CourseIndex % 5)
+                WHEN 0 THEN 0.00        -- Miễn phí
+                WHEN 1 THEN 250000.00   -- 200k - 500k
+                WHEN 2 THEN 550000.00   -- 500k - 700k
+                WHEN 3 THEN 800000.00   -- 700k - 1M
+                ELSE 1200000.00         -- Trên 1M
+            END;
+        END
+
         INSERT INTO courses (instructor_id, category_id, title, description, thumbnail_url, price, level, status)
         VALUES (
                    1,
-                   1,
-                   CONCAT(N'Lập Trình C Chuyên Đề ', @CourseIndex, N' - 28Tech'),
-                   CONCAT(N'Khóa học chuyên đề C số ', @CourseIndex),
+                   @CatId,
+                   @Title,
+                   CONCAT(N'Khóa học chuyên đề số ', @CourseIndex),
                    'course-thumbnails/2aOboQZWp6Ov5iGTAZLOlCgmiOhOKsGgeQU1cI0O.jpg',
-                   0,
+                   @Price,
                    CASE
                        WHEN @CourseIndex % 3 = 2 THEN 'BEGINNER'
                        WHEN @CourseIndex % 3 = 0 THEN 'INTERMEDIATE'
@@ -2005,15 +2078,15 @@ DECLARE @C1Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Cơ B
 DECLARE @C2Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Nâng Cao - 28Tech');
 DECLARE @C3Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Thực Hành - 28Tech');
 DECLARE @C4Id INT = (SELECT id FROM courses WHERE title = N'Thuật Toán C với 28Tech');
-DECLARE @C5Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
-DECLARE @C6Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 6 - 28Tech');
-DECLARE @C7Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 7 - 28Tech');
-DECLARE @C8Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 8 - 28Tech');
-DECLARE @C9Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 9 - 28Tech');
-DECLARE @C10Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 10 - 28Tech');
-DECLARE @C11Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 11 - 28Tech');
-DECLARE @C12Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 12 - 28Tech');
-DECLARE @C13Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 13 - 28Tech');
+DECLARE @C5Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình Python Cơ Bản và Nâng Cao');
+DECLARE @C6Id INT = (SELECT id FROM courses WHERE title = N'Xây Dựng Giao Diện Web Với HTML5');
+DECLARE @C7Id INT = (SELECT id FROM courses WHERE title = N'Làm Chủ CSS Grid Và Flexbox Responsive');
+DECLARE @C8Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình Frontend Hiện Đại Với ReactJS');
+DECLARE @C9Id INT = (SELECT id FROM courses WHERE title = N'Xây Dựng RESTful API Với Node.js');
+DECLARE @C10Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình Ứng Dụng iOS Với Ngôn Ngữ Swift');
+DECLARE @C11Id INT = (SELECT id FROM courses WHERE title = N'Thiết Kế Giao Diện iOS Bằng SwiftUI');
+DECLARE @C12Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình Hướng Đối Tượng Java Core');
+DECLARE @C13Id INT = (SELECT id FROM courses WHERE title = N'Phát Triển Ứng Dụng Web Với Java Spring Boot');
 DECLARE @C14Id INT = (SELECT id FROM courses WHERE title = N'Lập Trình C Chuyên Đề 14 - 28Tech');
 
 -- Lesson IDs for Course 2 (C Nâng cao) Section 1 (Giới thiệu)
@@ -2030,9 +2103,9 @@ DECLARE @C3_L3 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.sec
 DECLARE @C4_L1 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 1' AND c.title = N'Thuật Toán C với 28Tech');
 
 -- Lesson IDs for Course 5 Section 1 (Giới thiệu)
-DECLARE @C5_L1 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 1 - Chuyên đề 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
-DECLARE @C5_L2 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 2 - Chuyên đề 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
-DECLARE @C5_L3 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 3 - Chuyên đề 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
+DECLARE @C5_L1 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 1 - Chuyên đề 5' AND c.title = N'Lập Trình Python Cơ Bản và Nâng Cao');
+DECLARE @C5_L2 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 2 - Chuyên đề 5' AND c.title = N'Lập Trình Python Cơ Bản và Nâng Cao');
+DECLARE @C5_L3 INT = (SELECT l.id FROM lessons l JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE l.title = N'Bài 3 - Chuyên đề 5' AND c.title = N'Lập Trình Python Cơ Bản và Nâng Cao');
 
 -- Create missing Quizzes for Course 3 if not exists
 IF NOT EXISTS (SELECT 1 FROM quizzes q JOIN lessons l ON q.lesson_id = l.id WHERE q.title = N'Quiz - Kiểu dữ liệu và biến' AND l.id = @C3_L2)
@@ -2061,9 +2134,9 @@ DECLARE @C4_Qz3Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.le
 DECLARE @C4_Qz4Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Hàm scanf' AND c.title = N'Thuật Toán C với 28Tech');
 
 -- Quizzes for Course 5 (title format from WHILE loop: 'Quiz - Bài X - Khóa Y')
-DECLARE @C5_Qz1Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Bài 1 - Khóa 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
-DECLARE @C5_Qz2Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Bài 2 - Khóa 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
-DECLARE @C5_Qz3Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Bài 3 - Khóa 5' AND c.title = N'Lập Trình C Chuyên Đề 5 - 28Tech');
+DECLARE @C5_Qz1Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Bài 1 - Khóa 5' AND c.title = N'Lập Trình Python Cơ Bản và Nâng Cao');
+DECLARE @C5_Qz2Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Bài 2 - Khóa 5' AND c.title = N'Lập Trình Python Cơ Bản và Nâng Cao');
+DECLARE @C5_Qz3Id INT = (SELECT TOP 1 q.id FROM quizzes q JOIN lessons l ON q.lesson_id = l.id JOIN course_sections s ON l.section_id = s.id JOIN courses c ON s.course_id = c.id WHERE q.title = N'Quiz - Bài 3 - Khóa 5' AND c.title = N'Lập Trình Python Cơ Bản và Nâng Cao');
 
 -- Coupons already inserted in previous batch (lines ~1978-1981), just read their IDs
 DECLARE @Cp1Id INT = (SELECT id FROM coupons WHERE code = 'WELCOME10');
@@ -2234,7 +2307,7 @@ VALUES (@UserKhoaId, 1500000.00, 0.00, 'PAID', 'MOMO', DATEADD(day, -1, GETDATE(
 DECLARE @OrderKhoaId INT = SCOPE_IDENTITY();
 
 INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
-VALUES (@OrderKhoaId, @C5Id, @Cp1Id, 1500000.00, 0.00, 1500000.00, N'Lập Trình C Chuyên Đề 5 - 28Tech', DATEADD(day, -1, GETDATE()));
+VALUES (@OrderKhoaId, @C5Id, @Cp1Id, 1500000.00, 0.00, 1500000.00, N'Lập Trình Python Cơ Bản và Nâng Cao', DATEADD(day, -1, GETDATE()));
 
 INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
 VALUES (@OrderKhoaId, 'TX_KHOA_001', 'MOMO', 'GATEWAY_3329', 1500000.00, 'SUCCESS', DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
@@ -2250,7 +2323,7 @@ DECLARE @OrderLongId INT = SCOPE_IDENTITY();
 INSERT INTO order_items (order_id, course_id, coupon_id, price_snapshot, discount_amount, final_price, course_title_snapshot, created_at)
 VALUES 
 (@OrderLongId, @C1Id, NULL, 0.00, 0.00, 0.00, N'Lập Trình C Cơ Bản - 28Tech', DATEADD(day, -1, GETDATE())),
-(@OrderLongId, @C5Id, NULL, 1500000.00, 0.00, 1500000.00, N'Lập Trình C Chuyên Đề 5 - 28Tech', DATEADD(day, -1, GETDATE()));
+(@OrderLongId, @C5Id, NULL, 1500000.00, 0.00, 1500000.00, N'Lập Trình Python Cơ Bản và Nâng Cao', DATEADD(day, -1, GETDATE()));
 
 INSERT INTO payments (order_id, transaction_code, gateway, gateway_tx_id, amount, status, paid_at, created_at)
 VALUES (@OrderLongId, 'TX_LONG_001', 'VNPAY', 'GATEWAY_9938', 1500000.00, 'SUCCESS', DATEADD(day, -1, GETDATE()), DATEADD(day, -1, GETDATE()));
