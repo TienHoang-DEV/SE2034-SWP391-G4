@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -28,7 +29,8 @@ public class CourseSection extends BaseEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "courseSection", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Lesson> lessons = new HashSet<>();
+    @OrderBy("position asc")
+    private Set<Lesson> lessons = new LinkedHashSet<>();
 
     public void addLesson(Lesson lesson) {
         lessons.add(lesson);

@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Enter') {
                 const query = searchInput.value.trim();
                 if (query) {
-                    window.location.href = `courses.html?search=${encodeURIComponent(query)}`;
+                    window.location.href = `/courses?search=${encodeURIComponent(query)}`;
                 }
             }
         });

@@ -21,6 +21,10 @@ public class CategoryService {
         return repository.findAll();
     }
 
+    public List<Category> findByStatus(String status){
+        return repository.findByStatus(status);
+    }
+
     public Optional<Category> findById(Integer id) {
         return repository.findById(id);
     }

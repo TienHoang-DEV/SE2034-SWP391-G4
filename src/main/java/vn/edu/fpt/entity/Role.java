@@ -23,17 +23,17 @@ public class Role extends BaseEntity{
     private String description;
 
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL ,mappedBy = "role")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
 
     public void addUser(User user) {
         users.add(user);
-        user.setRole(this);
+        user.getRoles().add(this);
     }
 
     public void removeUser(User user) {
         users.remove(user);
-        user.setRole(null);
+        user.getRoles().remove(this);
     }
 
 }
