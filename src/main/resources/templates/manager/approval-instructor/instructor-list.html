@@ -95,8 +95,6 @@
                             <tr th:each="request : ${requestPage.content}">
                                 <td>
                                     <div class="user-info">
-                                        <img th:src="${request.user.avatarUrl != null ? request.user.avatarUrl : '/images/default-avatar.png'}"
-                                            alt="Avatar" class="table-avatar">
                                         <span class="user-name"
                                             th:text="${request.user.firstName + ' ' + request.user.lastName}">Nguyễn Văn
                                             A</span>
@@ -108,13 +106,15 @@
                                     5/24/2026</td>
                                 <td>
                                     <span
-                                        th:class="${'badge badge-' + (#strings.toLowerCase(request.status) == 'pending' ? 'warning' : (#strings.toLowerCase(request.status) == 'approved' ? 'success' : (#strings.toLowerCase(request.status) == 'rejected' ? 'danger' : (#strings.toLowerCase(request.status) == 'blocked' ? 'dark' : 'secondary'))))}"
-                                        th:text="${request.status}">pending</span>
+                                        th:class="${'badge badge-' + (request.status.value == 'pending' ? 'warning' : (request.status.value == 'approved' ? 'success' : (request.status.value == 'rejected' ? 'danger' : (request.status.value == 'blocked' ? 'dark' : 'secondary'))))}"
+                                        th:text="${request.status.displayName}">Đang chờ duyệt</span>
                                 </td>
                                 <td>
                                     <div class="actions">
-                                        <a href="#" class="action-btn"><i class="ph ph-eye"></i> Xem Chi Tiết</a>
-                                        <a href="#" class="action-btn"><i class="ph ph-pencil-simple"></i> Sửa</a>
+                                        <a th:href="@{/manager/instructor/detail/{id}(id=${request.id})}"
+                                            class="action-btn"><i class="ph ph-eye"></i> Xem Chi Tiết</a>
+                                        <a th:href="@{/manager/instructor/edit/{id}(id=${request.id})}"
+                                            class="action-btn"><i class="ph ph-pencil-simple"></i> Sửa</a>
                                     </div>
                                 </td>
                             </tr>
@@ -124,6 +124,38 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Phân trang (Pagination) -->
+                <div class="pagination-container" th:if="${requestPage.totalPages > 1}">
+                    <div class="pagination-info">
+                        Hiển thị <span th:text="${requestPage.number * requestPage.size + 1}">1</span>
+                        đến <span
+                            th:text="${(requestPage.number + 1) * requestPage.size < requestPage.totalElements ? (requestPage.number + 1) * requestPage.size : requestPage.totalElements}">10</span>
+                        trong số <span th:text="${requestPage.totalElements}">50</span> yêu cầu
+                    </div>
+                    <div class="pagination-buttons">
+                        <!-- Nút Trước (Previous) -->
+                        <a th:href="@{/manager/instructor/list(page=${requestPage.number - 1}, keyword=${keyword}, status=${status})}"
+                            th:class="${requestPage.hasPrevious() ? 'page-btn' : 'page-btn disabled'}"
+                            th:aria-disabled="${!requestPage.hasPrevious()}">
+                            <i class="ph ph-caret-left"></i> Trước
+                        </a>
+
+                        <!-- Các số trang (Page numbers) -->
+                        <span th:each="pageNum : ${#numbers.sequence(0, requestPage.totalPages - 1)}">
+                            <a th:href="@{/manager/instructor/list(page=${pageNum}, keyword=${keyword}, status=${status})}"
+                                th:text="${pageNum + 1}"
+                                th:class="${pageNum == requestPage.number ? 'page-btn active' : 'page-btn'}">1</a>
+                        </span>
+
+                        <!-- Nút Tiếp (Next) -->
+                        <a th:href="@{/manager/instructor/list(page=${requestPage.number + 1}, keyword=${keyword}, status=${status})}"
+                            th:class="${requestPage.hasNext() ? 'page-btn' : 'page-btn disabled'}"
+                            th:aria-disabled="${!requestPage.hasNext()}">
+                            Tiếp <i class="ph ph-caret-right"></i>
+                        </a>
+                    </div>
                 </div>
             </main>
         </div>
