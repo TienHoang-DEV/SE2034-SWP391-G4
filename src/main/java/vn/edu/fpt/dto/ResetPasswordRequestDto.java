@@ -1,17 +1,17 @@
 package vn.edu.fpt.dto;
-import lombok.Getter;
-import lombok.Setter;
-import jakarta.validation.constraints.Email;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-public class RegisterRequest {
-    @NotBlank(message = "Email không được để trống")
-    @Email(message = "Email không hợp lệ")
-    private String email;
+public class ResetPasswordRequestDto {
+
+    @NotBlank
+    private String token;
 
     @NotBlank(message = "Mật khẩu không được để trống")
     @Size(min = 8, message = "Mật khẩu phải có ít nhất 8 ký tự")
@@ -21,24 +21,12 @@ public class RegisterRequest {
     )
     private String password;
 
-    @NotBlank(message = "Họ không được để trống")
-    private String firstName;
-
-    @NotBlank(message = "Tên không được để trống")
-    private String lastName;
-
     @NotBlank(message = "Retype password không được để trống")
     private String confirmPassword;
-
-    @NotBlank(message = "Số điện thoại không được để trống")
-    @Pattern(
-            regexp = "^(03|05|07|08|09)\\d{8}$",
-            message = "Số điện thoại không hợp lệ"
-    )
-    private String phoneNumber;
 
     public boolean isPasswordMatched() {
         return password != null
                 && password.equals(confirmPassword);
     }
+
 }
