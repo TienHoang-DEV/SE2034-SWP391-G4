@@ -102,6 +102,7 @@ CREATE TABLE user_roles (
                             updated_at DATETIME NULL,
     -- Thời gian cập nhật gần nhất
 
+
                             CONSTRAINT UQ_user_roles_user_role UNIQUE (user_id, role_id),
 
                             CONSTRAINT FK_user_roles_user
@@ -182,6 +183,7 @@ CREATE TABLE instructor_requests (
                                      cv_url VARCHAR(500) NULL,
     -- URL file CV (lưu link từ Azure Blob Storage)
 
+
                                      national_id_card_front VARCHAR(500) NOT NULL,
     -- URL file ảnh cccd mặt trước
 
@@ -219,6 +221,7 @@ CREATE TABLE instructor_requests (
                                          FOREIGN KEY (reviewed_by) REFERENCES users(id)
 );
 
+
 -- =========================
 -- CATEGORIES
 -- =========================
@@ -248,6 +251,8 @@ CREATE TABLE categories (
                             CONSTRAINT FK_categories_parent
                                 FOREIGN KEY (parent_id) REFERENCES categories(id)
 );
+
+
 
 -- =========================
 -- COURSES
@@ -344,7 +349,7 @@ CREATE TABLE lessons (
                          title NVARCHAR(255) NOT NULL,
     -- Tên bài học (ví dụ: 'Bài 1: Giới thiệu ngôn ngữ C')
 
-                         video_url VARCHAR(500) NULL,
+                         video_url NVARCHAR(500) NULL,
     -- URL video bài học (lưu link từ Azure Blob Storage)
 
                          duration_seconds INT NULL CHECK (duration_seconds > 0),
@@ -578,6 +583,9 @@ CREATE TABLE coupons (
                          code VARCHAR(100) UNIQUE NOT NULL,
     -- Mã code coupon (ví dụ: 'SUMMER50', 'NEWYEAR2024'), phải unique
 
+    title VARCHAR(200) NOT NULL,
+    -- tên mã
+
                          discount_type VARCHAR(20)
                              CHECK (discount_type IN ('PERCENT', 'FIXED')),
     -- Loại giảm giá: percent (giảm theo %), fixed (giảm số tiền cố định)
@@ -693,6 +701,7 @@ CREATE TABLE cart_instructor_coupons (
                                          CONSTRAINT UQ_cart_instructor UNIQUE(cart_id, instructor_id)
 );
 
+
 -- =========================
 -- ORDERS
 -- =========================
@@ -757,6 +766,7 @@ CREATE TABLE order_items (
     -- Tên khóa học tại thời điểm tạo đơn (snapshot, dùng cho lịch sử)
 
                              created_at DATETIME DEFAULT GETDATE(),
+
 
                              updated_at DATETIME NULL,
 
