@@ -3,10 +3,12 @@ package vn.edu.fpt.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import vn.edu.fpt.dto.LessonDto;
 import vn.edu.fpt.entity.CourseSection;
 import vn.edu.fpt.entity.Lesson;
 import vn.edu.fpt.entity.User;
+import vn.edu.fpt.enums.LessonModerationStatus;
 import vn.edu.fpt.exception.CourseNotFoundException;
 import vn.edu.fpt.exception.ResourceNotFoundException;
 import vn.edu.fpt.mapper.DtoMapper;
@@ -58,7 +60,11 @@ public class LessonService {
         return repository.existsById(id);
     }
 
-    public Lesson saveLesson(Integer sectiondId, LessonDto lessonDto){
+
+    private Integer findMaxPositionLesson(Integer sectionId){
+        return repository.FindMaxPositionByCourseSectionId(sectionId);
+    }
+    public Lesson saveLesson(Integer sectiondId, LessonDto lessonDto, MultipartFile file){
         boolean exist = courseSectionService.existsById(sectiondId);
         if(!exist){
             throw new RuntimeException("Tiêu đề khoá học không tìm thấy với id: " + sectiondId);
@@ -79,20 +85,26 @@ public class LessonService {
             throw new RuntimeException("Tiêu đề bài học đã dài quá mức cho phép");
         }
 
-        if(lessonDto.getVideoUrl() == null || lessonDto.getVideoUrl().isEmpty()){
+        if( file == null || file.isEmpty()){
             throw new RuntimeException("Video bài học không được để trống");
         }
 
         if(lessonDto.getDurationSeconds() == null || lessonDto.getDurationSeconds() <= 0){
-            lessonDto.setDurationSeconds(1); // Set a default value to prevent crash if not provided
+            lessonDto.setDurationSeconds(0);
         }
-        String video_url = azureBlobService.generateSasUrl(AppConstants.AZURE_STORAGE_CONTAINER_VIDEOS, lessonDto.getVideoUrl());
+
+        Integer po = findMaxPositionLesson(sectiondId);    ///2 trans + 9 field
+
+        String video_url = azureBlobService.generateSasUrl(AppConstants.AZURE_STORAGE_CONTAINER_VIDEOS, file.getOriginalFilename());
         Lesson l = new Lesson();
         l.setTitle(lessonDto.getTitle());
         l.setVideoUrl(video_url);
-        l.setPosition(lessonDto.getPosition());
+        l.setPosition(po + 1);
         l.setDurationSeconds(lessonDto.getDurationSeconds());
         l.setCreatedAt(LocalDateTime.now());
+        l.setPublished(false);
+
+        l.setModerationStatus(LessonModerationStatus.PENDING.toString());
         l.setCourseSection(courseSectionService.findById(sectiondId).orElseThrow());
         l.setIsFreePreview(lessonDto.getIsFreePreview() != null ? lessonDto.getIsFreePreview() : false);
         return repository.save(l);
@@ -172,5 +184,17 @@ public class LessonService {
         return repository.findDetailById(lessonId);
     }
 
-
+    /**
+     * Lấy danh sách Lesson theo Section ID — dùng cho Ajax cascade dropdown
+     * (form upload Material: Course → Section → Lesson)
+     */
+    @Transactional(readOnly = true)
+    public List<LessonDto> findBySectionId(Integer sectionId) {
+        CourseSection section = courseSectionService.findById(sectionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chương với id = " + sectionId));
+        return section.getLessons().stream()
+                .map(dtoMapper::toLessonDto)
+                .toList();
+    }
 }
+

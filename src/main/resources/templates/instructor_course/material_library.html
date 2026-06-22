@@ -145,15 +145,39 @@
                     <input type="text" name="name" id="editMaterialName" class="form-control" required/>
                 </div>
                 <div class="form-group">
-                    <label>Gắn Vào Bài Giảng</label>
-                    <select name="lessonId" class="form-control" id="editMaterialLesson">
-                        <option value="">— Không gắn —</option>
-                        <optgroup th:each="section : ${sections}" th:label="${section.title}">
-                            <option th:each="lesson : ${section.lessons}"
-                                    th:value="${lesson.id}"
-                                    th:text="${lesson.title}">Bài giảng</option>
-                        </optgroup>
+                    <label>Gắn Vào Khoá học</label>
+<!--                    <select name="lessonId" class="form-control" id="editMaterialLesson">-->
+<!--                        <option value="">— Không gắn —</option>-->
+<!--                        <optgroup th:each="section : ${sections}" th:label="${section.title}">-->
+<!--                            <option th:each="lesson : ${section.lessons}"-->
+<!--                                    th:value="${lesson.id}"-->
+<!--                                    th:text="${lesson.title}">Bài giảng</option>-->
+<!--                        </optgroup>-->
+<!--                    </select>-->
+                    <select name="courseId" id="courseSelected">
+                        <option value="">- Chọn khoá học -</option>
+                        <option th:each="c : ${courses}" th:label="${c.name}"
+                                th:value="${c.id}"
+                                th:text="${c.name}"
+                               ></option>
                     </select>
+
+                    <select name="sectionId" id="sectionSelected">
+                        <option value="">- Chọn chương -</option>
+                        <option th:each="s : ${sections}" th:label="${s.title}"
+                                th:value="${s.id}"
+                                th:text="${s.title}"
+                        ></option>
+                    </select>
+
+                    <select name="lessonId" id="lessonSelected">
+                        <option value="">- Chọn bài học -</option>
+                        <option th:each="l : ${lessons}" th:label="${l.title}"
+                                th:value="${l.id}"
+                                th:text="${l.title}"
+                        ></option>
+                    </select>
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -198,6 +222,43 @@
         document.getElementById('deleteMaterialId').value = id;
         document.getElementById('modal-delete-material').classList.add('active');
     }
+
+    ///Chọn section theo Course
+    const courseSelected = document.getElementById("courseSelected");
+    const sectionSelected = document.getElementById("sectionSelected");
+
+    courseSelected.addEventListener("change", function () {
+        const courseId = this.valueOf();
+
+        Array.from(sectionSelected.option()).forEach(option => {
+            if(option.value === null)return;
+
+            const optionCourseId = option.dataset.courseId;
+
+            option.hidden = courseId !== "" && optionCourseId !== courseId;
+        })
+        sectionSelected.value = "";
+    })
+
+    ///Chọn lesson the Section
+
+    const lessonSelectd = document.getElementById("lessonSelected")
+
+    sectionSelected.addEventListener("change", function () {
+        const sectionId = this.valueOf();
+
+        Array.from(lessonSelectd.option()).forEach(option => {
+            if(option.value === null) return;
+
+            const optionSectionId = option.dataset.sectionId;
+
+            option.hidden = sectionId !== null && optionSectionId !== sectionId;
+        })
+
+        lessonSelectd.value = "";
+    })
+
+
 </script>
 </body>
 </html>

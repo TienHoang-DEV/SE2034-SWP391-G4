@@ -17,10 +17,7 @@ import vn.edu.fpt.dto.CategoryDto;
 import vn.edu.fpt.dto.CourseCreateDto;
 import vn.edu.fpt.dto.CourseDto;
 import vn.edu.fpt.dto.quizdto.QuizDTO;
-import vn.edu.fpt.entity.Category;
-import vn.edu.fpt.entity.Course;
-import vn.edu.fpt.entity.Lesson;
-import vn.edu.fpt.entity.User;
+import vn.edu.fpt.entity.*;
 import vn.edu.fpt.enums.CourseLevel;
 import vn.edu.fpt.enums.CourseStatus;
 
@@ -54,11 +51,6 @@ public class InstructorCourseController {
         this.lessonService = lessonService;
     }
 
-
-    @GetMapping("/materials")
-    public String getMaterialPage(){
-        return "instructor_course/material_library";
-    }
 
 
     ///Danh sách khoá học theo từng status
@@ -173,17 +165,18 @@ public class InstructorCourseController {
 
         @GetMapping("/{courseId}/curriculum")
         public String getCurriculumPage(@PathVariable Integer courseId, Model model) {
+            List<CourseSectionDto> listSection = courseSectionService.findByCourseAndLesson(courseId);
             model.addAttribute("courseId", courseId);
             model.addAttribute("activeStep", "curriculum");
             model.addAttribute("courseRequest",
                     courseService.findById(courseId));
-//            model.addAttribute("sections", courseSectionService.FindSectionByCourseId(courseId));
             model.addAttribute("section", new CourseSectionDto());
             model.addAttribute("lesson", new LessonDto());
-            model.addAttribute("sections", courseSectionService.findByCourseAndLesson(courseId));
+            model.addAttribute("sections", listSection);
+            model.addAttribute("totalLessons", courseSectionService.totalLesson(listSection));
             return "instructor_course/editcourse";
         }
-    // --- MOCKUP DEMO ENDPOINTS ---
+
     @GetMapping("/demo/view")
     public String viewCourseDemo() {
         return "instructor_course/view_course_demo";
@@ -194,13 +187,5 @@ public class InstructorCourseController {
         return "instructor_course/edit_course_demo";
     }
 
-    @GetMapping("/create-quizz")
-    String quizzCreate(Model model){
-        User currentUser = SecurityUtils.getCurrentUser();
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("quiz", new QuizDTO());
-
-        return "instructor_course/quizz-create";
-    }
 
 }

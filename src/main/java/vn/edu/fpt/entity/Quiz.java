@@ -29,7 +29,7 @@ public class Quiz extends BaseEntity {
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
-    @Column(name = "pass_score", nullable = false)
+    @Column(name = "pass_score")
     private Integer passScorePercent;
 
     @Builder.Default
@@ -40,11 +40,11 @@ public class Quiz extends BaseEntity {
     private Integer timeLimitMinutes;
 
     @Builder.Default
-    @Column(name = "is_random_question", nullable = false)
+    @Column(name = "is_random_question")
     private Boolean isRandomQuestion = false;
 
     @Builder.Default
-    @Column(name = "is_random_answer", nullable = false)
+    @Column(name = "is_random_answer")
     private Boolean isRandomAnswer = false;
 
     @Column(name = "published_at")

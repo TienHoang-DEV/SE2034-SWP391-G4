@@ -25,6 +25,17 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     //Kiểm tra không title trùng
     boolean existsByInstructorAndTitle(User instructor, String title);
 
+    //Tim course theo id
+    @Query("""
+          select c distinct from Course c
+          LEFT JOIN FETCH c.category ca
+          LEFT JOIN FETCH c.sections s
+          LEFT JOIN FETCH s.lessons l
+          LEFT JOIN FETCH l.materials m
+          WHERE c.id = :courseId
+          """)
+    Course findDetailById(@Param("courseId") Integer courseId);
+
 
     //Phân trang khoá học của mỗi instructor
     Page<Course> findByInstructorAndStatus(User instructor, Pageable pageable, CourseStatus courseStatus);
@@ -38,7 +49,10 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     Optional<Course> findFirstByOrderByIdAsc();
 
     @Query("""
-            select distinct c from Course c left join fetch c.sections s left join fetch s.lessons where c.id = :id
+            select distinct c from Course c 
+            left join fetch c.sections s 
+            left join fetch s.lessons
+            where c.id = :id
             """)
     Optional<Course> findByIdWithSectionsAndLessons(@Param("id") Integer id);
 
@@ -67,6 +81,8 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
             Pageable pageable);
 
     Course findCourseById(Integer id);
+
+    List<Course> findByInstructorId(Integer integer);
 }
 
 

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class VideoModerationFlagService {
+public class    VideoModerationFlagService {
     private final VideoModerationFlagRepository repository;
 
     public VideoModerationFlagService(VideoModerationFlagRepository videoModerationFlagRepository) {

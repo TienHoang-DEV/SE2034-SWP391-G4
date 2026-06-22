@@ -49,6 +49,11 @@ public class CourseSectionService {
         return repository.existsById(id);
     }
 
+    public int totalLesson(List<CourseSectionDto> listSection){
+        if(listSection == null) return 0;
+        return listSection.stream().mapToInt(s -> s.getLessons().size()).sum();
+    }
+
     public Set<CourseSection> findSectionsByCourse(Course course) {
         if (course.getSections() == null || course.getSections().isEmpty()) {
             throw new CourseNotFoundException("Khóa học không có section nào");
@@ -87,7 +92,7 @@ public class CourseSectionService {
             throw new CourseValidationException("courseRequets","Khoá học này không tồn tại");
         }
 
-        Integer po = repository.FindMaxPositionByCourseId(course.getId());
+        Integer po = repository.FindMaxPositionByCourseId(course.getId());  ////2 trans 4 trường
         CourseSection courseSection = new CourseSection();
         courseSection.setTitle(courseSectionDto.getTitle());
         courseSection.setPosition(po + 1);
@@ -129,6 +134,7 @@ public class CourseSectionService {
                           lessonDto.setPosition(l.getPosition());
                           lessonDto.setDurationSeconds(l.getDurationSeconds());
                           lessonDto.setIsFreePreview(l.getIsFreePreview());
+                          lessonDto.setMaterials(l.getMaterials().stream().toList());
                           return lessonDto;
                       }).toList();
             courseSectionDto.setLessons(lessons);
