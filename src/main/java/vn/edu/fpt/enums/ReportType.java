@@ -1,12 +1,12 @@
 package vn.edu.fpt.enums;
 
-public enum UserStatus {
-    ACTIVE("Hoạt động"),
-    BANNED("Bị khóa");
+public enum ReportType {
+    LESSON("Bài học"),
+    FEEDBACK("Đánh giá");
 
     private final String label;
 
-    UserStatus(String label) {
+    ReportType(String label) {
         this.label = label;
     }
 

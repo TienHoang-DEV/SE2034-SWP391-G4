@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/manager-layout}">
+      layout:decorate="~{layout/admin-layout}">
 <head>
-    <title>Academic Manager - Quản lý Giảng viên</title>
+    <title>Quản lý Manager</title>
     <th:block layout:fragment="page-css">
         <link rel="stylesheet" th:href="@{/css/manager/instructor.css}">
     </th:block>
 </head>
 <body>
     <div layout:fragment="content">
-        <form th:action="@{/manager/instructor/list}" method="get" class="page-header page-header-top">
+        <form th:action="@{/admin/manager/list}" method="get" class="page-header page-header-top">
             <div>
-                <h1>Quản lý Giảng viên</h1>
-                <p>Quản lý danh sách tài khoản giảng viên</p>
+                <h1>Quản lý Manager</h1>
+                <p>Danh sách và trạng thái hoạt động của các tài khoản Manager</p>
             </div>
             <div class="header-actions">
-                <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm giảng viên..."
+                <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm manager..."
                     class="search-input form-control">
                 <select name="status" class="search-input search-select form-select" onchange="this.form.submit()">
                     <option value="" th:selected="${status == null}">Tất cả trạng thái</option>
-                    <option th:each="st : ${statuses}" 
-                            th:value="${st}" 
-                            th:text="${st.label}" 
-                            th:selected="${status == st}"></option>
+                    <option value="ACTIVE" th:selected="${status != null && status.name() == 'ACTIVE'}">Hoạt động</option>
+                    <option value="BANNED" th:selected="${status != null && status.name() == 'BANNED'}">Bị khóa</option>
                 </select>
                 <button type="submit" class="d-none">Tìm kiếm</button>
             </div>
         </form>
         <div class="table-container">
-            <table class="data-table instructor-table">
+            <table class="data-table">
                 <thead>
                     <tr>
                         <th>Tên</th>
                         <th>Email</th>
                         <th>Điện thoại</th>
-                        <th class="text-center">Số khóa học</th>
                         <th>Trạng thái</th>
                         <th>Thao tác</th>
                     </tr>
@@ -44,28 +41,31 @@
                     <tr th:each="request : ${requestPage.content}">
                         <td>
                             <div class="user-info">
+                                <div class="avatar-sm me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; background-color: #e2e8f0;">
+                                    <img th:if="${request.avatarUrl != null}" th:src="${request.avatarUrl}" alt="Avatar" class="w-100 h-100 object-fit-cover" />
+                                    <span th:if="${request.avatarUrl == null}" th:text="${!request.firstName.isEmpty() ? #strings.substring(request.firstName, 0, 1).toUpperCase() : 'M'}">M</span>
+                                </div>
                                 <span class="user-name" th:text="${request.fullName}">Nguyễn Văn A</span>
                             </div>
                         </td>
-                        <td th:text="${request.email}">nguyenvana@example.com</td>
+                        <td th:text="${request.email}">manager@example.com</td>
                         <td th:text="${request.phone != null ? request.phone : 'N/A'}">0123456789</td>
-                        <td class="text-center" th:text="${request.courseCount != null ? request.courseCount : 0}">0</td>
                         <td>
                             <span
                                 th:class="${'badge badge-' + (request.status.name() == 'ACTIVE' ? 'success' : 'danger')}"
-                                th:text="${request.statusLabel}">
+                                th:text="${request.status.name() == 'ACTIVE' ? 'Hoạt động' : 'Bị khóa'}">
                                 Hoạt động
                             </span>
                         </td>
                         <td>
                             <div class="actions">
-                                <a th:href="@{/manager/instructor/detail/{id}(id=${request.id})}"
+                                <a th:href="@{/admin/manager/detail/{id}(id=${request.id})}"
                                     class="action-btn"><i class="ph ph-eye"></i> Xem Chi Tiết</a>
                             </div>
                         </td>
                     </tr>
                     <tr th:if="${requestPage.empty}">
-                        <td colspan="6" class="text-center py-4">Không tìm thấy giảng viên nào.</td>
+                        <td colspan="5" class="text-center py-4">Không tìm thấy manager nào.</td>
                     </tr>
                 </tbody>
             </table>
@@ -76,7 +76,7 @@
             <div class="pagination-circle-buttons">
                 <!-- Previous -->
                 <a th:if="${requestPage.hasPrevious()}"
-                    th:href="@{/manager/instructor/list(keyword=${keyword}, status=${status}, page=${requestPage.number - 1}, size=${requestPage.size})}"
+                    th:href="@{/admin/manager/list(keyword=${keyword}, status=${status}, page=${requestPage.number - 1}, size=${requestPage.size})}"
                     class="page-circle-btn">
                     <i class="ph ph-caret-left"></i>
                 </a>
@@ -84,15 +84,15 @@
                     <i class="ph ph-caret-left"></i>
                 </span>
 
-                <!-- Danh sách số trang -->
+                <!-- Pages list -->
                 <a th:each="i : ${#numbers.sequence(0, requestPage.totalPages - 1)}"
-                    th:href="@{/manager/instructor/list(keyword=${keyword}, status=${status}, page=${i}, size=${requestPage.size})}"
+                    th:href="@{/admin/manager/list(keyword=${keyword}, status=${status}, page=${i}, size=${requestPage.size})}"
                     th:class="${requestPage.number == i ? 'page-circle-btn active' : 'page-circle-btn'}"
                     th:text="${i + 1}">1</a>
 
-                <!-- Nút Next -->
+                <!-- Next -->
                 <a th:if="${requestPage.hasNext()}"
-                    th:href="@{/manager/instructor/list(keyword=${keyword}, status=${status}, page=${requestPage.number + 1}, size=${requestPage.size})}"
+                    th:href="@{/admin/manager/list(keyword=${keyword}, status=${status}, page=${requestPage.number + 1}, size=${requestPage.size})}"
                     class="page-circle-btn">
                     <i class="ph ph-caret-right"></i>
                 </a>

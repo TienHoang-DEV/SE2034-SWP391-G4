@@ -1,12 +1,13 @@
 package vn.edu.fpt.enums;
 
-public enum UserStatus {
-    ACTIVE("Hoạt động"),
-    BANNED("Bị khóa");
+public enum ReportStatus {
+    PENDING("Chờ xử lý"),
+    RESOLVED("Đã xử lý"),
+    REJECTED("Từ chối");
 
     private final String label;
 
-    UserStatus(String label) {
+    ReportStatus(String label) {
         this.label = label;
     }
 
