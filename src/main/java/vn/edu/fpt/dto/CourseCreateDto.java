@@ -36,3 +36,5 @@ public class CourseCreateDto {
 
     @NotNull(message = "Vui lòng chọn danh mục khóa học.")
     private Integer categoryId;}
+
+

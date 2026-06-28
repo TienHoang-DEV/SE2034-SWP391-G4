@@ -1,10 +1,8 @@
 package vn.edu.fpt.dto;
 
 import lombok.*;
-import vn.edu.fpt.dto.course.CourseDto;
-import vn.edu.fpt.dto.user.UserDto;
-
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter

@@ -1,0 +1,29 @@
+package vn.edu.fpt.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import vn.edu.fpt.entity.CourseSection;
+import vn.edu.fpt.entity.Lesson;
+import vn.edu.fpt.entity.LessonMaterial;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CourseRespon {
+    private Integer Id;
+    private String tittle;
+    private String category;
+    private String description;
+    private String thumnaiUrl;
+    private BigDecimal price;
+    private String level;
+    private LocalDateTime createAt;
+
+}

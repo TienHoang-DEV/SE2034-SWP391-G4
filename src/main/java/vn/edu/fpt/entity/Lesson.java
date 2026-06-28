@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -47,11 +45,15 @@ public class Lesson extends BaseEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "lesson", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Quiz> quizzes = new ArrayList<>();
+    private Set<Quiz> quizzes = new HashSet<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "lesson", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<LessonMaterial> materials = new HashSet<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "lesson", fetch = FetchType.LAZY)
+    private Set<VideoModerationFlag> moderationFlags = new HashSet<>();
 
     public void addQuiz(Quiz quiz) {
         quizzes.add(quiz);
@@ -71,6 +73,16 @@ public class Lesson extends BaseEntity {
     public void removeMaterial(LessonMaterial material) {
         materials.remove(material);
         material.setLesson(null);
+    }
+
+    public void addModerationFlag(VideoModerationFlag flag) {
+        moderationFlags.add(flag);
+        flag.setLesson(this);
+    }
+
+    public void removeModerationFlag(VideoModerationFlag flag) {
+        moderationFlags.remove(flag);
+        flag.setLesson(null);
     }
 }
 

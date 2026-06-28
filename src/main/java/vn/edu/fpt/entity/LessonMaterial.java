@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
+@Builder
 @Table(name = "lesson_materials")
 public class LessonMaterial extends BaseEntity {
 

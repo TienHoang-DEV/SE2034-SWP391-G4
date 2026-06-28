@@ -9,28 +9,32 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.fpt.dto.*;
 
 import vn.edu.fpt.dto.CategoryDto;
 import vn.edu.fpt.dto.CourseCreateDto;
 import vn.edu.fpt.dto.CourseDto;
-
-import vn.edu.fpt.entity.Course;
-import vn.edu.fpt.entity.User;
+import vn.edu.fpt.dto.quizdto.QuizDTO;
+import vn.edu.fpt.entity.*;
 import vn.edu.fpt.enums.CourseLevel;
 import vn.edu.fpt.enums.CourseStatus;
 
+import vn.edu.fpt.exception.CourseSectionValidation;
 import vn.edu.fpt.exception.CourseValidationException;
 import vn.edu.fpt.service.CategoryService;
 import vn.edu.fpt.service.CourseSectionService;
 import vn.edu.fpt.service.CourseService;
+import vn.edu.fpt.service.quiz.QuizService;
 import vn.edu.fpt.service.LessonService;
 import vn.edu.fpt.util.SecurityUtils;
 
 
 import java.util.Arrays;
 import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Controller
 @RequestMapping("/instructorcourse")
@@ -47,11 +51,6 @@ public class InstructorCourseController {
         this.lessonService = lessonService;
     }
 
-
-    @GetMapping("/materials")
-    public String getMaterialPage(){
-        return "instructor_course/material_library";
-    }
 
 
     ///Danh sách khoá học theo từng status
@@ -166,17 +165,18 @@ public class InstructorCourseController {
 
         @GetMapping("/{courseId}/curriculum")
         public String getCurriculumPage(@PathVariable Integer courseId, Model model) {
+            List<CourseSectionDto> listSection = courseSectionService.findByCourseAndLesson(courseId);
             model.addAttribute("courseId", courseId);
             model.addAttribute("activeStep", "curriculum");
             model.addAttribute("courseRequest",
                     courseService.findById(courseId));
-//            model.addAttribute("sections", courseSectionService.FindSectionByCourseId(courseId));
             model.addAttribute("section", new CourseSectionDto());
             model.addAttribute("lesson", new LessonDto());
-            model.addAttribute("sections", courseSectionService.findByCourseAndLesson(courseId));
+            model.addAttribute("sections", listSection);
+            model.addAttribute("totalLessons", courseSectionService.totalLesson(listSection));
             return "instructor_course/editcourse";
         }
-    // --- MOCKUP DEMO ENDPOINTS ---
+
     @GetMapping("/demo/view")
     public String viewCourseDemo() {
         return "instructor_course/view_course_demo";
@@ -186,8 +186,6 @@ public class InstructorCourseController {
     public String editCourseDemo() {
         return "instructor_course/edit_course_demo";
     }
-
-
 
 
 }

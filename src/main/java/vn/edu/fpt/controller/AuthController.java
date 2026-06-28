@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import vn.edu.fpt.dto.LoginRequest;
 import vn.edu.fpt.dto.RegisterRequest;
 import vn.edu.fpt.entity.User;
@@ -97,15 +95,5 @@ public class AuthController {
         authService.register(request);
 
         return "redirect:/login_no";
-    }
-
-    @GetMapping("/view-current-role")
-    @ResponseBody
-    public String debug(Authentication authentication) {
-
-        authentication.getAuthorities()
-                .forEach(System.out::println);
-
-        return authentication.getAuthorities().toString();
     }
 }

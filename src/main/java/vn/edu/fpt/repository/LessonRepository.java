@@ -20,7 +20,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
     @Query("SELECT l FROM Lesson l LEFT JOIN FETCH l.materials WHERE l.id = :id")
     Optional<Lesson> findByIdWithMaterials(@Param("id") Integer id);
 
-    @Query("SELECT l FROM Lesson l LEFT JOIN FETCH l.quizzes WHERE l.id = :id")
+    @Query("SELECT DISTINCT l FROM Lesson l LEFT JOIN FETCH l.quizzes q LEFT JOIN FETCH q.questions qs LEFT JOIN FETCH qs.answers WHERE l.id = :id")
     Optional<Lesson> findByIdWithQuizzes(@Param("id") Integer id);
 
     Lesson getFinalCompledLessonIdByCourseSection(CourseSection courseSection);
@@ -62,4 +62,11 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
     WHERE l.id = :lessonId
 """)
     Lesson findDetailById(Integer lessonId);
+
+    List<Lesson> findByCourseSectionId(Integer courseSectionId);
+
+    @Query("""
+           SELECT COALESCE(MAX(l.position), 0) FROM Lesson l where l.courseSection.id = :sectionId
+           """)
+    Integer FindMaxPositionByCourseSectionId(@Param("sectionId") Integer sectionId);
 }
