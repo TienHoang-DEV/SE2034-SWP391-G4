@@ -6,23 +6,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import vn.edu.fpt.dto.home.HomeDto;
+import vn.edu.fpt.dto.user.StudentPurchaseHistoryDto;
 import vn.edu.fpt.entity.User;
 import vn.edu.fpt.repository.UserRepository;
-import vn.edu.fpt.service.CourseService;
+import vn.edu.fpt.service.HistoryOrderService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-public class HomeController {
+public class HistoryOrderController {
 
     private final UserRepository userRepository;
-    private final CourseService courseService;
+    private final HistoryOrderService historyOrderService;
 
-    public HomeController(UserRepository userRepository, CourseService courseService) {
+    public HistoryOrderController(UserRepository userRepository, HistoryOrderService historyOrderService) {
         this.userRepository = userRepository;
-        this.courseService = courseService;
+        this.historyOrderService = historyOrderService;
     }
 
     private User getSessionUser() {
@@ -44,22 +44,18 @@ public class HomeController {
         return null;
     }
 
-    @GetMapping("/")
-    public String showHomePage(Model model) {
-        User currentUser = getSessionUser();
-        if (currentUser != null) {
-            if (!currentUser.isFavoriteSetupCompleted()) {
-                return "redirect:/student/favorites/step1";
-            }
+    @GetMapping("/student/purchase-history")
+    public String showPurchaseHistory(Model model) {
+        User user = getSessionUser();
+        if (user == null) {
+            return "redirect:/login_no";
         }
-        HomeDto homeData = courseService.getHomeData(currentUser);
-        model.addAttribute("homeData", homeData);
-        return "home/home";
-    }
-
-    @GetMapping("/home")
-    public String home() {
-        return "redirect:/";
+        
+        StudentPurchaseHistoryDto purchaseHistoryData = historyOrderService.getPurchaseHistoryData(user);
+        
+        model.addAttribute("currentUser", purchaseHistoryData.getCurrentUser());
+        model.addAttribute("orders", purchaseHistoryData.getOrders());
+        
+        return "purchase_history/purchase_history";
     }
 }
-
